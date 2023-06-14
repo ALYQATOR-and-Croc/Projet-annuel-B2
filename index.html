@@ -2,12 +2,17 @@
 <html>
 <head>
     <title>Test de connexion SQL</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-    <button id="testButton">Tester la connexion SQL</button>
-    <div id="result"></div>
+    <form method="post" action="test-connexion.php">
+        <button type="submit" name="testButton">Tester la connexion SQL</button>
+    </form>
 
-    <script src="script.js"></script>
+    <div id="result">
+        <?php if (isset($result)) {
+            echo $result;
+        } ?>
+    </div>
 </body>
 </html>
