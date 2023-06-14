@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test de connexion SQL</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+  <title>Test de connexion SQL</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <form method="post" action="test-connexion.php">
-        <button type="submit" name="testButton">Tester la connexion SQL</button>
-    </form>
-
-    <div id="result">
-        <?php if (isset($result)) {
-            echo $result;
-        } ?>
-    </div>
+  <div class="container">
+    <h1>Test de connexion SQL</h1>
+    <button id="testButton">Tester la connexion</button>
+    <p id="resultMessage"></p>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
