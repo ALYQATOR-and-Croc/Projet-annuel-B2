@@ -1,8 +1,8 @@
 <?php
-$servername = "adresse_IP_du_serveur_SQL";
-$username = "nom_utilisateur_SQL";
-$password = "mot_de_passe_SQL";
-$dbname = "nom_base_de_donnees_SQL";
+$servername = "10.1.1.36";
+$username = "DEV1-G7-SQL-BDD";
+$password = "5kQ3@sQ6b#";
+$dbname = "test-database";
 
 // Créer une connexion
 $conn = new mysqli($servername, $username, $password, $dbname);
