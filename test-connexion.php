@@ -1,5 +1,5 @@
 <?php
-$servername = "10.1.1.36";
+$servername = "DEV1-G7-SQL-BDD";
 $username = "dev-alyqator";
 $password = "Jef!Z37;";
 $dbname = "test-database";
