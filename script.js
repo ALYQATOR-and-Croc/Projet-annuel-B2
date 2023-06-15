@@ -1,44 +1,42 @@
-const http = require('http');
-const fs = require('fs');
+const express = require('express');
 const sql = require('mssql');
+const fs = require('fs');
 
-const server = http.createServer((req, res) => {
-  if (req.url === '/' && req.method === 'GET') {
-    fs.readFile(__dirname + '/index.html', 'utf8', (err, data) => {
-      if (err) {
-        res.statusCode = 500;
-        res.end('Erreur interne du serveur');
-      } else {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/html');
-        res.end(data);
-      }
-    });
-  } else if (req.url === '/test-connexion' && req.method === 'GET') {
-    sql.connect(config, (err) => {
-      if (err) {
-        console.error('Erreur de connexion à la base de données :', err);
-        res.statusCode = 500;
-        res.end('Erreur de connexion à la base de données.');
-      } else {
-        console.log('Connexion réussie à la base de données.');
-        res.statusCode = 200;
-        res.end('Connexion réussie à la base de données.');
-      }
-    });
-  } else {
-    res.statusCode = 404;
-    res.end('Page introuvable');
-  }
+const app = express();
+const port = 3000;
+
+// Charger les informations de connexion à partir du fichier config.json
+const config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+
+// Route pour tester la connexion SQL
+app.get('/', (req, res) => {
+  // Tentative de connexion à la base de données
+  sql.connect(config, (err) => {
+    if (err) {
+      console.log('Erreur de connexion à la base de données :', err);
+      res.send('Erreur de connexion à la base de données');
+    } else {
+      console.log('Connexion à la base de données réussie');
+
+      // Exécution d'une requête pour vérifier l'accès à la base de données
+      const request = new sql.Request();
+      request.query('SELECT 1 AS result', (err, recordset) => {
+        if (err) {
+          console.log('Erreur lors de l\'exécution de la requête :', err);
+          res.send('Erreur lors de l\'exécution de la requête');
+        } else {
+          console.log('Requête exécutée avec succès');
+          res.send('La base de données est connectée');
+        }
+
+        // Fermeture de la connexion à la base de données
+        sql.close();
+      });
+    }
+  });
 });
 
-const config = {
-    user: 'dev-alyqator',
-    password: 'Jef!Z37;',
-    server: '10.1.1.36',
-    database: 'test-database',
-};
-
-server.listen(3000, () => {
-  console.log('Serveur démarré sur le port 3000');
+// Démarrage du serveur
+app.listen(port, () => {
+  console.log(`Serveur démarré sur le port ${port}`);
 });

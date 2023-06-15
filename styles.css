@@ -1,14 +1,12 @@
-.container {
-    text-align: center;
-    margin-top: 100px;
-  }
-  
-  button {
-    padding: 10px 20px;
-    font-size: 18px;
-  }
-  
-  #resultMessage {
-    font-size: 18px;
-    margin-top: 20px;
-  }  
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+button {
+  padding: 16px 32px;
+  font-size: 18px;
+}
