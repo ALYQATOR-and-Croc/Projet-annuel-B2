@@ -1,4 +1,5 @@
 backend/config.json
+backend/.env
 backend/node_modules/
 
 
