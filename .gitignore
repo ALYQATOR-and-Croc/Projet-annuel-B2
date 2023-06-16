@@ -1,1 +1,3 @@
-config.json
+backend/config.json
+backend/node_modules/
+frontend/node_modules/
