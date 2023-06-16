@@ -1,13 +1,10 @@
-function testConnection() {
+document.getElementById('test-button').addEventListener('click', () => {
   fetch('/test-connexion')
     .then(response => response.json())
     .then(data => {
-      console.log('Connexion réussie à la base de données !');
-      console.log('Résultat de la requête :', data);
+      console.log(data.message);
     })
     .catch(error => {
-      console.error('Erreur de connexion à la base de données :', error);
+      console.error('Erreur lors de la requête:', error);
     });
-}
-
-document.getElementById('testButton').addEventListener('click', testConnection);
+});
