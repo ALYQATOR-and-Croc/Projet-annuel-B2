@@ -5,10 +5,11 @@ body {
 }
 .loginContainer{
     position: absolute;
-    top: 40%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 3px #239489 solid;
+    border: 1px #239489 solid;
+    box-shadow:  2px 7px 7px rgba(0, 0, 0, 0.4);
     border-radius: 10px; 
     background-color: white;
     display: flex;
@@ -20,7 +21,9 @@ body {
 .formContainer{
     color: #004d40;
     border-radius: 10px; 
-    background-color: #b2dfdb ;
+    border: 1px rgba(0, 77, 64, 0.6) solid;
+    background-color: #b2dfdb9a ;
+    box-shadow:  2px 5px 5px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     margin: 0 auto;
@@ -28,6 +31,7 @@ body {
     text-align: center;
     padding: 20px;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 .emargisTitle{
     margin: 0 auto;
@@ -50,4 +54,5 @@ body {
 }
 .loginButton{
     margin-top:15px;
+    margin-bottom: 15px;
 }
