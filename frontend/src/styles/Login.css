@@ -1,0 +1,53 @@
+body {
+    background-image: url('../assets/classroom.png');
+    background-attachment: fixed;
+    background-size: cover;
+}
+.loginContainer{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px #239489 solid;
+    border-radius: 10px; 
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-inline: 70px;
+    padding-block: 50px;
+}
+.formContainer{
+    color: #004d40;
+    border-radius: 10px; 
+    background-color: #b2dfdb ;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+.emargisTitle{
+    margin: 0 auto;
+    margin-bottom: 30px;
+    display: inline-flex;
+    align-items: center;
+}
+.logoEmargis{
+    height: 100px;
+    width: 100px;
+}
+.textEmargis{
+    color: #004d40;
+    font-family: "Copykey";
+    font-size: 3em;
+    padding-left: 10px;
+}
+.loginInput{
+    margin-bottom:10px;
+}
+.loginButton{
+    margin-top:15px;
+}

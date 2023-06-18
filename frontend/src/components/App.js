@@ -1,8 +1,18 @@
 import logo from '../assets/logo.svg';
 import '../styles/App.css';
+import Login from './Login';
+import { useState, useEffect, Component } from 'react';
+import emargisTheme from '../emargisTheme';
+import { ThemeProvider } from '@mui/material/styles';
+
 
 function App() {
-  return (
+  const [loginActive, setLogin] = useState(false);
+
+  return !loginActive ? (
+    <ThemeProvider theme={emargisTheme}><Login /></ThemeProvider>
+    
+  ) : (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
@@ -19,7 +29,7 @@ function App() {
         </a>
       </header>
     </div>
-  );
+  )
 }
 
 export default App;
