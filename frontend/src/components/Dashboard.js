@@ -1,5 +1,4 @@
 import logo from '../assets/logo.svg';
-import '../styles/App.css';
 import Navbar from './Navbar';
 
 
