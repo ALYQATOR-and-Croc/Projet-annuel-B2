@@ -33,7 +33,6 @@ function Login() {
                         <FormControl sx={{ m: 1, width: '30ch' }} variant="standard">
                             <InputLabel htmlFor="standard-adornment-password">Adresse Email</InputLabel>
                             <Input
-                                id="standard-adornment-password"
                                 type='mail'
                                 sx={{
                                     ':before': { borderBottomColor: 'text.secondary' }
@@ -51,7 +50,6 @@ function Login() {
                         <FormControl sx={{ m: 1, width: '30ch' }} variant="standard">
                             <InputLabel htmlFor="standard-adornment-password">Mot de passe</InputLabel>
                             <Input
-                                id="standard-adornment-password"
                                 type={showPassword ? 'text' : 'password'}
                                 sx={{
                                     ':before': { borderBottomColor: 'text.secondary' }
