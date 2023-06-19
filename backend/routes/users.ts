@@ -1,9 +1,19 @@
 import * as express from 'express';
-let router = express.Router();
+const router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.send('respond with a resource');
 });
 
+
+export class UsersRouter {
+  parameters : null = null;
+  constructor(parameters : null = null){
+    this.parameters = parameters
+  }
+  public getRouter(){
+    return router
+  }
+}
 module.exports = router;

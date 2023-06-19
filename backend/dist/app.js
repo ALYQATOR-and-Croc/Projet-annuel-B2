@@ -26,13 +26,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.set = exports.App = void 0;
 const http_errors_1 = __importDefault(require("http-errors"));
 const express_1 = __importDefault(require("express"));
 const path = __importStar(require("path"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// import {indexRouter} from'./routes/index';
+const users_1 = require("./routes/users");
+const usersRouter = new users_1.UsersRouter(null);
+// import { IndexRouter } from './routes/index';
+// const indexRouter = new IndexRouter();
 const app = (0, express_1.default)();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,14 +46,14 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(path.join(__dirname, 'public')));
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/');
+app.use('/users', usersRouter.getRouter());
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     next((0, http_errors_1.default)(404));
 });
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -57,4 +61,17 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+class App {
+    constructor(parameter = null) {
+        this.parameter = parameter;
+    }
+    get app() {
+        return app;
+    }
+}
+exports.App = App;
 module.exports = app;
+function set(arg0, port) {
+    throw new Error('Function not implemented.');
+}
+exports.set = set;

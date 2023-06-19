@@ -23,10 +23,21 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.UsersRouter = void 0;
 const express = __importStar(require("express"));
-let router = express.Router();
+const router = express.Router();
 /* GET users listing. */
-router.get('/', function (req, res, next) {
+router.get('/', (req, res, next) => {
     res.send('respond with a resource');
 });
+class UsersRouter {
+    constructor(parameters = null) {
+        this.parameters = null;
+        this.parameters = parameters;
+    }
+    getRouter() {
+        return router;
+    }
+}
+exports.UsersRouter = UsersRouter;
 module.exports = router;

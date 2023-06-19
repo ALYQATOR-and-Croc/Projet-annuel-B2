@@ -3,18 +3,20 @@
 /**
  * Module dependencies.
  */
-var app = require('../app');
-var debug = require('debug')('backend:server');
-var http = require('http');
+Object.defineProperty(exports, "__esModule", { value: true });
+const app_1 = require("../app");
+const debug = require("debug"); // ('backend:server');
+const http = require("http");
+const app = new app_1.App();
 /**
  * Get port from environment and store in Express.
  */
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+const port = normalizePort(process.env.PORT || '3000');
+app.app().getApp().set('port', port);
 /**
  * Create HTTP server.
  */
-var server = http.createServer(app);
+const server = http.createServer(app.app());
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -25,12 +27,12 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 function normalizePort(val) {
-    var port = parseInt(val, 10);
-    if (isNaN(port)) {
+    const portNorm = parseInt(val, 10);
+    if (isNaN(portNorm)) {
         // named pipe
         return val;
     }
-    if (port >= 0) {
+    if (portNorm >= 0) {
         // port number
         return port;
     }
@@ -43,9 +45,7 @@ function onError(error) {
     if (error.syscall !== 'listen') {
         throw error;
     }
-    var bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+    const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
     // handle specific listen errors with friendly messages
     switch (error.code) {
         case 'EACCES':
@@ -64,9 +64,7 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 function onListening() {
-    var addr = server.address();
-    var bind = typeof addr === 'string'
-        ? 'pipe ' + addr
-        : 'port ' + addr.port;
+    const addr = server.address();
+    const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }

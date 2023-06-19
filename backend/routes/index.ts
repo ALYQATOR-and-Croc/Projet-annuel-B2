@@ -1,8 +1,8 @@
 import * as express from 'express';
-let router = express.Router();
+const router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.render('index', { title: 'Express' });
 });
 
