@@ -21,7 +21,7 @@ function Login() {
 
     };
 
-    return(<div className="loginContainer">
+    return(<div className="Login"><div className="loginContainer">
                 <div className="emargisTitle">
                     <img className="logoEmargis" src={logo} alt="Logo Emargis"/>
                     <h1 className="textEmargis">Emargis</h1>
@@ -74,7 +74,7 @@ function Login() {
                         <Button variant="contained">Se connecter</Button>
                     </div>
                 </form>
-            </div>);
+            </div></div>);
 }
 
 export default Login;

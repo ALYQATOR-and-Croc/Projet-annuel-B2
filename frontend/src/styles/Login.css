@@ -1,7 +1,11 @@
-body {
+.Login{
     background-image: url('../assets/classroom.png');
-    background-attachment: fixed;
+    min-width: 100%;
+    min-height: 100vh;
     background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    list-style: none;
 }
 .loginContainer{
     position: absolute;
