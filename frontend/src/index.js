@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './components/App';
-import Dashboard from './components/Dashboard';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import "@fontsource/montserrat/600.css";

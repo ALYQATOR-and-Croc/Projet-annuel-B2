@@ -1,9 +1,10 @@
 import React from 'react'
 
-export const Notfound = () => {
+export default function Notfound() {
   return (
-    <div>Erreur 404</div>
+    <div className="Notfound">
+      Erreur 404
+    </div>
   )
 }
 
-export default Notfound;

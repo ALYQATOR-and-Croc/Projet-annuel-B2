@@ -10,11 +10,33 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 function Login() {
 
-    const [showPassword, setShowPassword] = React.useState(false);
+    const navigate = useNavigate();
+
+    const [credentials, setCredentials] = useState({
+        email : '',
+        password : ''
+    });
+    const userFormInput = (e) => {
+        setCredentials({
+            ...credentials,
+            [e.target.name]: e.target.value
+        })
+    }
+    const userFormSubmit = (e) => {
+        e.preventDefault();
+        console.log(credentials);
+        // TODO : requête API
+        if (credentials.email === "luigi" && credentials.password === "oui") {
+            navigate("/student/dashboard");
+        }
+    }
+    const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
       event.preventDefault();
@@ -26,7 +48,7 @@ function Login() {
                     <img className="logoEmargis" src={logo} alt="Logo Emargis"/>
                     <h1 className="textEmargis">Emargis</h1>
                 </div>
-                <form className='formContainer'>
+                <form className='formContainer' onSubmit={userFormSubmit}>
                     <h3>Connexion</h3>
                     {/* email */}
                     <div className='loginInput'>
@@ -42,6 +64,9 @@ function Login() {
                                         <AccountCircle />
                                     </InputAdornment>
                                 }
+                                name="email"
+                                value={credentials.email}
+                                onChange={userFormInput}
                         />
                         </FormControl>
                     </div>
@@ -66,12 +91,15 @@ function Login() {
                                     </IconButton>
                                 </InputAdornment>
                                 }
+                                name="password"
+                                value={credentials.password}
+                                onChange={userFormInput}
                             />
                         </FormControl>
                     </div>
                     {/* bouton */}
                     <div className='loginButton'>
-                        <Button variant="contained">Se connecter</Button>
+                        <Button variant="contained" type="submit">Se connecter</Button>
                     </div>
                 </form>
             </div></div>);
