@@ -1,7 +1,12 @@
+# BACKEND
 backend/config.json
+backend/CONFIG-FILES
 backend/.env
 backend/node_modules/
 
+# Build
+backend/dist/config.json
+backend/dist/CONFIG-FILES
 
 # FRONTEND
 frontend/node_modules/

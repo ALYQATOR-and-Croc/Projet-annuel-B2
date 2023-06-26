@@ -1,6 +1,7 @@
 import '../styles/Login.css';
 import logo from '../assets/logo_emargis.png';
 import * as React from 'react';
+import axios from 'axios';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +13,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { accountService } from './Auth/account.service';
 
 
 function Login() {
@@ -19,7 +21,7 @@ function Login() {
     const navigate = useNavigate();
 
     const [credentials, setCredentials] = useState({
-        email : '',
+        login : '',
         password : ''
     });
     const userFormInput = (e) => {
@@ -31,10 +33,13 @@ function Login() {
     const userFormSubmit = (e) => {
         e.preventDefault();
         console.log(credentials);
-        // TODO : requête API
-        if (credentials.email === "luigi" && credentials.password === "oui") {
-            navigate("/student/dashboard");
-        }
+        axios.post('http://localhost:5000/login/', credentials)
+            .then(res => {
+                console.log(res)
+                accountService.saveToken(res.data.accessToken);
+                navigate('/student')  
+            })
+            .catch(error => {console.log(error)})
     }
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -64,8 +69,8 @@ function Login() {
                                         <AccountCircle />
                                     </InputAdornment>
                                 }
-                                name="email"
-                                value={credentials.email}
+                                name="login"
+                                value={credentials.login}
                                 onChange={userFormInput}
                         />
                         </FormControl>
