@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom';
-import { accountService } from './account.service';
+import { accountService } from '../../_services/account.service';
 
 export default function AuthGuard({children}) {
 

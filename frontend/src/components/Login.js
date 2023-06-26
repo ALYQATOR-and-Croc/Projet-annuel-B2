@@ -1,7 +1,6 @@
 import '../styles/Login.css';
 import logo from '../assets/logo_emargis.png';
 import * as React from 'react';
-import axios from 'axios';
 import FormControl from '@mui/material/FormControl';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -13,7 +12,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { accountService } from './Auth/account.service';
+import { accountService } from '../_services/account.service';
 
 
 function Login() {
@@ -24,23 +23,24 @@ function Login() {
         login : '',
         password : ''
     });
+
     const userFormInput = (e) => {
         setCredentials({
             ...credentials,
             [e.target.name]: e.target.value
         })
     }
+
     const userFormSubmit = (e) => {
         e.preventDefault();
-        console.log(credentials);
-        axios.post('http://localhost:5000/login/', credentials)
+        accountService.login(credentials)
             .then(res => {
-                console.log(res)
                 accountService.saveToken(res.data.token);
-                navigate('/student')  
+                navigate('/student');  
             })
-            .catch(error => {console.log(error)})
+            .catch(error => {console.log(error);})
     }
+
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {

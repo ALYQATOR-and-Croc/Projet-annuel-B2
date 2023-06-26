@@ -22,7 +22,6 @@ function App() {
                 <RouteurStudent/>
               </AuthGuard>
             }/>
-            
             <Route path="*" element={<Notfound/>} />
           </Routes>
         </BrowserRouter>
