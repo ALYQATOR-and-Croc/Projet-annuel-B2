@@ -22,11 +22,25 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const express = __importStar(require("express"));
-let router = express.Router();
-/* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
-});
-module.exports = router;
+const jwt = __importStar(require("jsonwebtoken"));
+const secretPass = __importStar(require("../CONFIG-FILES/secret-password.json"));
+const isAuthenticated = (request, response, next) => {
+    const authHeader = request.get('Authorization');
+    if (!authHeader) {
+        const error = new Error('Not authenticated.');
+        response.status(401).send(error);
+        throw error;
+    }
+    const token = authHeader.replace('Bearer ', '');
+    let decodedToken;
+    try {
+        decodedToken = jwt.verify(token, secretPass.passwordToken);
+    }
+    catch (error) {
+        response.status(401).send('Not authenticated.');
+        throw error;
+    }
+    next();
+};
+module.exports = isAuthenticated;
+//# sourceMappingURL=is-auth.js.map
