@@ -36,7 +36,7 @@ function Login() {
         axios.post('http://localhost:5000/login/', credentials)
             .then(res => {
                 console.log(res)
-                accountService.saveToken(res.data.accessToken);
+                accountService.saveToken(res.data.token);
                 navigate('/student')  
             })
             .catch(error => {console.log(error)})
