@@ -32,16 +32,15 @@ function PlanningJour() {
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridWeek"
         //   headerToolbar={{
+        //     left : 'prev,next',
+        //     center: 'title',
+        //     right: 'timeGridWeek'
+        //   }}
+        //   headerToolbar={{
         //     center: 'dayGridMonth,timeGridWeek,timeGridDay new',
         //   }}
-          customButtons={{
-            new: {
-              text: 'new',
-              click: () => console.log('new event'),
-            },
-          }}
           events={events}
-          eventColor="red"
+          eventColor="blue"
           nowIndicator
           locales={frLocale}
           locale='fr'

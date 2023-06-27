@@ -31,17 +31,18 @@ function PlanningJour() {
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="timeGridDay"
+          // headerToolbar={{
+          //   left : 'prev,next',
+          //   center: 'title',
+          //   right: 'timeGridDay'
+          // }}
         //   headerToolbar={{
         //     center: 'timeGridDay new',
         //   }}
-          customButtons={{
-            new: {
-              text: 'new',
-              click: () => console.log('new event'),
-            },
-          }}
+          // minTime= "06:00:00"
+          // maxTime='21:00:00'
           events={events}
-          eventColor="red"
+          eventColor="blue"
           nowIndicator
           locales={frLocale}
           locale='fr'

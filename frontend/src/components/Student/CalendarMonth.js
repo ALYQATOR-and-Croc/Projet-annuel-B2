@@ -29,17 +29,13 @@ function PlanningMois() {
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
+         
         //   headerToolbar={{
         //     center: 'dayGridMonth,timeGridWeek,timeGridDay new',
         //   }}
-          customButtons={{
-            new: {
-              text: 'new',
-              click: () => console.log('new event'),
-            },
-          }}
+          
           events={events}
-          eventColor="red"
+          eventColor="blue"
           nowIndicator
           locales={frLocale}
           locale='fr'
