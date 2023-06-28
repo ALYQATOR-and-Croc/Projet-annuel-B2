@@ -1,4 +1,6 @@
 import * as React from 'react';
+import logo from '../../assets/logo_emargis_white.png';
+import '../../styles/Navbar.css';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,16 +9,38 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
-
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { Link } from 'react-router-dom';
 
 function ResponsiveAppBar() {
+
+  const userType = 'student'; // a remplacer par un appel API
+
+  let pages = []; 
+
+  switch (userType) {
+    case 'student':
+      pages = [{title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}, {title:'Emarger', path:'/student/emager'}];
+      break;
+    // A modifier en fonction des pages de chaque profil
+    case 'teacher':
+      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      break;
+    case 'ap':
+      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      break;
+    case 'rp':
+      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      break;
+    default:
+      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      break;
+  }
+
+const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -37,15 +61,15 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="100%">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <img className="logoEmargis" src={logo} alt="Logo Emargis"/>
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
             component="a"
             sx={{
-              mr: 2,
+              mr: 3,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'Copykey',
               fontWeight: 700,
@@ -87,13 +111,20 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                  <Typography 
+                  textAlign="center" 
+                  component={Link} 
+                  to={page.path} 
+                  color="primary.dark"
+                  sx={{ textDecoration: 'none' }}
+                  >
+                    {page.title}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -115,19 +146,33 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
               <Button
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.title}
+                href={page.path}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            <Typography
+              variant="subtitle1"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                fontFamily: 'Montserrat',
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              {fullname}
+            </Typography>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <AccountCircle fontSize='large' sx={{color:"white"}}/>
               </IconButton>
             </Tooltip>
             <Menu
@@ -146,11 +191,10 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem key="Logout" onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Logout</Typography>
+                {/* onClick={account.service.logout} */}
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
