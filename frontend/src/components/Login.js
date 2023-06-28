@@ -13,11 +13,15 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { accountService } from '../_services/account.service';
+import { Alert } from '@mui/material';
 
 
 function Login() {
 
     const navigate = useNavigate();
+
+    const [idInvalides, setIdInvalides] = useState(false);
+    const errorAlert = idInvalides ? <Alert className="alertLogin" variant="filled" severity="error">Identifiants incorrects</Alert> : null;
 
     const [credentials, setCredentials] = useState({
         login : '',
@@ -39,10 +43,7 @@ function Login() {
                 navigate('/student');  
             })
             .catch(error => {
-                console.log(error)
-                if (error.data.status === 401) {
-                    console.log('oui');
-                };
+                setIdInvalides(true);
             })
     }
 
@@ -111,6 +112,7 @@ function Login() {
                     <div className='loginButton'>
                         <Button variant="contained" type="submit">Se connecter</Button>
                     </div>
+                    <div>{errorAlert}</div>
                 </form>
             </div></div>);
 }
