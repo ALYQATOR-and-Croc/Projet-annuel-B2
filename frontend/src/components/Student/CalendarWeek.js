@@ -42,7 +42,7 @@ const events = [
   },
 ];
 
-function PlanningSemaine() {
+function CalendarWeek() {
   const calendarRef = React.createRef();
 
   const handleDateClick = (info) => {
@@ -86,4 +86,4 @@ function PlanningSemaine() {
   );
 }
 
-export default PlanningSemaine;
+export default CalendarWeek;

@@ -4,7 +4,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
-//import '../../styles/PlanningJour.css';
+//import '../../styles/PlanningStudent.css';
 
 const events = [
   {
@@ -41,11 +41,12 @@ const events = [
   },
 ];
 
-function PlanningJour() {
+function CalendarDay({selectedDate}) {
   const calendarRef = React.createRef();
 
   const handleDateClick = (info) => {
     console.log('Date clicked: ', info.dateStr);
+    console.log(selectedDate);
   };
 
   const calendarOptions = {
@@ -73,7 +74,7 @@ function PlanningJour() {
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
           <br></br>
-          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.salle}</b>
+          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.salle}</b> 
         </div>
       );
     },
@@ -86,6 +87,6 @@ function PlanningJour() {
   );
 }
 
-export default PlanningJour;
+export default CalendarDay;
 
 

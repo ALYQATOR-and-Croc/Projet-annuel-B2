@@ -5,11 +5,14 @@ import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
 
-function PlanningMois() {
+function CalendarMonth({onDateClick}) {
   const calendarRef = React.createRef();
 
   const handleDateClick = (info) => {
-    console.log('Date clicked: ', info.dateStr);
+    //console.log('Date clicked: ', info.dateStr);
+    const dateStr = info.dateStr;
+    //onDateClick(dateStr);
+    onDateClick(dateStr);
   };
 
   const calendarOptions = {
@@ -31,4 +34,4 @@ function PlanningMois() {
   );
 }
 
-export default PlanningMois;
+export default CalendarMonth;
