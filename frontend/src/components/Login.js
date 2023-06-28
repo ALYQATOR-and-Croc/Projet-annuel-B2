@@ -38,7 +38,12 @@ function Login() {
                 accountService.saveToken(res.data.token);
                 navigate('/student');  
             })
-            .catch(error => {console.log(error);})
+            .catch(error => {
+                console.log(error)
+                if (error.data.status === 401) {
+                    console.log('oui');
+                };
+            })
     }
 
     const [showPassword, setShowPassword] = useState(false);
