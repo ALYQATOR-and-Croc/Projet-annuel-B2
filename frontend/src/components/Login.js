@@ -12,30 +12,41 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { accountService } from '../_services/account.service';
+import { Alert } from '@mui/material';
 
 
 function Login() {
 
     const navigate = useNavigate();
 
+    const [idInvalides, setIdInvalides] = useState(false);
+    const errorAlert = idInvalides ? <Alert className="alertLogin" variant="filled" severity="error">Identifiants incorrects</Alert> : null;
+
     const [credentials, setCredentials] = useState({
-        email : '',
+        login : '',
         password : ''
     });
+
     const userFormInput = (e) => {
         setCredentials({
             ...credentials,
             [e.target.name]: e.target.value
         })
     }
+
     const userFormSubmit = (e) => {
         e.preventDefault();
-        console.log(credentials);
-        // TODO : requête API
-        if (credentials.email === "luigi" && credentials.password === "oui") {
-            navigate("/student/dashboard");
-        }
+        accountService.login(credentials)
+            .then(res => {
+                accountService.saveToken(res.data.token);
+                navigate('/student');  
+            })
+            .catch(error => {
+                setIdInvalides(true);
+            })
     }
+
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
@@ -64,8 +75,8 @@ function Login() {
                                         <AccountCircle />
                                     </InputAdornment>
                                 }
-                                name="email"
-                                value={credentials.email}
+                                name="login"
+                                value={credentials.login}
                                 onChange={userFormInput}
                         />
                         </FormControl>
@@ -101,6 +112,7 @@ function Login() {
                     <div className='loginButton'>
                         <Button variant="contained" type="submit">Se connecter</Button>
                     </div>
+                    <div>{errorAlert}</div>
                 </form>
             </div></div>);
 }

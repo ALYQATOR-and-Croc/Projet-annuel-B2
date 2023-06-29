@@ -1,9 +1,9 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import Login from './Login'
-import Notfound from './Notfound'
+import Login from '../Login'
+import Notfound from '../Notfound'
 
-export default function RouteurIndex() {
+export default function RouteurAuth() {
   return (
     <Routes>
         <Route index element={<Login/>} />
