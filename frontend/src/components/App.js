@@ -4,7 +4,9 @@ import Notfound from './Notfound';
 import emargisTheme from '../emargisTheme';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import RouteurIndex from './RouteurIndex';import RouteurStudent from './Student/RouteurStudent';
+import RouteurAuth from './Auth/RouteurAuth';
+import AuthGuard from './Auth/AuthGuard';
+import RouteurStudent from './Student/RouteurStudent';
 
 
 function App() {
@@ -14,9 +16,12 @@ function App() {
       <div className="App">
         <BrowserRouter>
           <Routes>
-            <Route path="/*" element={<RouteurIndex/>}/>
-            <Route path="/student/*" element={<RouteurStudent/>}/>
-            
+            <Route path="/*" element={<RouteurAuth/>}/>
+            <Route path="/student/*" element={
+              <AuthGuard>
+                <RouteurStudent/>
+              </AuthGuard>
+            }/>
             <Route path="*" element={<Notfound/>} />
           </Routes>
         </BrowserRouter>
