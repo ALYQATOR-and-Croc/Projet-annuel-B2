@@ -1,17 +1,17 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import StudentApp from './StudentApp'
-import Dashboard from './Dashboard'
-import Planning from './Planning'
+import UserApp from '../UserApp'
+import StudentDashboard from './StudentDashboard'
+import StudentPlanning from './StudentPlanning'
 import Notfound from '../Notfound'
 
 export default function RouteurStudent() {
   return (
     <Routes>
-        <Route element={<StudentApp/>}>
-            <Route index element={<Dashboard/>} />
-            <Route path="dashboard" element={<Dashboard/>} />
-            <Route path="planning" element={<Planning/>} />
+        <Route element={<UserApp userType = 'student'/>}>
+            <Route index element={<StudentDashboard/>} />
+            <Route path="dashboard" element={<StudentDashboard/>} />
+            <Route path="planning" element={<StudentPlanning/>} />
             <Route path="*" element={<Notfound/>} />
         </Route>
     </Routes>

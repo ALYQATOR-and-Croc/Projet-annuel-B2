@@ -1,6 +1,6 @@
 import * as React from 'react';
-import logo from '../../assets/logo_emargis_white.png';
-import '../../styles/Navbar.css';
+import logo from '../assets/logo_emargis_white.png';
+import '../styles/Navbar.css';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,21 +14,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
-import { accountService } from '../../_services/account.service';
+import { accountService } from '../_services/account.service';
 
-function ResponsiveAppBar() {
-
-  const userType = 'student'; // a remplacer par un appel API
+function ResponsiveAppBar(props) {
 
   let pages = []; 
 
-  switch (userType) {
+  switch (props.userType) {
     case 'student':
-      pages = [{title:'Dashboard', path:'/student/Dashboard'}, {title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}];
+      pages = [{title:'Dashboard', path:'/student/dashboard'}, {title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}];
       break;
     // A modifier en fonction des pages de chaque profil
     case 'teacher':
-      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      pages = [{title:'Dashboard', path:'/teacher/dashboard'}, {title:'Planning', path:'/teacher/planning'}, {title:'Emarger', path:'/teacher/register-students'}];
       break;
     case 'ap':
       pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
