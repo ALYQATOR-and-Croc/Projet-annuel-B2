@@ -80,7 +80,7 @@ function CalendarWeek() {
   };
 
   return (
-    <div className="PlanningJour">
+    <div className="PlanningSemaine">
       <FullCalendar ref={calendarRef} {...calendarOptions} />
     </div>
   );

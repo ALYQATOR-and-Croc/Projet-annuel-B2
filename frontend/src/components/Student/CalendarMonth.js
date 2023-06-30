@@ -9,7 +9,7 @@ function CalendarMonth({onDateClick}) {
   const calendarRef = React.createRef();
 
   const handleDateClick = (info) => {
-    //console.log('Date clicked: ', info.dateStr);
+    console.log('Date clicked: ', info.dateStr);
     const dateStr = info.dateStr;
     //onDateClick(dateStr);
     onDateClick(dateStr);
