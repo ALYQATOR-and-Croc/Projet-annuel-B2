@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from 'react-router-dom';
+import { accountService } from '../../_services/account.service';
 
 function ResponsiveAppBar() {
 
@@ -23,7 +24,7 @@ function ResponsiveAppBar() {
 
   switch (userType) {
     case 'student':
-      pages = [{title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}, {title:'Emarger', path:'/student/emager'}];
+      pages = [{title:'Dashboard', path:'/student/Dashboard'}, {title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}];
       break;
     // A modifier en fonction des pages de chaque profil
     case 'teacher':
@@ -191,7 +192,10 @@ const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem key="Logout" onClick={handleCloseUserMenu}>
+              <MenuItem key="Logout" onClick={() => {
+                accountService.logout();
+                window.location.reload(false);
+                }}>
                 <Typography textAlign="center">Logout</Typography>
                 {/* onClick={account.service.logout} */}
               </MenuItem>
