@@ -9,8 +9,12 @@ body {
   font-family: 'Montserrat';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} 
 
 code {
   font-family: 'Montserrat';
+}
+
+html, body, .App, .App>div {
+  height: 100vh
 }

@@ -1,32 +1,15 @@
 .planning-container {
-  margin-top: 30px;
-  margin-left: 20px;
-  margin-right: 20px;
-  margin-bottom: 30px;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto;
-  gap: 20px;
-}
-
-@media (min-width: 768px) {
-  .planning-container {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto;
-  }
+  margin: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .planning-month {
-  grid-column: 1 / span 1;
-  grid-row: 1 / span 1;
+  width: 38%;
 }
 
-
 .planning-week {
-  /* grid-column: 1 / span 2;
-  grid-row: 2 / span 1; */
-  grid-column: 2 / span 1;
-  grid-row: 1 / span 1;
+  width: 58%;
 }
 
 .planning-month .fc-prev-button, 
@@ -55,10 +38,7 @@
   border-color: gray;
 }
 
-
-
-
-
+/*  */
 
 .planning-week .fc-prev-button, 
 .planning-week .fc-next-button {

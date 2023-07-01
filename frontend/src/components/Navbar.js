@@ -21,10 +21,10 @@ function ResponsiveAppBar(props) {
   let pages = []; 
 
   switch (props.userType) {
+    // A modifier en fonction des pages de chaque profil
     case 'student':
       pages = [{title:'Dashboard', path:'/student/dashboard'}, {title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}];
       break;
-    // A modifier en fonction des pages de chaque profil
     case 'teacher':
       pages = [{title:'Dashboard', path:'/teacher/dashboard'}, {title:'Planning', path:'/teacher/planning'}, {title:'Emarger', path:'/teacher/register-students'}];
       break;
@@ -194,8 +194,7 @@ const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
                 accountService.logout();
                 window.location.reload(false);
                 }}>
-                <Typography textAlign="center">Logout</Typography>
-                {/* onClick={account.service.logout} */}
+                <Typography textAlign="center">Déconnexion</Typography>
               </MenuItem>
             </Menu>
           </Box>
