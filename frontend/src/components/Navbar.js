@@ -23,7 +23,7 @@ function ResponsiveAppBar(props) {
   switch (props.userType) {
     // A modifier en fonction des pages de chaque profil
     case 'student':
-      pages = [{title:'Dashboard', path:'/student/dashboard'}, {title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absences'}];
+      pages = [{title:'Dashboard', path:'/student/dashboard'}, {title:'Planning', path:'/student/planning'}, {title:'Absences/Retards', path:'/student/absence-delay'}];
       break;
     case 'teacher':
       pages = [{title:'Dashboard', path:'/teacher/dashboard'}, {title:'Planning', path:'/teacher/planning'}, {title:'Emarger', path:'/teacher/register-students'}];
