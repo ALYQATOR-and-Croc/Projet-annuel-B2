@@ -196,6 +196,14 @@ const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
                 }}>
                 <Typography textAlign="center">Déconnexion</Typography>
               </MenuItem>
+              <MenuItem>
+                <Typography 
+                textAlign="center" 
+                component={Link} 
+                color="primary.dark"
+                sx={{ textDecoration: 'none' }}
+                to={`/${props.userType}/change-password`}>Changer le mot de passe</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
