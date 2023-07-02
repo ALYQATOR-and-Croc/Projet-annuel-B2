@@ -22,7 +22,7 @@ export default function AbsenceDelayGrid(props) {
                   </Grid>
                 )) : 
                 ((props.type === 'retard') ? <div><h3 className='noAbsenceDelay'>Aucun {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelay'/></div> 
-                : <div><h3 className='noAbsenceDelay'>Aucune {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelay'/></div>) }
+                : <div><h3 className='noAbsenceDelay'>Aucune {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelayIcon'/></div>) }
             </Grid>
         </Box>
     </div>
