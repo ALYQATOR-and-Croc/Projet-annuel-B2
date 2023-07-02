@@ -1,18 +1,23 @@
-/* .AbsenceDelayStudent {
-    width: 75%;
-    margin-left: auto;
-    margin-right: auto;
+.absenceDelayGrids{
+    width: 100%;
+    display: flex;
+    margin-top: 2%;
 }
-
-.titreEmargement {
+.absences, .delays{
+    margin-left: 4%;
+    margin-right: 4%;
+    width: 42%;
+}
+.absencesTitle, .delaysTitle{
+    display: inline-flex;
     margin-bottom: 50px;
+    color: rgba(0, 77, 64, 0.87);
 }
-
-.titreEmargement, .soustitreEmargement {
-    color: #006655;
+.absenceTitleLogo, .delaysTitleLogo{
+    margin-top: 2px;
+    margin-right: 10px;
 }
-
-.RegisterTable {
-    height: 60vh;
-    margin-bottom: 30px;
-} */
+.noAbsenceDelay{
+    color: rgba(0, 77, 64, 0.87);
+    margin-left: 4%;
+}
