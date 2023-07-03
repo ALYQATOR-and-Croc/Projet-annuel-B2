@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 //import CalendarDay from './CalendarDay';
-import CalendarMonth from './CalendarMonth';
-import CalendarWeek from './CalendarWeek'
+import CalendarMonth from '../CalendarMonth';
+import CalendarWeek from '../CalendarWeek'
 
 import '../../styles/PlanningStudent.css'
 
-export default function Planning() {
+export default function StudentPlanning() {
 
   const [SelectedDate, setSelectedDate] = useState(null);
 

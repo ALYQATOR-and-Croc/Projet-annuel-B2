@@ -1,0 +1,31 @@
+.AbsenceDelayCard{
+    height: 100%;
+}
+.AbsenceDelayCardContent{
+    background-color: #b2dfdb5e;
+    border: 1px solid rgba(0, 77, 64, 0.1);
+}
+.absenceDelay{
+    display: flex;
+}
+.absenceDelayInfos{
+    width: 50%;
+}
+.absenceDelayJustify{
+    width: 50%;
+    padding-top: 20px;
+}
+.absenceDelayJustified{
+    width: 50%;
+    padding-top: 35px;
+}
+.justifyStatus{
+    width: 100%;
+    padding-bottom: 10px;
+    display: inline-flex;
+    justify-content: center;
+}
+.justifyStatusIcon{
+    margin-top: 4px;
+    margin-right: 6px;
+}

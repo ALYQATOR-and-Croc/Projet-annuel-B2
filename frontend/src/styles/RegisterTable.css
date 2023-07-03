@@ -1,0 +1,10 @@
+.css-1iyq7zh-MuiDataGrid-columnHeaders, .MuiDataGrid-footerContainer{
+    background-color: #c8ece9;
+    color: rgba(0, 77, 64, 0.87);
+}
+.MuiDataGrid-columnHeader .MuiDataGrid-sortIcon{
+    color: rgba(0, 77, 64, 0.87);
+}
+.MuiDataGrid-filterForm .MuiInputBase-root, .MuiDataGrid-filterForm .css-ilo6uu-MuiFormControl-root-MuiTextField-root {
+    background-color: white !important;
+}

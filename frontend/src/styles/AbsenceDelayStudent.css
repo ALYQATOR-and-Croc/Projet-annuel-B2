@@ -1,0 +1,26 @@
+.absenceDelayGrids{
+    width: 100%;
+    display: flex;
+    margin-top: 2%;
+}
+.absences, .delays{
+    margin-left: 4%;
+    margin-right: 4%;
+    width: 42%;
+}
+.absencesTitle, .delaysTitle{
+    display: inline-flex;
+    margin-bottom: 50px;
+    color: rgba(0, 77, 64, 0.87);
+}
+.absenceTitleLogo, .delaysTitleLogo{
+    margin-top: 2px;
+    margin-right: 10px;
+}
+.noAbsenceDelay, .noAbsenceDelayIcon{
+    color: rgba(0, 77, 64, 0.87);
+    margin-left: 4%;
+}
+.noAbsenceDelay{
+    margin-top: 10%;
+}
