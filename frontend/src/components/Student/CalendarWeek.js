@@ -42,12 +42,27 @@ const events = [
   },
 ];
 
-function CalendarWeek() {
-  const calendarRef = React.createRef();
+function CalendarWeek({selectedDate}) {
+  const calendarRef = React.createRef(null);
 
   const handleDateClick = (info) => {
     console.log('Date clicked: ', info.dateStr);
+    if (calendarRef.current) {
+        calendarRef.current.getApi().changeView('timeGridWeek', {
+          validRange: {
+            start: selectedDate
+          },
+        })
+      };
   };
+  // if (calendarRef.current) {
+  //   calendarRef.current.getApi().gotoDate(selectedDate);
+  // }
+  // if (calendarRef.current) {
+  //   calendarRef.current.getApi().changeView('timeGridWeek', {
+  //     date: selectedDate,
+  //   })
+  // };
 
   const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -55,13 +70,19 @@ function CalendarWeek() {
     slotDuration: '00:30:00',
     slotMinTime: '08:00:00',
     slotMaxTime: '19:00:00',
+    // validRange: {
+    //   start: '2023-07-10'
+    // },
+    //gotodate: '2023-07-10',
     height: 'auto',
     locales: [frLocale],
     locale: 'fr',
     events: events,
+    date: selectedDate,
     eventColor: '#4BBDB7',
     nowIndicator: true,
     allDaySlot: false,
+    
     dateClick: handleDateClick,
     eventClick: (info) => console.log(info.event.id),
     eventContent: function (arg) {
