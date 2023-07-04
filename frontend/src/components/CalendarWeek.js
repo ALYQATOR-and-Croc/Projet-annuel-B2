@@ -32,8 +32,8 @@ const events = [
     prof:'Mr DUMONT',
     classe:'B1 ESGI',
     salle: 'SALLE 515',
-    start: '2023-07-03T14:00:00',
-    end: '2023-07-03T15:30:00',
+    start: '2023-07-04T14:00:00',
+    end: '2023-07-04T15:30:00',
   },
   {
     id: 4,

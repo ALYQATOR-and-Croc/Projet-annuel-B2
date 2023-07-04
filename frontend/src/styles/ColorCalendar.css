@@ -81,7 +81,7 @@
 
 
 .fc .fc-timegrid-now-indicator-arrow {
-  border-color: #239489;
+  border-color: #B8E3E1;
 }
 .fc-direction-ltr .fc-timegrid-now-indicator-arrow {
   border-bottom-color: transparent;
@@ -90,7 +90,7 @@
   left: 0px;
 }
 .fc .fc-timegrid-now-indicator-line {
-  border-color: #239489;
+  border-color: #B8E3E1;
 }
 
 .fc-day-today{

@@ -14,10 +14,10 @@ export default function TeacherPlanning() {
   };
   return (
     <div className='planning-container'>
-      <div className='planning-month'>
+      <div className='planning-month-size'>
         <CalendarMonth onDateClick={handleDateClick}/>
       </div>
-      <div className='planning-week'>
+      <div className='planning-week-size'>
         <CalendarWeek SelectedDate={SelectedDate}/>
       </div>
     </div>
