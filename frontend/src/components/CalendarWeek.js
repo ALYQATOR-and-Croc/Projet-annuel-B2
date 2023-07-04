@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -46,27 +46,16 @@ const events = [
   },
 ];
 
-function CalendarWeek({selectedDate}) {
-  const calendarRef = React.createRef(null);
+function CalendarWeek(props) {
+  const calendarRef = React.createRef();
 
-  const handleDateClick = (info) => {
-    console.log('Date clicked: ', info.dateStr);
-    if (calendarRef.current) {
-        calendarRef.current.getApi().changeView('timeGridWeek', {
-          validRange: {
-            start: selectedDate
-          },
-        })
-      };
-  };
-  // if (calendarRef.current) {
-  //   calendarRef.current.getApi().gotoDate(selectedDate);
-  // }
-  // if (calendarRef.current) {
-  //   calendarRef.current.getApi().changeView('timeGridWeek', {
-  //     date: selectedDate,
-  //   })
-  // };
+  // Si date selectionnée dans le mois, affichage de la date choisie
+  useEffect(() => {
+    let calendarApi = calendarRef.current.getApi();
+    if (props.SelectedDate !== null) {
+      calendarApi.gotoDate(props.SelectedDate);
+    }
+  });
 
   const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -74,20 +63,13 @@ function CalendarWeek({selectedDate}) {
     slotDuration: '00:30:00',
     slotMinTime: '08:00:00',
     slotMaxTime: '19:00:00',
-    // validRange: {
-    //   start: '2023-07-10'
-    // },
-    //gotodate: '2023-07-10',
     height: 'auto',
     locales: [frLocale],
     locale: 'fr',
     events: events,
-    date: selectedDate,
     eventColor: '#239489',
     nowIndicator: true,
     allDaySlot: false,
-    
-    dateClick: handleDateClick,
     eventClick: (info) => console.log(info.event.id),
     eventContent: function (arg) {
       return (
@@ -106,7 +88,7 @@ function CalendarWeek({selectedDate}) {
 
   return (
     <div className="planningSemaine">
-      <FullCalendar ref={calendarRef} {...calendarOptions} />
+      <FullCalendar id='calendarSemaine' ref={calendarRef} {...calendarOptions} />
     </div>
   );
 }

@@ -9,13 +9,15 @@ export default function TeacherPlanning() {
 
   const [SelectedDate, setSelectedDate] = useState(null);
 
-  const handleDateClick = (date) => {
+  const showSelectedDate = (date) => {
     setSelectedDate(date);
   };
+
   return (
     <div className='planning-container'>
       <div className='planning-month-size'>
-        <CalendarMonth onDateClick={handleDateClick}/>
+        <CalendarMonth onDateClick={showSelectedDate}/>
+        <p className='planning-month-info'>↑ Cliquez sur un jour du mois pour afficher sa semaine ↑</p>
       </div>
       <div className='planning-week-size'>
         <CalendarWeek SelectedDate={SelectedDate}/>

@@ -4,7 +4,6 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import '../../styles/AbsenceDelayCard.css';
-import AttachEmailIcon from '@mui/icons-material/AttachEmail';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Divider } from '@mui/material';

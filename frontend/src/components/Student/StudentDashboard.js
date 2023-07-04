@@ -1,4 +1,4 @@
-import React , { useState } from 'react';
+import React from 'react';
 import '../../styles/StudentDashboard.css';
 import AbsenceDelayGrid from './AbsenceDelayGrid';
 import { Button, Divider } from '@mui/material';
@@ -8,8 +8,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CalendarWeek from '../CalendarWeek';
 
 export default function Dashboard() {
-
-  const [SelectedDate, setSelectedDate] = useState(null);
 
   const absenceDelays = [
   {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", prof:"M. BONNETON", justified:false},
@@ -43,7 +41,7 @@ export default function Dashboard() {
             <div className='SeeMoreButton'><Button href='/student/planning' variant="contained" startIcon={<VisibilityIcon/>}>VOIR TOUT</Button></div>
           </div>
             <div className='planning-weekDash'>
-              <CalendarWeek SelectedDate={SelectedDate}/>
+              <CalendarWeek SelectedDate={null}/>
             </div>
           </div>
         </div>

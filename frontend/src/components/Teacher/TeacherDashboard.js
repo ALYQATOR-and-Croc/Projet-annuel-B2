@@ -10,8 +10,6 @@ import '../../styles/TeacherDashboard.css';
 
 export default function Dashboard() {
 
-  const [SelectedDate, setSelectedDate] = useState(null);
-
   const absenceDelays = [
   {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", classe:"B2 ESGI", Emarger:false},
   {id:2, date: "02/06/2023", heure: "14h-15h30", matiere: "Algorithmie", classe:"B2 ESGI", Emarger:true},
@@ -44,7 +42,7 @@ export default function Dashboard() {
             <div className='SeeMoreButton'><Button href='/teacher/planning' variant="contained" startIcon={<VisibilityIcon/>}>VOIR TOUT</Button></div>
           </div>
             <div className='planning-weekDash'>
-              <CalendarWeek SelectedDate={SelectedDate}/>
+              <CalendarWeek SelectedDate={null}/>
             </div>
           </div>
         </div>
