@@ -4,6 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
+import '../styles/ColorCalendar.css';
 
 function CalendarMonth({onDateClick}) {
   const calendarRef = React.createRef();

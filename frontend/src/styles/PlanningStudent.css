@@ -1,89 +1,13 @@
 .planning-container {
-  margin: 30px;
-  display: flex;
-  justify-content: space-between;
-}
+    margin: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
 
-.planning-month {
-  width: 38%;
-}
-
-.planning-week {
-  width: 58%;
-}
-
-.planning-month .fc-prev-button, 
-.planning-month .fc-next-button {
-  background-color: #239489;
-  border-color:#1C5E53; 
-}
-
-.planning-month .fc-prev-button:hover, 
-.planning-month .fc-next-button:hover {
-  background-color: #1C5E53;
-  border-color:#1C5E53;
-}
-
-.planning-month .fc-today-button {
-  background-color: #239489;
-  border-color:#1C5E53; 
-}
-
-.planning-month .fc-today-button:hover {
-  background-color: #1C5E53;
-  border-color:#1C5E53; 
-}
-.planning-month .fc-today-button:disabled {
-  background-color: gray;
-  border-color: gray;
-}
-
-/*  */
-
-.planning-week .fc-prev-button, 
-.planning-week .fc-next-button {
-  background-color: #239489;
-  border-color:#1C5E53; 
-}
-
-.planning-week .fc-prev-button:hover, 
-.planning-week .fc-next-button:hover {
-  background-color: #1C5E53;
-  border-color:#1C5E53;
-}
-
-.planning-week .fc-today-button {
-  background-color: #239489;
-  border-color:#1C5E53; 
-}
-
-.planning-week .fc-today-button:hover {
-  background-color: #1C5E53;
-  border-color:#1C5E53; 
-}
-.planning-week .fc-today-button:disabled {
-  background-color: gray;
-  border-color: gray;
-}
-
-.planning-week .fc-col-header-cell-cushion {
-  color: #1C5E53;
-}
-.planning-week .fc-timegrid-slot-label-cushion {
-  color: #1C5E53;
-}
-
-.planning-week .fc-toolbar-title {
-  color: #1C5E53;
-}
-
-.planning-month .fc-col-header-cell-cushion {
-  color: #1C5E53;
-}
-
-.planning-month .fc-toolbar-title {
-  color: #1C5E53;
-}
-.planning-month .fc-daygrid-day-number {
-  color: #1C5E53;
-}
+.planning-month-size {
+    width: 38%;
+  }
+  
+.planning-week-size {
+    width: 58%;
+  }

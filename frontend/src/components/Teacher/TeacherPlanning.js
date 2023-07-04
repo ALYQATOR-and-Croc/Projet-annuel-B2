@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CalendarMonth from '../CalendarMonth';
 import CalendarWeek from '../CalendarWeek'
 
-import '../../styles/PlanningStudent.css'
+import '../../styles/ColorCalendar.css'
 
 export default function TeacherPlanning() {
 

@@ -5,13 +5,14 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
-//import '../../styles/PlanningJour.css';
+import '../styles/ColorCalendar.css';
 
 const events = [
   {
     id: 1,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B2 ESGI',
     salle: 'SALLE 515',
     start: '2023-07-03T09:45:00',
     end: '2023-07-03T11:15:00',
@@ -20,6 +21,7 @@ const events = [
     id: 2,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B2 ESGI',
     salle: 'SALLE 515',
     start: '2023-07-03T11:30:00',
     end: '2023-07-03T13:00:00',
@@ -28,6 +30,7 @@ const events = [
     id: 3,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B1 ESGI',
     salle: 'SALLE 515',
     start: '2023-07-03T14:00:00',
     end: '2023-07-03T15:30:00',
@@ -36,6 +39,7 @@ const events = [
     id: 4,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B1 ESGI',
     salle: 'SALLE 515',
     start: '2023-07-03T15:45:00',
     end: '2023-07-03T17:15:00',
@@ -101,7 +105,7 @@ function CalendarWeek({selectedDate}) {
   };
 
   return (
-    <div className="PlanningSemaine">
+    <div className="planningSemaine">
       <FullCalendar ref={calendarRef} {...calendarOptions} />
     </div>
   );

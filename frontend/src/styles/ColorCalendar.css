@@ -1,0 +1,102 @@
+
+.planningMois .fc-prev-button, 
+.planningMois .fc-next-button {
+  background-color: #239489;
+  border-color:#1C5E53; 
+}
+
+.planningMois .fc-prev-button:hover, 
+.planningMois .fc-next-button:hover {
+  background-color: #1C5E53;
+  border-color:#1C5E53;
+}
+
+.planningMois .fc-today-button {
+  background-color: #239489;
+  border-color:#1C5E53; 
+}
+
+.planningMois .fc-today-button:hover {
+  background-color: #1C5E53;
+  border-color:#1C5E53; 
+}
+.planningMois .fc-today-button:disabled {
+  background-color: gray;
+  border-color: gray;
+}
+
+/*  */
+
+.planningSemaine .fc-prev-button, 
+.planningSemaine .fc-next-button {
+  background-color: #239489;
+  border-color:#1C5E53; 
+}
+
+.planningSemaine .fc-prev-button:hover, 
+.planningSemaine .fc-next-button:hover {
+  background-color: #1C5E53;
+  border-color:#1C5E53;
+}
+
+.planningSemaine .fc-today-button {
+  background-color: #239489;
+  border-color:#1C5E53; 
+}
+
+.planningSemaine .fc-today-button:hover {
+  background-color: #1C5E53;
+  border-color:#1C5E53; 
+}
+.planningSemaine .fc-today-button:disabled {
+  background-color: gray;
+  border-color: gray;
+}
+
+.planningSemaine .fc-col-header-cell-cushion {
+  color: #1C5E53;
+}
+.planningSemaine .fc-timegrid-slot-label-cushion {
+  color: #1C5E53;
+}
+
+.planningSemaine .fc-toolbar-title {
+  color: #1C5E53;
+}
+
+.planningMois .fc-col-header-cell-cushion {
+  color: #1C5E53;
+}
+
+.planningMois .fc-toolbar-title {
+  color: #1C5E53;
+}
+.planningMois .fc-daygrid-day-number {
+  color: #1C5E53;
+}
+
+.planningSemaine .--fc-today-bg-color{
+  background-color: red !important;
+  }
+
+
+.fc .fc-timegrid-now-indicator-arrow {
+  border-color: #239489;
+}
+.fc-direction-ltr .fc-timegrid-now-indicator-arrow {
+  border-bottom-color: transparent;
+  border-top-color: transparent;
+  border-width: 5px 0px 5px 6px;
+  left: 0px;
+}
+.fc .fc-timegrid-now-indicator-line {
+  border-color: #239489;
+}
+
+.fc-day-today{
+  background-color: rgba(184, 227, 225, 0.3) !important;
+}
+
+.fc-col-header-cell {
+  background-color: white !important;
+}

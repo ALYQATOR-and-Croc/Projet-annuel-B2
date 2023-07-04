@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import CalendarMonth from '../CalendarMonth';
 import CalendarWeek from '../CalendarWeek'
 
+import '../../styles/ColorCalendar.css'
 import '../../styles/PlanningStudent.css'
 
 export default function StudentPlanning() {
@@ -14,10 +15,10 @@ export default function StudentPlanning() {
   };
   return (
     <div className='planning-container'>
-      <div className='planning-month'>
+      <div className='planning-month-size'>
         <CalendarMonth onDateClick={handleDateClick}/>
       </div>
-      <div className='planning-week'>
+      <div className='planning-week-size'>
         <CalendarWeek SelectedDate={SelectedDate}/>
       </div>
     </div>
