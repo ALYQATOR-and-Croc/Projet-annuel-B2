@@ -1,8 +1,9 @@
 import React from 'react';
 import RegisterTable from '../RegisterTable';
 import '../../styles/RegisterStudents.css';
-import { Button } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import CalendarDay from '../CalendarDay';
 
 export default function RegisterStudents() {
   const date = '18/02/2023';
@@ -16,13 +17,22 @@ export default function RegisterStudents() {
 
   return (
     <div className="RegisterStudents">
-      <div className="titreEmargement">
-        <h1>Appel du {date}</h1>
-        <h2>{heureDebut}-{heureFin} : {matiere}</h2>
+      <div className="RegisterStudentsDay">
+        <h4 className="soustitreEmargementDay">↓ Cliquez sur un cours pour en faire l'émargement ↓</h4>
+        <div className ="RegisterCalendar">
+          <CalendarDay/>
+        </div>
       </div>
-      <h4 className="soustitreEmargement">Selectionnez les élèves présents et cliquez sur "Confirmer".</h4>
-      <div className="RegisterTable"><RegisterTable/></div>
-      <Button variant="contained" endIcon={<CheckIcon/>} onClick={sendRegister}>Confirmer</Button>
+      <Divider orientation="vertical" flexItem></Divider>
+      <div className="RegisterStudentsTable">
+        <div className="titreEmargement">
+          <h1>Appel du {date}</h1>
+          <h2>{heureDebut}-{heureFin} : {matiere}</h2>
+        </div>
+        <h4 className="soustitreEmargement">Selectionnez les élèves présents et cliquez sur "Confirmer".</h4>
+        <div className="RegisterTable"><RegisterTable/></div>
+        <Button variant="contained" endIcon={<CheckIcon/>} onClick={sendRegister}>Confirmer</Button>
+      </div>
     </div>
   )
 }

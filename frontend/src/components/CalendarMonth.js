@@ -27,7 +27,7 @@ function CalendarMonth({onDateClick}) {
   };
 
   return (
-    <div className="planningMois">
+    <div className="calendarMois">
       <FullCalendar ref={calendarRef} {...calendarOptions} />
     </div>
   );

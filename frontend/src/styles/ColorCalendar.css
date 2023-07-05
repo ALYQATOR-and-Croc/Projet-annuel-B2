@@ -1,88 +1,72 @@
 
-.planningMois .fc-prev-button, 
-.planningMois .fc-next-button {
+.calendarMois .fc-prev-button, 
+.calendarMois .fc-next-button,
+.calendarSemaine .fc-prev-button, 
+.calendarSemaine .fc-next-button,
+.calendarJour .fc-prev-button, 
+.calendarJour .fc-next-button {
   background-color: #239489;
   border-color:#1C5E53; 
 }
 
-.planningMois .fc-prev-button:hover, 
-.planningMois .fc-next-button:hover {
+.calendarMois .fc-prev-button:hover, 
+.calendarMois .fc-next-button:hover,
+.calendarSemaine .fc-prev-button:hover, 
+.calendarSemaine .fc-next-button:hover,
+.calendarJour .fc-prev-button:hover, 
+.calendarJour .fc-next-button:hover {
   background-color: #1C5E53;
   border-color:#1C5E53;
 }
 
-.planningMois .fc-today-button {
+.calendarMois .fc-today-button,
+.calendarSemaine .fc-today-button,
+.calendarJour .fc-today-button {
   background-color: #239489;
   border-color:#1C5E53; 
 }
 
-.planningMois .fc-today-button:hover {
+.calendarMois .fc-today-button:hover,
+.calendarSemaine .fc-today-button:hover,
+.calendarJour .fc-today-button:hover
+{
   background-color: #1C5E53;
   border-color:#1C5E53; 
 }
-.planningMois .fc-today-button:disabled {
+.calendarMois .fc-today-button:disabled,
+.calendarSemaine .fc-today-button:disabled,
+.calendarJour .fc-today-button:disabled {
   background-color: gray;
   border-color: gray;
 }
 
 /*  */
 
-.planningSemaine .fc-prev-button, 
-.planningSemaine .fc-next-button {
-  background-color: #239489;
-  border-color:#1C5E53; 
-}
 
-.planningSemaine .fc-prev-button:hover, 
-.planningSemaine .fc-next-button:hover {
-  background-color: #1C5E53;
-  border-color:#1C5E53;
-}
-
-.planningSemaine .fc-today-button {
-  background-color: #239489;
-  border-color:#1C5E53; 
-}
-
-.planningSemaine .fc-today-button:hover {
-  background-color: #1C5E53;
-  border-color:#1C5E53; 
-}
-.planningSemaine .fc-today-button:disabled {
-  background-color: gray;
-  border-color: gray;
-}
-
-.planningSemaine .fc-col-header-cell-cushion {
+.calendarSemaine .fc-col-header-cell-cushion,
+.calendarMois .fc-col-header-cell-cushion,
+.calendarJour .fc-col-header-cell-cushion {
   color: #1C5E53;
 }
-.planningSemaine .fc-timegrid-slot-label-cushion {
+.calendarSemaine .fc-timegrid-slot-label-cushion,
+.calendarJour .fc-timegrid-slot-label-cushion {
   color: #1C5E53;
 }
 
-.planningSemaine .fc-toolbar-title {
+.calendarSemaine .fc-toolbar-title,
+.calendarMois .fc-toolbar-title,
+.calendarJour .fc-toolbar-title  {
   color: #1C5E53;
 }
 
-.planningMois .fc-col-header-cell-cushion {
+.calendarMois .fc-daygrid-day-number {
   color: #1C5E53;
 }
-
-.planningMois .fc-toolbar-title {
-  color: #1C5E53;
-}
-.planningMois .fc-daygrid-day-number {
-  color: #1C5E53;
-}
-
-.planningSemaine .--fc-today-bg-color{
-  background-color: red !important;
-  }
-
 
 .fc .fc-timegrid-now-indicator-arrow {
   border-color: #B8E3E1;
 }
+
 .fc-direction-ltr .fc-timegrid-now-indicator-arrow {
   border-bottom-color: transparent;
   border-top-color: transparent;
@@ -99,7 +83,4 @@
 
 .fc-col-header-cell {
   background-color: white !important;
-}
-.planning-month-info {
-  color: #1C5E53;
 }

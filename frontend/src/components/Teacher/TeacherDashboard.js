@@ -42,7 +42,7 @@ export default function Dashboard() {
             <div className='SeeMoreButton'><Button href='/teacher/planning' variant="contained" startIcon={<VisibilityIcon/>}>VOIR TOUT</Button></div>
           </div>
             <div className='planning-weekDash'>
-              <CalendarWeek SelectedDate={null}/>
+              <CalendarWeek SelectedDate={null} variant='teacher'/>
             </div>
           </div>
         </div>

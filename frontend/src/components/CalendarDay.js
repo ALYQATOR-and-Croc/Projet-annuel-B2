@@ -4,40 +4,40 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
-//import '../../styles/PlanningStudent.css';
+import '../styles/ColorCalendar.css';
 
 const events = [
   {
     id: 1,
     title: 'Mathématique',
-    prof:'Mr DUMONT',
+    classe:'B2 ESGI',
     salle: 'SALLE 515',
-    start: '2023-06-28T09:45:00',
-    end: '2023-06-28T11:15:00',
+    start: '2023-07-05T09:45:00',
+    end: '2023-07-05T11:15:00',
   },
   {
     id: 2,
     title: 'Mathématique',
-    prof:'Mr DUMONT',
+    classe:'B2 ESGI',
     salle: 'SALLE 515',
-    start: '2023-06-28T11:30:00',
-    end: '2023-06-28T13:00:00',
+    start: '2023-07-05T11:30:00',
+    end: '2023-07-05T13:00:00',
   },
   {
     id: 3,
-    title: 'Mathématique',
-    prof:'Mr DUMONT',
-    salle: 'SALLE 515',
-    start: '2023-06-28T14:00:00',
-    end: '2023-06-28T15:30:00',
+    title: 'Python',
+    classe:'M1 ESGI',
+    salle: 'SALLE 205',
+    start: '2023-07-05T14:00:00',
+    end: '2023-07-05T15:30:00',
   },
   {
     id: 4,
-    title: 'Mathématique',
-    prof:'Mr DUMONT',
-    salle: 'SALLE 515',
-    start: '2023-06-28T15:45:00',
-    end: '2023-06-28T17:15:00',
+    title: 'Algorithmie',
+    classe:'M1 ESGI',
+    salle: 'SALLE 145',
+    start: '2023-07-05T15:45:00',
+    end: '2023-07-05T17:15:00',
   },
 ];
 
@@ -50,6 +50,11 @@ function CalendarDay({selectedDate}) {
   };
 
   const calendarOptions = {
+    headerToolbar: {
+      left:   'title',
+      center: '',
+      right:  ''
+    },
     plugins: [timeGridPlugin, interactionPlugin],
     initialView: 'timeGridDay',
     slotDuration: '00:30:00',
@@ -59,8 +64,7 @@ function CalendarDay({selectedDate}) {
     locales: [frLocale],
     locale: 'fr',
     events: events,
-    //eventColor: '#239489',
-    eventColor: '#4BBDB7',
+    eventColor: '#239489',
     nowIndicator: true,
     allDaySlot: false,
     dateClick: handleDateClick,
@@ -72,7 +76,7 @@ function CalendarDay({selectedDate}) {
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.title}</b>
           <br></br>
-          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.classe}</b>
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.salle}</b> 
         </div>
@@ -81,7 +85,7 @@ function CalendarDay({selectedDate}) {
   };
 
   return (
-    <div className="PlanningJour">
+    <div className="calendarJour">
       <FullCalendar ref={calendarRef} {...calendarOptions} />
     </div>
   );

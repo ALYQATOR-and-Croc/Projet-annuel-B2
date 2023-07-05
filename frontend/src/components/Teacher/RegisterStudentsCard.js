@@ -39,7 +39,7 @@ export default function RegisterStudentsCard(props) {
                         </Typography>
                     </div>
                     <Button 
-                    href='register-students' 
+                    href='/teacher/register-students' 
                     target='_blank' 
                     size="small" 
                     variant="contained" 

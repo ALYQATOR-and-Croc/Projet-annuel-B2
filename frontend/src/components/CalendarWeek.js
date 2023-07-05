@@ -78,7 +78,10 @@ function CalendarWeek(props) {
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.title}</b>
           <br></br>
-          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+          {
+            (props.variant === 'teacher') ? <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.classe}</b> :
+            <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+          }
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.salle}</b>
         </div>
@@ -87,7 +90,7 @@ function CalendarWeek(props) {
   };
 
   return (
-    <div className="planningSemaine">
+    <div className="calendarSemaine">
       <FullCalendar id='calendarSemaine' ref={calendarRef} {...calendarOptions} />
     </div>
   );

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CalendarMonth from '../CalendarMonth';
 import CalendarWeek from '../CalendarWeek'
 
-import '../../styles/ColorCalendar.css'
+import '../../styles/PlanningPage.css'
 
 export default function TeacherPlanning() {
 
@@ -20,7 +20,7 @@ export default function TeacherPlanning() {
         <p className='planning-month-info'>↑ Cliquez sur un jour du mois pour afficher sa semaine ↑</p>
       </div>
       <div className='planning-week-size'>
-        <CalendarWeek SelectedDate={SelectedDate}/>
+        <CalendarWeek SelectedDate={SelectedDate} variant='teacher'/>
       </div>
     </div>
   );
