@@ -59,156 +59,158 @@ const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="100%">
-        <Toolbar disableGutters>
-          <img className="logoEmargis" src={logo} alt="Logo Emargis"/>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            sx={{
-              mr: 3,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Copykey',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Emargis
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
-                  <Typography 
-                  textAlign="center" 
-                  component={Link} 
-                  to={page.path} 
-                  color="primary.dark"
-                  sx={{ textDecoration: 'none' }}
-                  >
-                    {page.title}
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: 'flex', md: 'none' },
-              flexGrow: 1,
-              fontFamily: 'Copykey',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            Emargis
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page.title}
-                href={page.path}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page.title}
-              </Button>
-            ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
+    <div className='Navbar'>
+      <AppBar position="fixed">
+        <Container maxWidth="100%">
+          <Toolbar disableGutters>
+            <img className="logoEmargis" src={logo} alt="Logo Emargis"/>
             <Typography
-              variant="subtitle1"
+              variant="h5"
               noWrap
               component="a"
               sx={{
-                mr: 2,
-                fontFamily: 'Montserrat',
+                mr: 3,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'Copykey',
                 fontWeight: 700,
+                letterSpacing: '.3rem',
                 color: 'inherit',
                 textDecoration: 'none',
               }}
             >
-              {fullname}
+              Emargis
             </Typography>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <AccountCircle fontSize='large' sx={{color:"white"}}/>
+
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
               </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: 'block', md: 'none' },
+                }}
+              >
+                {pages.map((page) => (
+                  <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                    <Typography 
+                    textAlign="center" 
+                    component={Link} 
+                    to={page.path} 
+                    color="primary.dark"
+                    sx={{ textDecoration: 'none' }}
+                    >
+                      {page.title}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+            <Typography
+              variant="h5"
+              noWrap
+              component="a"
+              href=""
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                flexGrow: 1,
+                fontFamily: 'Copykey',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
               }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
             >
-              <MenuItem key="Logout" onClick={() => {
-                accountService.logout();
-                window.location.reload(false);
-                }}>
-                <Typography textAlign="center">Déconnexion</Typography>
-              </MenuItem>
-              <MenuItem>
-                <Typography 
-                textAlign="center" 
-                component={Link} 
-                color="primary.dark"
-                sx={{ textDecoration: 'none' }}
-                to={`/${props.userType}/change-password`}>Changer le mot de passe</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
-      </Container>
-    </AppBar>
+              Emargis
+            </Typography>
+            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              {pages.map((page) => (
+                <Button
+                  key={page.title}
+                  href={page.path}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page.title}
+                </Button>
+              ))}
+            </Box>
+
+            <Box sx={{ flexGrow: 0 }}>
+              <Typography
+                variant="subtitle1"
+                noWrap
+                component="a"
+                sx={{
+                  mr: 2,
+                  fontFamily: 'Montserrat',
+                  fontWeight: 700,
+                  color: 'inherit',
+                  textDecoration: 'none',
+                }}
+              >
+                {fullname}
+              </Typography>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <AccountCircle fontSize='large' sx={{color:"white"}}/>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem key="Logout" onClick={() => {
+                  accountService.logout();
+                  window.location.reload(false);
+                  }}>
+                  <Typography textAlign="center">Déconnexion</Typography>
+                </MenuItem>
+                <MenuItem>
+                  <Typography 
+                  textAlign="center" 
+                  component={Link} 
+                  color="primary.dark"
+                  sx={{ textDecoration: 'none' }}
+                  to={`/${props.userType}/change-password`}>Changer le mot de passe</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </div>
   );
 }
 export default ResponsiveAppBar;
