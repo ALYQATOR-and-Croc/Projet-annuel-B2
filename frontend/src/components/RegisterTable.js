@@ -9,7 +9,7 @@ const columns = [
   { field: 'class', headerName: 'Classe', flex: 0.5}
 ];
 
-const rows = [
+const eleves = [
   { id: 1, lastName: 'Snow', firstName: 'Jon', email: 'jon@snow.fr', class: 'B2 ESGI'},
   { id: 2, lastName: 'Lannister', firstName: 'Cersei', email: 'cersei@lannister.fr', class: 'B2 ESGI'},
   { id: 3, lastName: 'Lannister', firstName: 'Jaime', email: 'jaime@lannister.fr', class: 'B2 ESGI'},
@@ -36,7 +36,7 @@ const rows = [
   { id: 39, lastName: 'Roxie', firstName: 'Harvey', email: 'harvey@roxie.fr', class: 'B2 ESGI'}
 ];
 
-export default function RegisterTable() {
+export default function RegisterTable(props) {
   return (
     <div className="RegisterTable">
       <DataGrid
@@ -50,11 +50,11 @@ export default function RegisterTable() {
                 ? `${count.toLocaleString()} élèves sélectionnés`
                 : `${count.toLocaleString()} élève sélectionné`,
         }}
-        rows={rows}
+        rows={eleves}
         columns={columns}
         initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: rows.length }
+              paginationModel: { page: 0, pageSize: eleves.length }
             },
         }}
         checkboxSelection

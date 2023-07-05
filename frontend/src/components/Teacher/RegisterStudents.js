@@ -1,38 +1,93 @@
-import React from 'react';
+import React, { useState } from 'react';
 import RegisterTable from '../RegisterTable';
 import '../../styles/RegisterStudents.css';
 import { Button, Divider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CalendarDay from '../CalendarDay';
 
 export default function RegisterStudents() {
-  const date = '18/02/2023';
-  const heureDebut = '8h';
-  const heureFin = '9h30';
-  const matiere = 'Algorithmie'
 
-  const sendRegister = () => {
-    console.log("emargement terminé");
+  const cours = [
+    {
+      id: 1,
+      title: 'Mathématique',
+      classe:'B2 ESGI',
+      salle: 'SALLE 515',
+      start: '2023-07-05T09:45:00',
+      end: '2023-07-05T11:15:00',
+    },
+    {
+      id: 2,
+      title: 'Mathématique',
+      classe:'B2 ESGI',
+      salle: 'SALLE 515',
+      start: '2023-07-05T11:30:00',
+      end: '2023-07-05T13:00:00',
+    },
+    {
+      id: 3,
+      title: 'Python',
+      classe:'M1 ESGI',
+      salle: 'SALLE 205',
+      start: '2023-07-05T14:00:00',
+      end: '2023-07-05T15:30:00',
+    },
+    {
+      id: 4,
+      title: 'Algorithmie',
+      classe:'M1 ESGI',
+      salle: 'SALLE 145',
+      start: '2023-07-05T15:45:00',
+      end: '2023-07-05T17:15:00',
+    },
+  ];
+
+  const [isCoursSelected, setIsCoursSelected] = useState(false);
+  const [idCoursSelected, setIdCoursSelected] = useState(null);
+
+  let date = '';
+  let heureDebut = '';
+  let heureFin = '';
+  let matiere = '';
+
+  if (isCoursSelected) {
+    date = cours[idCoursSelected-1].start.substr(0,10).replace(/-/g, '/');
+    heureDebut = cours[idCoursSelected-1].start.substr(11,5).replace(':', 'h');
+    heureFin = cours[idCoursSelected-1].end.substr(11,5).replace(':', 'h');
+    matiere = cours[idCoursSelected-1].title;
   }
+
+  const showSelectedCours = (idCours) => {
+    setIdCoursSelected(idCours);
+    setIsCoursSelected(true);
+  };
 
   return (
     <div className="RegisterStudents">
       <div className="RegisterStudentsDay">
-        <h4 className="soustitreEmargementDay">↓ Cliquez sur un cours pour en faire l'émargement ↓</h4>
+        <h3 className="soustitreEmargementDay">↓ Cliquez sur un cours pour en faire l'émargement ↓</h3>
         <div className ="RegisterCalendar">
-          <CalendarDay/>
+          <CalendarDay cours={cours} onCoursClick={showSelectedCours}/>
         </div>
       </div>
       <Divider orientation="vertical" flexItem></Divider>
+      { isCoursSelected ? 
       <div className="RegisterStudentsTable">
         <div className="titreEmargement">
           <h1>Appel du {date}</h1>
           <h2>{heureDebut}-{heureFin} : {matiere}</h2>
         </div>
-        <h4 className="soustitreEmargement">Selectionnez les élèves présents et cliquez sur "Confirmer".</h4>
-        <div className="RegisterTable"><RegisterTable/></div>
-        <Button variant="contained" endIcon={<CheckIcon/>} onClick={sendRegister}>Confirmer</Button>
+        <div className='btnEmargement'><Button variant="contained" endIcon={<CheckIcon/>} onClick={() => setIsCoursSelected(false)}>Confirmer l'appel</Button></div>
+        {/* Avec l'idCours récupéré, requete api pour récupérer elèves du cours */}
+        <div className="RegisterTable"><RegisterTable eleves={[]}/></div>
+      </div> :
+      <div className="titreNotEmargement">
+        <EventBusyIcon className='notEmargementIcon' fontSize='large'/>
+        <h1>Aucun cours selectionné</h1>
+        <h3>← Choisissez un cours</h3>
       </div>
+      }
     </div>
   )
 }

@@ -22,8 +22,7 @@ function CalendarMonth({onDateClick}) {
     locale: 'fr',
     eventColor: '#4BBDB7',
     nowIndicator: true,
-    dateClick: handleDateClick,
-    eventClick: (info) => console.log(info.event.id),
+    dateClick: handleDateClick
   };
 
   return (

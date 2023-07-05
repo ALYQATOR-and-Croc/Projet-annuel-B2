@@ -40,7 +40,6 @@ export default function RegisterStudentsCard(props) {
                     </div>
                     <Button 
                     href='/teacher/register-students' 
-                    target='_blank' 
                     size="small" 
                     variant="contained" 
                     startIcon={<ListAltIcon/>}>Émarger</Button>

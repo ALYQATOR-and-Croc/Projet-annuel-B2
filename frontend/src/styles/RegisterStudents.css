@@ -1,6 +1,5 @@
 .RegisterStudents{
     display: flex;
-    margin-top: 1%;
 }
 
 .RegisterStudentsDay {
@@ -15,16 +14,24 @@
     margin-right: 2%;
 }
 
-.titreEmargement {
-    margin-bottom: 50px;
+.btnEmargement {
+    margin-bottom: 2em;
 }
 
-.titreEmargement, .soustitreEmargement, .soustitreEmargementDay {
+.titreEmargement, .soustitreEmargementDay, .titreNotEmargement {
     color: #006655;
 }
 
 .soustitreEmargementDay {
-    margin-top: 10%;
+    margin-top: 5%;
+}
+
+.titreNotEmargement{
+    margin: auto;
+}
+
+.notEmargementIcon{
+    transform: scale(1.8);
 }
 
 .RegisterTable {
@@ -33,5 +40,5 @@
 }
 
 .RegisterCalendar{
-    margin-top: 12%;
+    margin-top: 16%;
 }
