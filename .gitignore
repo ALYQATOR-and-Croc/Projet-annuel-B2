@@ -12,6 +12,7 @@ backend/dist/CONFIG-FILES
 
 # FRONTEND
 frontend/node_modules/
+frontend/src/config.json
 frontend/.pnp
 frontend/.pnp.js
 
