@@ -1,17 +1,21 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
-import StudentApp from './StudentApp'
-import Dashboard from './Dashboard'
-import Planning from './Planning'
+import UserApp from '../UserApp'
+import StudentDashboard from './StudentDashboard'
+import StudentPlanning from './StudentPlanning'
+import AbsenceDelayStudent from './AbsenceDelayStudent'
 import Notfound from '../Notfound'
+import ChangePassword from '../ChangePassword'
 
 export default function RouteurStudent() {
   return (
     <Routes>
-        <Route element={<StudentApp/>}>
-            <Route index element={<Dashboard/>} />
-            <Route path="dashboard" element={<Dashboard/>} />
-            <Route path="planning" element={<Planning/>} />
+        <Route element={<UserApp userType = 'student'/>}>
+            <Route index element={<StudentDashboard/>} />
+            <Route path="dashboard" element={<StudentDashboard/>} />
+            <Route path="planning" element={<StudentPlanning/>} />
+            <Route path="absence-delay" element={<AbsenceDelayStudent/>} />
+            <Route path="change-password" element={<ChangePassword/>} />
             <Route path="*" element={<Notfound/>} />
         </Route>
     </Routes>

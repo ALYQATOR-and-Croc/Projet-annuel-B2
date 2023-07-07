@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import express, { response } from 'express';
+import express from 'express';
 import * as secretPass from '../CONFIG-FILES/secret-password.json';
 
 const isAuthenticated = (
@@ -7,21 +7,22 @@ const isAuthenticated = (
   response: express.Response,
   next: express.NextFunction
 ) => {
-  const authHeader = request.get('Authorization');
-  if (!authHeader) {
-    const error = new Error('Not authenticated.');
-    response.status(401).send(error);
-    throw error;
-  }
-  const token = authHeader.replace('Bearer ', '');
-  let decodedToken;
   try {
-    decodedToken = jwt.verify(token, secretPass.passwordToken);
+    const authHeader = request.get('Authorization');
+    if (!authHeader) {
+      throw new Error('Not authenticated.');
+    }
+    const token = authHeader!.replace('Bearer ', '');
+    let decodedToken;
+    try {
+      decodedToken = jwt.verify(token, secretPass.passwordToken);
+      next();
+    } catch (error: any) {
+      response.status(401).send(error?.name);
+    }
   } catch (error) {
-    response.status(401).send('Not authenticated.');
-    throw error;
+    response.status(401).send('Error unauthorized');
   }
-  next();
 };
 
 export = isAuthenticated;
