@@ -3,7 +3,9 @@ backend/config.json
 backend/CONFIG-FILES
 backend/.env
 backend/node_modules/
-
+backend/controllers/token-generator-dev.ts
+backend/dist/controllers/token-generator-dev.js
+backend/dist/controllers/token-generator-dev.js.map
 # Build
 backend/dist/config.json
 backend/dist/CONFIG-FILES

@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes} from 'react-router-dom';
 import RouteurAuth from './Auth/RouteurAuth';
 import AuthGuard from './Auth/AuthGuard';
 import RouteurStudent from './Student/RouteurStudent';
+import RouteurTeacher from './Teacher/RouteurTeacher';
 
 
 function App() {
@@ -20,6 +21,11 @@ function App() {
             <Route path="/student/*" element={
               <AuthGuard>
                 <RouteurStudent/>
+              </AuthGuard>
+            }/>
+            <Route path="/teacher/*" element={
+              <AuthGuard>
+                <RouteurTeacher/>
               </AuthGuard>
             }/>
             <Route path="*" element={<Notfound/>} />

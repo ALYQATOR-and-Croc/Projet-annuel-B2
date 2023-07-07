@@ -25,22 +25,24 @@ var __importStar = (this && this.__importStar) || function (mod) {
 const jwt = __importStar(require("jsonwebtoken"));
 const secretPass = __importStar(require("../CONFIG-FILES/secret-password.json"));
 const isAuthenticated = (request, response, next) => {
-    const authHeader = request.get('Authorization');
-    if (!authHeader) {
-        const error = new Error('Not authenticated.');
-        response.status(401).send(error);
-        throw error;
-    }
-    const token = authHeader.replace('Bearer ', '');
-    let decodedToken;
     try {
-        decodedToken = jwt.verify(token, secretPass.passwordToken);
+        const authHeader = request.get('Authorization');
+        if (!authHeader) {
+            throw new Error('Not authenticated.');
+        }
+        const token = authHeader.replace('Bearer ', '');
+        let decodedToken;
+        try {
+            decodedToken = jwt.verify(token, secretPass.passwordToken);
+            next();
+        }
+        catch (error) {
+            response.status(401).send(error === null || error === void 0 ? void 0 : error.name);
+        }
     }
     catch (error) {
-        response.status(401).send('Not authenticated.');
-        throw error;
+        response.status(401).send('Error unauthorized');
     }
-    next();
 };
 module.exports = isAuthenticated;
 //# sourceMappingURL=is-auth.js.map
