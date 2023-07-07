@@ -29,6 +29,7 @@ const secret_password_json_1 = __importDefault(require("../CONFIG-FILES/secret-p
 const jwt = __importStar(require("jsonwebtoken"));
 // TODO : create admin right check
 const ADMIN_RIGHTS = 'admin';
+// TODO : create hash
 // Temporary
 const etudiant = {
     id_etudiant: 1,
@@ -77,14 +78,13 @@ const login = (request, response) => {
         };
         const options = {
             expiresIn: '1h',
-            audience: [ADMIN_RIGHTS, result.recordset[0].id_etudiant.toString()],
+            audience: ADMIN_RIGHTS,
         };
         const token = jwt.sign(payload, secret_password_json_1.default.passwordToken, options);
         response.status(200).json({
-            token: token,
+            token,
             userId: result.recordset[0].id_etudiant.toString(),
         });
-        1111;
     }
     else {
         response.status(401).send("User doesn't exist.");
