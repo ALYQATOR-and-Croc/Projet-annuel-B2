@@ -1,53 +1,61 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
-//import '../../styles/PlanningJour.css';
+import '../styles/ColorCalendar.css';
 
 const events = [
   {
     id: 1,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B2 ESGI',
     salle: 'SALLE 515',
-    start: '2023-06-28T09:45:00',
-    end: '2023-06-28T11:15:00',
+    start: '2023-07-03T09:45:00',
+    end: '2023-07-03T11:15:00',
   },
   {
     id: 2,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B2 ESGI',
     salle: 'SALLE 515',
-    start: '2023-06-28T11:30:00',
-    end: '2023-06-28T13:00:00',
+    start: '2023-07-03T11:30:00',
+    end: '2023-07-03T13:00:00',
   },
   {
     id: 3,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B1 ESGI',
     salle: 'SALLE 515',
-    start: '2023-06-28T14:00:00',
-    end: '2023-06-28T15:30:00',
+    start: '2023-07-04T14:00:00',
+    end: '2023-07-04T15:30:00',
   },
   {
     id: 4,
     title: 'Mathématique',
     prof:'Mr DUMONT',
+    classe:'B1 ESGI',
     salle: 'SALLE 515',
-    start: '2023-06-28T15:45:00',
-    end: '2023-06-28T17:15:00',
+    start: '2023-07-03T15:45:00',
+    end: '2023-07-03T17:15:00',
   },
 ];
 
-function CalendarWeek() {
+function CalendarWeek(props) {
   const calendarRef = React.createRef();
 
-  const handleDateClick = (info) => {
-    console.log('Date clicked: ', info.dateStr);
-  };
+  // Si date selectionnée dans le mois, affichage de la date choisie
+  useEffect(() => {
+    let calendarApi = calendarRef.current.getApi();
+    if (props.SelectedDate !== null) {
+      calendarApi.gotoDate(props.SelectedDate);
+    }
+  });
 
   const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -59,10 +67,9 @@ function CalendarWeek() {
     locales: [frLocale],
     locale: 'fr',
     events: events,
-    eventColor: '#4BBDB7',
+    eventColor: '#239489',
     nowIndicator: true,
     allDaySlot: false,
-    dateClick: handleDateClick,
     eventClick: (info) => console.log(info.event.id),
     eventContent: function (arg) {
       return (
@@ -71,7 +78,10 @@ function CalendarWeek() {
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.title}</b>
           <br></br>
-          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+          {
+            (props.variant === 'teacher') ? <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.classe}</b> :
+            <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+          }
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.salle}</b>
         </div>
@@ -80,8 +90,8 @@ function CalendarWeek() {
   };
 
   return (
-    <div className="PlanningSemaine">
-      <FullCalendar ref={calendarRef} {...calendarOptions} />
+    <div className="calendarSemaine">
+      <FullCalendar id='calendarSemaine' ref={calendarRef} {...calendarOptions} />
     </div>
   );
 }

@@ -8,13 +8,13 @@
     display: flex;
     margin-top: 2%;
 }
-.absenceDelayDash, .planningDash{
+.registerStudentsDash, .planningDash{
     margin-left: 4%;
     margin-right: 4%;
     width: 42%;
     height: 100%;
 }
-.absenceDelayDashTitle, .planningDashTitle{
+.registerStudentsDashTitle, .planningDashTitle{
     display: inline-flex;
     text-align: left;
     height: 5%;
@@ -34,7 +34,7 @@
     height: 50%;
     margin-top: 2.5vh;
 }
-.absenceDelayDashSubTitle{
+.registerStudentsDashSubTitle{
     text-align: left;
     color: rgba(0, 77, 64, 0.87);
 }

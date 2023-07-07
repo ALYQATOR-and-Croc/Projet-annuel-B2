@@ -5,6 +5,7 @@ import Notfound from '../Notfound'
 import RegisterStudents from './RegisterStudents'
 import TeacherDashboard from './TeacherDashboard'
 import ChangePassword from '../ChangePassword'
+import TeacherPlanning from './TeacherPlanning'
 
 export default function RouteurTeacher() {
   return (
@@ -14,7 +15,7 @@ export default function RouteurTeacher() {
             <Route path="dashboard" element={<TeacherDashboard/>} />
             <Route path="register-students" element={<RegisterStudents/>} />
             <Route path="change-password" element={<ChangePassword/>} />
-            {/* <Route path="planning" element={<TeacherPlanning/>} /> */}
+            <Route path="planning" element={<TeacherPlanning/>} />
             <Route path="*" element={<Notfound/>} />
         </Route>
     </Routes>

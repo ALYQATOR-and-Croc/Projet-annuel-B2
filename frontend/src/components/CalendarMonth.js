@@ -4,14 +4,13 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 
+import '../styles/ColorCalendar.css';
 
 function CalendarMonth({onDateClick}) {
   const calendarRef = React.createRef();
 
   const handleDateClick = (info) => {
-    console.log('Date clicked: ', info.dateStr);
     const dateStr = info.dateStr;
-    //onDateClick(dateStr);
     onDateClick(dateStr);
   };
 
@@ -23,12 +22,11 @@ function CalendarMonth({onDateClick}) {
     locale: 'fr',
     eventColor: '#4BBDB7',
     nowIndicator: true,
-    dateClick: handleDateClick,
-    eventClick: (info) => console.log(info.event.id),
+    dateClick: handleDateClick
   };
 
   return (
-    <div className="planningMois">
+    <div className="calendarMois">
       <FullCalendar ref={calendarRef} {...calendarOptions} />
     </div>
   );

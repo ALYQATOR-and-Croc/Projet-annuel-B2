@@ -1,0 +1,17 @@
+.planning-container {
+    margin: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+.planning-month-size {
+    width: 38%;
+  }
+  
+.planning-week-size {
+    width: 58%;
+  }
+
+.planning-month-info {
+  color: #1C5E53;
+}

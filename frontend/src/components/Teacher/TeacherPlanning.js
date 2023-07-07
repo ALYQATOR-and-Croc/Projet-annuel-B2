@@ -5,7 +5,7 @@ import CalendarWeek from '../CalendarWeek'
 
 import '../../styles/PlanningPage.css'
 
-export default function StudentPlanning() {
+export default function TeacherPlanning() {
 
   const [SelectedDate, setSelectedDate] = useState(null);
 
@@ -20,11 +20,8 @@ export default function StudentPlanning() {
         <p className='planning-month-info'>↑ Cliquez sur un jour du mois pour afficher sa semaine ↑</p>
       </div>
       <div className='planning-week-size'>
-        <CalendarWeek SelectedDate={SelectedDate} variant='student'/>
+        <CalendarWeek SelectedDate={SelectedDate} variant='teacher'/>
       </div>
     </div>
   );
 }
-
-
-
