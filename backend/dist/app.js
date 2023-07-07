@@ -1,9 +1,9 @@
 "use strict";
+// import tokenGenerator from './controllers/token-generator-dev';
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const token_generator_dev_1 = __importDefault(require("./controllers/token-generator-dev"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_route_1 = __importDefault(require("./routes/auth/auth-route"));
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
-app.use(token_generator_dev_1.default);
+// app.use(tokenGenerator);
 app.use(auth_route_1.default);
 app.use(roles_route_1.default);
 app.use(campus_route_1.default);

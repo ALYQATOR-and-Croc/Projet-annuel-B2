@@ -1,4 +1,4 @@
-import tokenGenerator from './controllers/token-generator-dev';
+// import tokenGenerator from './controllers/token-generator-dev';
 
 import * as config from './config.json';
 import express from 'express';
@@ -27,7 +27,7 @@ app.use(
     next();
   }
 );
-app.use(tokenGenerator);
+// app.use(tokenGenerator);
 app.use(auth);
 app.use(roles);
 app.use(campus);
