@@ -64,6 +64,9 @@ export const coursesUserFunctionIdGETQuery = (
   SELECT
   C.${CoursEnum.PK},
   C.${CoursEnum.LIBELLE},
+  C.${CoursEnum.DATE},
+  C.${CoursEnum.DEBUT},
+  C.${CoursEnum.FIN},
   U1.${UtilisateurEnum.PK} AS id_reprographe,
   U1.${UtilisateurEnum.NOM} AS nom_reprographe,
   U1.${UtilisateurEnum.PRENOM} AS prenom_reprographe,
