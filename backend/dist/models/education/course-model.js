@@ -38,6 +38,9 @@ const coursesUserFunctionIdGETQuery = (targetIdInTableForFKCourse, targetTableNa
   SELECT
   C.${CoursEnum.PK},
   C.${CoursEnum.LIBELLE},
+  C.${CoursEnum.DATE},
+  C.${CoursEnum.DEBUT},
+  C.${CoursEnum.FIN},
   U1.${user_model_1.UtilisateurEnum.PK} AS id_reprographe,
   U1.${user_model_1.UtilisateurEnum.NOM} AS nom_reprographe,
   U1.${user_model_1.UtilisateurEnum.PRENOM} AS prenom_reprographe,

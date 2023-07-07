@@ -128,7 +128,6 @@ const coursesPagesGET = (
               sqlQueryBodyData.startDate,
               sqlQueryBodyData.numberOfDays
             );
-            console.log('\n\n\n', userConcernedCourses, '\n\n\n');
 
             return userConcernedCourses;
           })
@@ -137,8 +136,8 @@ const coursesPagesGET = (
               .request()
               .query(userConcernedCoursesQuery);
           })
-          .then((result) => {
-            response.status(200).send(result.recordsets);
+          .then((result: any) => {
+            response.status(200).send(result.recordsets[0]);
           });
       });
   } catch (error) {

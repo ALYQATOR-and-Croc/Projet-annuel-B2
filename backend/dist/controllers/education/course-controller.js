@@ -137,7 +137,6 @@ const coursesPagesGET = (request, response, next) => {
                 .query(coursesUserGETQueryResult.queryRole)
                 .then((result) => {
                 const userConcernedCourses = userFonctionTable(result.recordset[0][roles_model_1.RolesEnum.LIBELLE], sqlQueryBodyData.idUser, sqlQueryBodyData.startDate, sqlQueryBodyData.numberOfDays);
-                console.log('\n\n\n', userConcernedCourses, '\n\n\n');
                 return userConcernedCourses;
             })
                 .then((userConcernedCoursesQuery) => {
@@ -146,7 +145,7 @@ const coursesPagesGET = (request, response, next) => {
                     .query(userConcernedCoursesQuery);
             })
                 .then((result) => {
-                response.status(200).send(result.recordsets);
+                response.status(200).send(result.recordsets[0]);
             });
         });
     }

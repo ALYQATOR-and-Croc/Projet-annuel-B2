@@ -1,9 +1,33 @@
 "use strict";
+// import tokenGenerator from './controllers/token-generator-dev';
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const token_generator_dev_1 = __importDefault(require("./controllers/token-generator-dev"));
+const config = __importStar(require("./config.json"));
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const auth_route_1 = __importDefault(require("./routes/auth/auth-route"));
@@ -15,16 +39,18 @@ const promotion_routes_1 = __importDefault(require("./routes/education/promotion
 const room_1 = __importDefault(require("./routes/infrastructure/room"));
 const matiere_route_1 = __importDefault(require("./routes/education/matiere-route"));
 const course_route_1 = __importDefault(require("./routes/education/course-route"));
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const localhost = 5000;
-const API_URL = 'http://localhost:3000';
+const portHost = config.HOST;
+const API_URL = config.API;
 app.use(body_parser_1.default.json());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', API_URL); // update to match the domain you will make the request from
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
 });
-app.use(token_generator_dev_1.default);
+app.use((0, cors_1.default)());
+// app.use(tokenGenerator);
 app.use(auth_route_1.default);
 app.use(roles_route_1.default);
 app.use(campus_route_1.default);
@@ -37,5 +63,5 @@ app.use(course_route_1.default);
 app.get('/', (request, response) => {
     response.send(request.body);
 });
-app.listen(localhost);
+app.listen(portHost);
 //# sourceMappingURL=app.js.map
