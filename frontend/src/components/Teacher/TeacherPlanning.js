@@ -16,7 +16,7 @@ export default function TeacherPlanning() {
   return (
     <div className='planning-container'>
       <div className='planning-month-size'>
-        <CalendarMonth onDateClick={showSelectedDate}/>
+        <CalendarMonth onDateClick={showSelectedDate} onEventClick={showSelectedDate}/>
         <p className='planning-month-info'>↑ Cliquez sur un jour du mois pour afficher sa semaine ↑</p>
       </div>
       <div className='planning-week-size'>

@@ -70,7 +70,6 @@ function CalendarWeek(props) {
     eventColor: '#239489',
     nowIndicator: true,
     allDaySlot: false,
-    eventClick: (info) => console.log(info.event.id),
     eventContent: function (arg) {
       return (
         <div>
