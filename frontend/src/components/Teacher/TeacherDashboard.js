@@ -5,10 +5,26 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CalendarWeek from '../CalendarWeek';
-
+import { calendarService } from '../../_services/calendar.service';
 import '../../styles/TeacherDashboard.css';
 
-export default function Dashboard() {
+export default function Dashboard(props) {
+  const [monthPlanning, setMonthPlanning] = useState([]);
+
+  const requestCalendar = (idUser) => {
+    calendarService.month(props.idUser)
+        .then(res => {
+            console.log(res);  
+            setMonthPlanning(res.data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
+
+  if (monthPlanning.length === 0) {
+    requestCalendar(props.idUser);
+  }
 
   const absenceDelays = [
   {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", classe:"B2 ESGI", Emarger:false},
@@ -42,7 +58,7 @@ export default function Dashboard() {
             <div className='SeeMoreButton'><Button href='/teacher/planning' variant="contained" startIcon={<VisibilityIcon/>}>VOIR TOUT</Button></div>
           </div>
             <div className='planning-weekDash'>
-              <CalendarWeek SelectedDate={null} variant='teacher'/>
+              <CalendarWeek SelectedDate={null} variant='teacher' courses={monthPlanning}/>
             </div>
           </div>
         </div>

@@ -40,6 +40,7 @@ function Login() {
         accountService.login(credentials)
             .then(res => {
                 accountService.saveToken(res.data.token);
+                accountService.saveUserId(res.data.userId);
                 navigate('/student');  
             })
             .catch(error => {

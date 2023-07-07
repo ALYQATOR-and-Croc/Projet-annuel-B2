@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../styles/StudentDashboard.css';
 import AbsenceDelayGrid from './AbsenceDelayGrid';
 import { Button, Divider } from '@mui/material';
@@ -6,8 +6,26 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CalendarWeek from '../CalendarWeek';
+import { calendarService } from '../../_services/calendar.service';
 
-export default function Dashboard() {
+
+export default function Dashboard(props) {
+  const [monthPlanning, setMonthPlanning] = useState([]);
+
+  const requestCalendar = (idUser) => {
+    calendarService.month(props.idUser)
+        .then(res => {
+            console.log(res);  
+            setMonthPlanning(res.data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
+
+  if (monthPlanning.length === 0) {
+    requestCalendar(props.idUser);
+  }
 
   const absenceDelays = [
   {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", prof:"M. BONNETON", justified:false},
@@ -41,7 +59,7 @@ export default function Dashboard() {
             <div className='SeeMoreButton'><Button href='/student/planning' variant="contained" startIcon={<VisibilityIcon/>}>VOIR TOUT</Button></div>
           </div>
             <div className='planning-weekDash'>
-              <CalendarWeek SelectedDate={null} variant='student'/>
+              <CalendarWeek SelectedDate={null} variant='student' courses={monthPlanning}/>
             </div>
           </div>
         </div>

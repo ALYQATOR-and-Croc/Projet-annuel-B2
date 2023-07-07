@@ -17,6 +17,20 @@ let saveToken = (token) => {
     localStorage.setItem('AuthToken', token)
 }
 
+let saveUserId = (id) => {
+    localStorage.setItem('UserId', id)
+}
+
+let getToken = () => {
+    let token = localStorage.getItem('AuthToken');
+    return token;
+}
+
+let getUserId = () => {
+    let UserId = localStorage.getItem('UserId');
+    return UserId;
+}
+
 export const accountService = {
-    login, saveToken, logout, isLogged
+    login, saveToken, logout, isLogged, getToken, saveUserId, getUserId
 }
