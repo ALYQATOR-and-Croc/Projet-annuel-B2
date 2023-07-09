@@ -5,29 +5,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
 import '../styles/ColorCalendar.css';
 
-// const events = [
-//   {
-//     id: 1,
-//     start: '2023-07-03',
-//   },
-//   {
-//     id: 5,
-//     start: '2023-07-03',
-//   },
-//   {
-//     id: 2,
-//     start: '2023-07-10',
-//   },
-//   {
-//     id: 3,
-//     start: '2023-07-18',
-//   },
-//   {
-//     id: 4,
-//     start: '2023-07-18',
-//   },
-// ]
-
 
 function CalendarMonth(props) {
   const calendarRef = React.createRef();
@@ -58,8 +35,8 @@ function CalendarMonth(props) {
   
   const handleEventClick = (info) => {
     const event = info.event;
-    var Eventdate = event.start 
-    Eventdate = Eventdate.setDate(event.start.getDate() + 1)
+    let Eventdate = event.start 
+    Eventdate = Eventdate.setDate(event.start.getDate())
     props.onEventClick(Eventdate);
   }
 
