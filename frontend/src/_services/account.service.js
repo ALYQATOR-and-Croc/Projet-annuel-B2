@@ -11,9 +11,9 @@ let logout = () => {
 let isLogged = () => {
     let token = localStorage.getItem('AuthToken');
     return !!token
-}
+} 
 
-let saveToken = (token) => {
+let saveToken = (token) => { 
     localStorage.setItem('AuthToken', token)
 }
 

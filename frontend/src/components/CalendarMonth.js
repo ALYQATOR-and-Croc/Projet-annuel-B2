@@ -11,6 +11,18 @@ const events = [
     id: 1,
     start: '2023-07-03',
   },
+  {
+    id: 2,
+    start: '2023-07-10',
+  },
+  {
+    id: 3,
+    start: '2023-07-18',
+  },
+  {
+    id: 4,
+    start: '2023-07-18',
+  },
 ]
 
 // const eventsDate = [events.start];
@@ -31,14 +43,17 @@ function CalendarMonth({onDateClick, onEventClick}) {
     onDateClick(dateStr);
   };
   
+  
+  //création du tableau avec les datess uniques
+  const uniqueDates = Array.from(new Set(events.map((event) => event.start)))
+  .map((date) => ({ start: date }));
+  
+//console.log(uniqueDates);
+  
   const handleEventClick = (info) => {
-    // const event = info.event;
-    // const day = event.start.getDate();
-    // console.log(day);
-    //  console.log(event);
     const event = info.event;
-    const Eventdate = event.start.toISOString().split('T')[0];
-    // Appeler la fonction de rappel avec la date complète
+    var Eventdate = event.start 
+    Eventdate = Eventdate.setDate(event.start.getDate() + 1)
     onEventClick(Eventdate);
   }
 
@@ -48,7 +63,7 @@ function CalendarMonth({onDateClick, onEventClick}) {
     height: 'auto',
     locales: [frLocale],
     locale: 'fr',
-    events: events,
+    events: uniqueDates,
     eventColor: '#4BBDB7',
     nowIndicator: true,
     dateClick: handleDateClick, 
