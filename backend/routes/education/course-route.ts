@@ -3,6 +3,7 @@ import isAuthenticated from '../../middleware/is-auth';
 import { isCourseManager } from '../../middleware/course-middelware';
 import {
   coursesPagesGET,
+  coursesStudentGET,
   newCoursePOST,
 } from '../../controllers/education/course-controller';
 
@@ -20,5 +21,11 @@ router.get(
   isAuthenticated,
   coursesPagesGET
 );
+
+router.get(
+  '/courses/course/:idCourse/page/students/',
+  isAuthenticated,
+  coursesStudentGET
+)
 
 export = router;

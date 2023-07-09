@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coursesPagesGET = exports.newCoursePOST = void 0;
+exports.coursesStudentGET = exports.coursesPagesGET = exports.newCoursePOST = void 0;
 const course_model_1 = require("../../models/education/course-model");
 const integer_model_1 = __importDefault(require("../../models/integer-model"));
 const string_regex_1 = require("../../Regex/string-regex");
@@ -39,6 +39,7 @@ const reprographe_model_1 = require("../../models/users/reprographe-model");
 const intervenant_1 = require("../../models/users/intervenant");
 const resp_pedago_model_1 = require("../../models/users/resp-pedago-model");
 const roles_model_1 = require("../../models/users/roles-model");
+const course_model_2 = require("../../models/education/course-model");
 const newCoursePOST = (request, response, next) => {
     const body = request.body;
     const startCourse = new Date(body.startCourse).toISOString();
@@ -101,10 +102,10 @@ const newCoursePOST = (request, response, next) => {
             })
                 .then((result) => {
                 if (result) {
-                    response.status(201).send('New course was successfully created !');
+                    response.status(201).send("New course was successfully created !");
                 }
                 else {
-                    throw new Error('Unacceptable operation.');
+                    throw new Error("Unacceptable operation.");
                 }
             });
         }
@@ -113,7 +114,7 @@ const newCoursePOST = (request, response, next) => {
         }
     }
     else {
-        response.status(405).send('Unacceptable operation.');
+        response.status(405).send("Unacceptable operation.");
     }
 };
 exports.newCoursePOST = newCoursePOST;
@@ -168,8 +169,35 @@ const userFonctionTable = (roleUser, idUser, startDate, numberOfDays) => {
             return (0, course_model_1.coursesUserFunctionIdGETQuery)(resp_pedago_model_1.ResponsablePedagogiqueEnum.PK, resp_pedago_model_1.ResponsablePedagogiqueEnum.NOM_TABLE, resp_pedago_model_1.ResponsablePedagogiqueEnum.FK_UTILISATEUR, idUser, startDate, numberOfDays);
         // case ADMIN
         default:
-            throw new Error('');
+            throw new Error("");
             break;
     }
 };
+//get all students that asisted to a course
+const coursesStudentGET = (request, response, next) => {
+    try {
+        const params = request.params;
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const sqlQueryBodyData = (0, course_model_2.allStudentsOfACourseGETQuery)(Number(params.idCourse));
+            return { sqlQueryBodyData, pool };
+        })
+            .then((courseStudentsGETQueryResult) => {
+            courseStudentsGETQueryResult.pool
+                .request()
+                .query(courseStudentsGETQueryResult.sqlQueryBodyData)
+                .then((result) => {
+                return result.recordset[0];
+            })
+                .then((resultList) => {
+                return response.status(200).send(resultList);
+            });
+        });
+    }
+    catch (error) {
+        response.status(400).send(error);
+    }
+};
+exports.coursesStudentGET = coursesStudentGET;
 //# sourceMappingURL=course-controller.js.map

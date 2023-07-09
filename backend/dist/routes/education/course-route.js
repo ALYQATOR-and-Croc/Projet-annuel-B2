@@ -10,5 +10,6 @@ router.post('/courses/new/', is_auth_1.default,
 // isCourseManager,
 course_controller_1.newCoursePOST);
 router.get('/courses/page/user/:idUser/start-date/:startDate/number-of-days/:numberOfDays/', is_auth_1.default, course_controller_1.coursesPagesGET);
+router.get('/courses/course/:idCourse/page/students/', is_auth_1.default, course_controller_1.coursesStudentGET);
 module.exports = router;
 //# sourceMappingURL=course-route.js.map

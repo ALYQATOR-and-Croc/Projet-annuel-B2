@@ -1,22 +1,23 @@
-import express, { query } from 'express';
+import express, { query } from "express";
 import {
   CoursEnum,
   CoursePOST,
   CoursePageGET,
   coursesUserFunctionIdGETQuery,
   coursesUserGETQuery,
-} from '../../models/education/course-model';
-import isId from '../../models/integer-model';
-import { onlyLowercaseRegExp } from '../../Regex/string-regex';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import { FonctionEnum, FonctionType } from '../../models/users/user-model';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
-import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
-import { ReprographeEnum } from '../../models/users/reprographe-model';
-import { IntervenantEnum } from '../../models/users/intervenant';
-import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
-import { RolesEnum } from '../../models/users/roles-model';
+} from "../../models/education/course-model";
+import isId from "../../models/integer-model";
+import { onlyLowercaseRegExp } from "../../Regex/string-regex";
+import * as config from "../../config.json";
+import sql from "mssql";
+import { FonctionEnum, FonctionType } from "../../models/users/user-model";
+import { EtudiantEnum } from "../../models/users/etudiant-model";
+import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
+import { ReprographeEnum } from "../../models/users/reprographe-model";
+import { IntervenantEnum } from "../../models/users/intervenant";
+import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
+import { RolesEnum } from "../../models/users/roles-model";
+import {allStudentsOfACourseGETQuery} from "../../models/education/course-model";
 
 const newCoursePOST = (
   request: express.Request,
@@ -85,16 +86,16 @@ const newCoursePOST = (
         })
         .then((result) => {
           if (result) {
-            response.status(201).send('New course was successfully created !');
+            response.status(201).send("New course was successfully created !");
           } else {
-            throw new Error('Unacceptable operation.');
+            throw new Error("Unacceptable operation.");
           }
         });
     } catch (error) {
       response.status(405).send(error);
     }
   } else {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
   }
 };
 
@@ -199,9 +200,36 @@ const userFonctionTable = (
       );
     // case ADMIN
     default:
-      throw new Error('');
+      throw new Error("");
       break;
   }
 };
 
-export { newCoursePOST, coursesPagesGET };
+
+//get all students that asisted to a course
+const coursesStudentGET= (request: express.Request, response: express.Response, next: express.NextFunction) => {
+  try {
+    const params = request.params; 
+    sql
+      .connect(config)
+      .then((pool) => {
+        const sqlQueryBodyData = allStudentsOfACourseGETQuery(Number(params.idCourse));
+        return { sqlQueryBodyData, pool };
+      })
+      .then((courseStudentsGETQueryResult) => {
+        courseStudentsGETQueryResult.pool
+          .request()
+          .query(courseStudentsGETQueryResult.sqlQueryBodyData)
+          .then((result) => {
+            return result.recordset[0];
+          })
+          .then((resultList) => {
+            return response.status(200).send(resultList);
+          })
+      });
+  } catch (error) {
+    response.status(400).send(error);
+  }
+};
+
+export { newCoursePOST, coursesPagesGET, coursesStudentGET};

@@ -1,27 +1,27 @@
-import bcrypt from 'bcryptjs';
-import validationResult from 'express-validator';
-import { LoginBody } from '../../models/auth/auth-model';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import secretPass from '../../CONFIG-FILES/secret-password.json';
-import * as jwt from 'jsonwebtoken';
-import express from 'express';
-import { error } from 'console';
-import { UtilisateurEnum } from '../../models/users/user-model';
+import bcrypt from "bcryptjs";
+import validationResult from "express-validator";
+import { LoginBody } from "../../models/auth/auth-model";
+import * as config from "../../config.json";
+import sql from "mssql";
+import secretPass from "../../CONFIG-FILES/secret-password.json";
+import * as jwt from "jsonwebtoken";
+import express from "express";
+import { error } from "console";
+import { UtilisateurEnum } from "../../models/users/user-model";
 import {
   UtilisateurPOST,
   FonctionEnum,
   FonctionType,
-} from '../../models/users/user-model';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
-import { ReprographeEnum } from '../../models/users/reprographe-model';
-import { IntervenantEnum } from '../../models/users/intervenant';
-import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
-import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
-import { RolesEnum } from '../../models/users/roles-model';
+} from "../../models/users/user-model";
+import { EtudiantEnum } from "../../models/users/etudiant-model";
+import { ReprographeEnum } from "../../models/users/reprographe-model";
+import { IntervenantEnum } from "../../models/users/intervenant";
+import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
+import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
+import { RolesEnum } from "../../models/users/roles-model";
 
 // TODO : create admin right check
-const ADMIN_RIGHTS = 'admin';
+const ADMIN_RIGHTS = "admin";
 
 // TODO : create hash
 
@@ -86,10 +86,10 @@ const signup = (request: express.Request, response: express.Response) => {
               .request()
               .query(queryFonction)
               .then(() => {
-                response.status(201).send('User was successfully created.');
+                response.status(201).send("User was successfully created.");
               });
           } else {
-            response.status(201).send('User was successfully created.');
+            response.status(201).send("User was successfully created.");
           }
         });
     });
@@ -100,50 +100,54 @@ const newFunctionQuery = (
   fkUtilisateur: number,
   body: any
 ): string | null => {
-  let queryNewFunction: string | null = null;
-  switch (fonctionType) {
-    case FonctionEnum.ETUDIANT:
-      queryNewFunction = `
+  try {
+    let queryNewFunction: string | null = null;
+    switch (fonctionType) {
+      case FonctionEnum.ETUDIANT:
+        queryNewFunction = `
       INSERT INTO ${EtudiantEnum.NOM_TABLE} (${EtudiantEnum.FK_UTILISATEUR}, ${EtudiantEnum.FK_CLASSE})
       VALUES
       (${fkUtilisateur}, ${body.idClasse})
       `;
-      break;
-    case FonctionEnum.INTERVENANT:
-      queryNewFunction = `
+        break;
+      case FonctionEnum.INTERVENANT:
+        queryNewFunction = `
       INSERT INTO ${IntervenantEnum.NOM_TABLE} (${IntervenantEnum.FK_UTILISATEUR}, ${IntervenantEnum.LIBELLE})
       VALUES
       (${fkUtilisateur}, '${body.libelleSpecialite}')
       `;
-      break;
-    case FonctionEnum.RESPONSABLE_PEDA:
-      queryNewFunction = `
+        break;
+      case FonctionEnum.RESPONSABLE_PEDA:
+        queryNewFunction = `
       INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR}, ${ResponsablePedagogiqueEnum.FK_SALLE})
       VALUES
       (${fkUtilisateur}, ${body.idSalle})
       `;
-      break;
-    case FonctionEnum.REPROGRAPHE:
-      queryNewFunction = `
+        break;
+      case FonctionEnum.REPROGRAPHE:
+        queryNewFunction = `
       INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR}, ${ReprographeEnum.FK_SALLE})
       VALUES
       (${fkUtilisateur}, ${body.idSalle})
       `;
-      break;
-    case FonctionEnum.ATTACHE_PROMO:
-      queryNewFunction = `
+        break;
+      case FonctionEnum.ATTACHE_PROMO:
+        queryNewFunction = `
       INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR}, ${AttachePromotionEnum.FK_SALLE})
       VALUES
       (${fkUtilisateur}, ${body.idSalle})
       `;
-      break;
-    case FonctionEnum.ADMIN:
-      break;
+        break;
+      case FonctionEnum.ADMIN:
+        break;
 
-    default:
-      throw new Error('Function does not exists.');
+      default:
+        throw new Error("Function does not exists.");
+    }
+    return queryNewFunction;
+  } catch (error) {
+    throw new Error("Error");
   }
-  return queryNewFunction;
 };
 
 const login = (request: express.Request, response: express.Response) => {
@@ -176,27 +180,33 @@ const login = (request: express.Request, response: express.Response) => {
           .compare(loginPswd, result.recordset[0][UtilisateurEnum.MDP])
           .then((isPswdEqual) => {
             if (isPswdEqual) {
+              console.log("Password is correct");
               return result;
             } else {
-              throw new Error('Wrong password');
+              response.status(401).send("Password is incorrect");
             }
+          })
+          .then((result) => {
+            try {
+              if (result === undefined) {
+                throw new Error("User does not exists");
+              }
+
+              const payload = {
+                sub: loginAlias,
+                id: result.recordset[0][UtilisateurEnum.PK],
+                role: result.recordset[0][RolesEnum.LIBELLE],
+              };
+              const claims = {
+                expiresIn: "5h",
+                audience: result.recordset[0][RolesEnum.DROITS],
+              };
+              response.status(200).json({
+                token: jwt.sign(payload, secretPass.passwordToken, claims),
+                userId: result.recordset[0][UtilisateurEnum.PK]?.toString(),
+              });
+            } catch (error) {}
           });
-        return result;
-      })
-      .then((result) => {
-        const payload = {
-          sub: loginAlias,
-          id: result.recordset[0][UtilisateurEnum.PK],
-          role: result.recordset[0][RolesEnum.LIBELLE],
-        };
-        const claims = {
-          expiresIn: '5h',
-          audience: result.recordset[0][RolesEnum.DROITS],
-        };
-        response.status(200).json({
-          token: jwt.sign(payload, secretPass.passwordToken, claims),
-          userId: result.recordset[0][UtilisateurEnum.PK]?.toString(),
-        });
       });
   } catch (error) {
     response.status(401).send(error);

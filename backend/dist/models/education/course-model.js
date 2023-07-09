@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coursesPagesGETQuery = exports.coursesUserFunctionIdGETQuery = exports.coursesUserGETQuery = exports.CoursEnum = void 0;
+exports.allStudentsOfACourseGETQuery = exports.coursesPagesGETQuery = exports.coursesUserFunctionIdGETQuery = exports.coursesUserGETQuery = exports.CoursEnum = void 0;
 const room_model_1 = require("../infrastructure/room-model");
+const etudiant_model_1 = require("../users/etudiant-model");
 const roles_model_1 = require("../users/roles-model");
 const user_model_1 = require("../users/user-model");
 const matiere_model_1 = require("./matiere-model");
@@ -89,4 +90,20 @@ const coursesPagesGETQuery = (startDate, numberOfDays) => {
     return query;
 };
 exports.coursesPagesGETQuery = coursesPagesGETQuery;
+// Function that returns an SQL QUERY to get all students of a specific course
+const allStudentsOfACourseGETQuery = (idCourse) => {
+    const query = `
+  SELECT
+  ${user_model_1.UtilisateurEnum.NOM_TABLE}.${user_model_1.UtilisateurEnum.PK},
+  ${user_model_1.UtilisateurEnum.NOM_TABLE}.${user_model_1.UtilisateurEnum.NOM},
+  ${user_model_1.UtilisateurEnum.NOM_TABLE}.${user_model_1.UtilisateurEnum.PRENOM},
+  ${user_model_1.UtilisateurEnum.NOM_TABLE}.${user_model_1.UtilisateurEnum.EMAIL}
+  FROM ${CoursEnum.NOM_TABLE}
+  LEFT JOIN ${etudiant_model_1.EtudiantEnum.NOM_TABLE} ON ${CoursEnum.NOM_TABLE}.${CoursEnum.FK_CLASSE} = ${etudiant_model_1.EtudiantEnum.NOM_TABLE}.${etudiant_model_1.EtudiantEnum.FK_CLASSE}
+  LEFT JOIN ${user_model_1.UtilisateurEnum.NOM_TABLE} ON ${etudiant_model_1.EtudiantEnum.NOM_TABLE}.${etudiant_model_1.EtudiantEnum.FK_UTILISATEUR} = ${user_model_1.UtilisateurEnum.NOM_TABLE}.${user_model_1.UtilisateurEnum.PK}
+  WHERE ${CoursEnum.NOM_TABLE}.${CoursEnum.PK} = ${idCourse};
+  `;
+    return query;
+};
+exports.allStudentsOfACourseGETQuery = allStudentsOfACourseGETQuery;
 //# sourceMappingURL=course-model.js.map

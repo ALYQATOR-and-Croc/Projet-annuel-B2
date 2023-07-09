@@ -41,7 +41,7 @@ const attache_promotion_model_1 = require("../../models/users/attache-promotion-
 const resp_pedago_model_1 = require("../../models/users/resp-pedago-model");
 const roles_model_1 = require("../../models/users/roles-model");
 // TODO : create admin right check
-const ADMIN_RIGHTS = 'admin';
+const ADMIN_RIGHTS = "admin";
 // TODO : create hash
 // Temporary
 // const etudiant = {
@@ -98,11 +98,11 @@ const signup = (request, response) => {
                         .request()
                         .query(queryFonction)
                         .then(() => {
-                        response.status(201).send('User was successfully created.');
+                        response.status(201).send("User was successfully created.");
                     });
                 }
                 else {
-                    response.status(201).send('User was successfully created.');
+                    response.status(201).send("User was successfully created.");
                 }
             });
         });
@@ -110,49 +110,54 @@ const signup = (request, response) => {
 };
 exports.signup = signup;
 const newFunctionQuery = (fonctionType, fkUtilisateur, body) => {
-    let queryNewFunction = null;
-    switch (fonctionType) {
-        case user_model_2.FonctionEnum.ETUDIANT:
-            queryNewFunction = `
+    try {
+        let queryNewFunction = null;
+        switch (fonctionType) {
+            case user_model_2.FonctionEnum.ETUDIANT:
+                queryNewFunction = `
       INSERT INTO ${etudiant_model_1.EtudiantEnum.NOM_TABLE} (${etudiant_model_1.EtudiantEnum.FK_UTILISATEUR}, ${etudiant_model_1.EtudiantEnum.FK_CLASSE})
       VALUES
       (${fkUtilisateur}, ${body.idClasse})
       `;
-            break;
-        case user_model_2.FonctionEnum.INTERVENANT:
-            queryNewFunction = `
+                break;
+            case user_model_2.FonctionEnum.INTERVENANT:
+                queryNewFunction = `
       INSERT INTO ${intervenant_1.IntervenantEnum.NOM_TABLE} (${intervenant_1.IntervenantEnum.FK_UTILISATEUR}, ${intervenant_1.IntervenantEnum.LIBELLE})
       VALUES
       (${fkUtilisateur}, '${body.libelleSpecialite}')
       `;
-            break;
-        case user_model_2.FonctionEnum.RESPONSABLE_PEDA:
-            queryNewFunction = `
+                break;
+            case user_model_2.FonctionEnum.RESPONSABLE_PEDA:
+                queryNewFunction = `
       INSERT INTO ${resp_pedago_model_1.ResponsablePedagogiqueEnum.NOM_TABLE} (${resp_pedago_model_1.ResponsablePedagogiqueEnum.FK_UTILISATEUR}, ${resp_pedago_model_1.ResponsablePedagogiqueEnum.FK_SALLE})
       VALUES
       (${fkUtilisateur}, ${body.idSalle})
       `;
-            break;
-        case user_model_2.FonctionEnum.REPROGRAPHE:
-            queryNewFunction = `
+                break;
+            case user_model_2.FonctionEnum.REPROGRAPHE:
+                queryNewFunction = `
       INSERT INTO ${reprographe_model_1.ReprographeEnum.NOM_TABLE} (${reprographe_model_1.ReprographeEnum.FK_UTILISATEUR}, ${reprographe_model_1.ReprographeEnum.FK_SALLE})
       VALUES
       (${fkUtilisateur}, ${body.idSalle})
       `;
-            break;
-        case user_model_2.FonctionEnum.ATTACHE_PROMO:
-            queryNewFunction = `
+                break;
+            case user_model_2.FonctionEnum.ATTACHE_PROMO:
+                queryNewFunction = `
       INSERT INTO ${attache_promotion_model_1.AttachePromotionEnum.NOM_TABLE} (${attache_promotion_model_1.AttachePromotionEnum.FK_UTILISATEUR}, ${attache_promotion_model_1.AttachePromotionEnum.FK_SALLE})
       VALUES
       (${fkUtilisateur}, ${body.idSalle})
       `;
-            break;
-        case user_model_2.FonctionEnum.ADMIN:
-            break;
-        default:
-            throw new Error('Function does not exists.');
+                break;
+            case user_model_2.FonctionEnum.ADMIN:
+                break;
+            default:
+                throw new Error("Function does not exists.");
+        }
+        return queryNewFunction;
     }
-    return queryNewFunction;
+    catch (error) {
+        throw new Error("Error");
+    }
 };
 const login = (request, response) => {
     try {
@@ -183,28 +188,34 @@ const login = (request, response) => {
                 .compare(loginPswd, result.recordset[0][user_model_1.UtilisateurEnum.MDP])
                 .then((isPswdEqual) => {
                 if (isPswdEqual) {
+                    console.log("Password is correct");
                     return result;
                 }
                 else {
-                    throw new Error('Wrong password');
+                    response.status(401).send("Password is incorrect");
                 }
-            });
-            return result;
-        })
-            .then((result) => {
-            var _a;
-            const payload = {
-                sub: loginAlias,
-                id: result.recordset[0][user_model_1.UtilisateurEnum.PK],
-                role: result.recordset[0][roles_model_1.RolesEnum.LIBELLE],
-            };
-            const claims = {
-                expiresIn: '5h',
-                audience: result.recordset[0][roles_model_1.RolesEnum.DROITS],
-            };
-            response.status(200).json({
-                token: jwt.sign(payload, secret_password_json_1.default.passwordToken, claims),
-                userId: (_a = result.recordset[0][user_model_1.UtilisateurEnum.PK]) === null || _a === void 0 ? void 0 : _a.toString(),
+            })
+                .then((result) => {
+                var _a;
+                try {
+                    if (result === undefined) {
+                        throw new Error("User does not exists");
+                    }
+                    const payload = {
+                        sub: loginAlias,
+                        id: result.recordset[0][user_model_1.UtilisateurEnum.PK],
+                        role: result.recordset[0][roles_model_1.RolesEnum.LIBELLE],
+                    };
+                    const claims = {
+                        expiresIn: "5h",
+                        audience: result.recordset[0][roles_model_1.RolesEnum.DROITS],
+                    };
+                    response.status(200).json({
+                        token: jwt.sign(payload, secret_password_json_1.default.passwordToken, claims),
+                        userId: (_a = result.recordset[0][user_model_1.UtilisateurEnum.PK]) === null || _a === void 0 ? void 0 : _a.toString(),
+                    });
+                }
+                catch (error) { }
             });
         });
     }

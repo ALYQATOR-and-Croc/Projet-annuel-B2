@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newClassPOST = void 0;
+exports.getOneClassByCampusGET = exports.getOneClassByPromoGET = exports.getOneClassGET = exports.getAllClassGET = exports.deleteClassPOST = exports.patchClassPOST = exports.newClassPOST = void 0;
 const config = __importStar(require("../../config.json"));
 const mssql_1 = __importDefault(require("mssql"));
 const student_class_model_1 = require("../../models/education/student-class-model");
@@ -58,4 +58,137 @@ const newClassPOST = (request, response) => {
     }
 };
 exports.newClassPOST = newClassPOST;
+const patchClassPOST = (request, response) => {
+    try {
+        const body = request.body;
+        const sqlQueryBody = {
+            libelleClasse: body.libelleClasse,
+            idPromotion: body.idPromotion,
+            idCampus: body.idCampus,
+        };
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const query = `
+            PATCH ${student_class_model_1.StudClassEnum.NOM_TABLE}
+            SET ${student_class_model_1.StudClassEnum.LIBELLE} = '${sqlQueryBody.libelleClasse}', ${student_class_model_1.StudClassEnum.FK_CAMPUS} = '${sqlQueryBody.idCampus}', ${student_class_model_1.StudClassEnum.FK_PROMOTION} = '${sqlQueryBody.idPromotion}'
+            WHERE ${student_class_model_1.StudClassEnum.PK} = '${request.params.id}'
+            `;
+            return pool.request().query(query);
+        })
+            .then(() => {
+            response.status(201).send('Class successfully updated !');
+        });
+    }
+    catch (error) {
+        response.status(400).send('Bad Request');
+    }
+};
+exports.patchClassPOST = patchClassPOST;
+const deleteClassPOST = (request, response) => {
+    try {
+        const body = request.body;
+        const sqlQueryBody = {
+            libelleClasse: body.libelleClasse,
+            idPromotion: body.idPromotion,
+            idCampus: body.idCampus,
+        };
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const query = `
+            DELETE FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
+            WHERE ${student_class_model_1.StudClassEnum.PK} = '${request.params.id}'
+            `;
+            return pool.request().query(query);
+        })
+            .then(() => {
+            response.status(201).send('Class successfully deleted !');
+        });
+    }
+    catch (error) {
+        response.status(400).send('Bad Request');
+    }
+};
+exports.deleteClassPOST = deleteClassPOST;
+const getAllClassGET = (request, response) => {
+    try {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const query = `
+            SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
+            `;
+            return pool.request().query(query);
+        })
+            .then((result) => {
+            response.status(200).send(result.recordset);
+        });
+    }
+    catch (error) {
+        response.status(400).send('Bad Request');
+    }
+};
+exports.getAllClassGET = getAllClassGET;
+const getOneClassGET = (request, response) => {
+    try {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const query = `
+            SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
+            WHERE ${student_class_model_1.StudClassEnum.PK} = '${request.params.id}'
+            `;
+            return pool.request().query(query);
+        })
+            .then((result) => {
+            response.status(200).send(result.recordset);
+        });
+    }
+    catch (error) {
+        response.status(400).send('Bad Request');
+    }
+};
+exports.getOneClassGET = getOneClassGET;
+const getOneClassByPromoGET = (request, response) => {
+    try {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const query = `
+
+            SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
+            WHERE ${student_class_model_1.StudClassEnum.FK_PROMOTION} = '${request.params.id}'
+            `;
+            return pool.request().query(query);
+        })
+            .then((result) => {
+            response.status(200).send(result.recordset);
+        });
+    }
+    catch (error) {
+        response.status(400).send('Bad Request');
+    }
+};
+exports.getOneClassByPromoGET = getOneClassByPromoGET;
+const getOneClassByCampusGET = (request, response) => {
+    try {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
+            const query = `
+            SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
+            WHERE ${student_class_model_1.StudClassEnum.FK_CAMPUS} = '${request.params.idCampus}'
+            `;
+            return pool.request().query(query);
+        })
+            .then((result) => {
+            response.status(200).send(result.recordset);
+        });
+    }
+    catch (error) {
+        response.status(400).send('Bad Request');
+    }
+};
+exports.getOneClassByCampusGET = getOneClassByCampusGET;
 //# sourceMappingURL=student-class-controller.js.map
