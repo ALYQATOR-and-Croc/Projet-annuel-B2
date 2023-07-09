@@ -5,46 +5,63 @@ import { Button, Divider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CalendarDay from '../CalendarDay';
+import { calendarService } from '../../_services/calendar.service';
 
-export default function RegisterStudents() {
+export default function RegisterStudents(props) {
 
-  const cours = [
-    {
-      id: 1,
-      title: 'Mathématique',
-      classe:'B2 ESGI',
-      salle: 'SALLE 515',
-      start: '2023-07-05T09:45:00',
-      end: '2023-07-05T11:15:00',
-    },
-    {
-      id: 2,
-      title: 'Mathématique',
-      classe:'B2 ESGI',
-      salle: 'SALLE 515',
-      start: '2023-07-05T11:30:00',
-      end: '2023-07-05T13:00:00',
-    },
-    {
-      id: 3,
-      title: 'Python',
-      classe:'M1 ESGI',
-      salle: 'SALLE 205',
-      start: '2023-07-05T14:00:00',
-      end: '2023-07-05T15:30:00',
-    },
-    {
-      id: 4,
-      title: 'Algorithmie',
-      classe:'M1 ESGI',
-      salle: 'SALLE 145',
-      start: '2023-07-05T15:45:00',
-      end: '2023-07-05T17:15:00',
-    },
-  ];
-
+  const [dayPlanning, setDayPlanning] = useState([]);
   const [isCoursSelected, setIsCoursSelected] = useState(false);
   const [idCoursSelected, setIdCoursSelected] = useState(null);
+
+  // const cours = [
+  //   {
+  //     id: 1,
+  //     title: 'Mathématique',
+  //     classe:'B2 ESGI',
+  //     salle: 'SALLE 515',
+  //     start: '2023-07-05T09:45:00',
+  //     end: '2023-07-05T11:15:00',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Mathématique',
+  //     classe:'B2 ESGI',
+  //     salle: 'SALLE 515',
+  //     start: '2023-07-05T11:30:00',
+  //     end: '2023-07-05T13:00:00',
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Python',
+  //     classe:'M1 ESGI',
+  //     salle: 'SALLE 205',
+  //     start: '2023-07-05T14:00:00',
+  //     end: '2023-07-05T15:30:00',
+  //   },
+  //   {
+  //     id: 4,
+  //     title: 'Algorithmie',
+  //     classe:'M1 ESGI',
+  //     salle: 'SALLE 145',
+  //     start: '2023-07-05T15:45:00',
+  //     end: '2023-07-05T17:15:00',
+  //   },
+  // ];
+
+  const requestCalendar = (idUser) => {
+    calendarService.day(props.idUser)
+        .then(res => {
+            console.log(res);  
+            setDayPlanning(res.data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
+
+  if (dayPlanning.length === 0) {
+    requestCalendar(props.idUser);
+  }
 
   let date = '';
   let heureDebut = '';
@@ -52,10 +69,13 @@ export default function RegisterStudents() {
   let matiere = '';
 
   if (isCoursSelected) {
-    date = cours[idCoursSelected-1].start.substr(0,10).replace(/-/g, '/');
-    heureDebut = cours[idCoursSelected-1].start.substr(11,5).replace(':', 'h');
-    heureFin = cours[idCoursSelected-1].end.substr(11,5).replace(':', 'h');
-    matiere = cours[idCoursSelected-1].title;
+    let selectedCourse = dayPlanning.find(cours => cours.id_cours === parseInt(idCoursSelected));
+    date = selectedCourse.date_cours.substr(8,2) + '/' 
+    + selectedCourse.date_cours.substr(5,2) + '/' 
+    + selectedCourse.date_cours.substr(0,4);
+    heureDebut = selectedCourse.heure_debut_cours.substr(11,5).replace(':', 'h');
+    heureFin = selectedCourse.heure_fin_cours.substr(11,5).replace(':', 'h');
+    matiere = selectedCourse.libelle_matiere.toUpperCase();
   }
 
   const showSelectedCours = (idCours) => {
@@ -68,7 +88,7 @@ export default function RegisterStudents() {
       <div className="RegisterStudentsDay">
         <h3 className="soustitreEmargementDay">↓ Cliquez sur un cours pour en faire l'émargement ↓</h3>
         <div className ="RegisterCalendar">
-          <CalendarDay cours={cours} onCoursClick={showSelectedCours}/>
+          <CalendarDay courses={dayPlanning} onCoursClick={showSelectedCours}/>
         </div>
       </div>
       <Divider orientation="vertical" flexItem></Divider>

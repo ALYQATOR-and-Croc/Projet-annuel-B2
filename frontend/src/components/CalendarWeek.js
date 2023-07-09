@@ -58,7 +58,7 @@ function CalendarWeek(props) {
           <b style={{fontSize: 'x-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.title}</b>
           <br></br>
           {
-            (props.variant === 'teacher') ? <b style={{fontSize: 'xx-small'}}>{arg.event.extendedProps.classe}</b> :
+            (props.variant === 'teacher') ? <b style={{fontSize: 'xx-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.extendedProps.classe}</b> :
             <b style={{fontSize: 'xx-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.extendedProps.prof}</b>
           }
           <br></br>

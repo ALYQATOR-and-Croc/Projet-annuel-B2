@@ -9,7 +9,15 @@ let month = (idUser) => {
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }
+let day = (idUser) => {
+    let actualDate = new Date();
+    actualDate.setHours(2, 0, 0);
+    let nbDays = 1;
+    return Axios.get(`/courses/page/user/${idUser}/start-date/${actualDate.toISOString()}/number-of-days/${nbDays}/`, 
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
 
 export const calendarService = {
-    month
+    month, day
 }
