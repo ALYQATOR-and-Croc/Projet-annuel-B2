@@ -19,9 +19,9 @@ function CalendarWeek(props) {
       heure_fin.setHours(heure_fin.getHours() - 2);
       return {
         id: course.id_cours,
-        title: course.libelle_matiere,
-        prof: course.nom_intervenant,
-        classe: course.libelle_classe,
+        title: course.libelle_matiere.toUpperCase(),
+        prof: course.prenom_intervenant[0].toUpperCase() + ". " + course.nom_intervenant.toUpperCase(),
+        classe: course.libelle_classe.toUpperCase(),
         salle: course.libelle_salle,
         start: heure_debut,
         end: heure_fin,
@@ -55,14 +55,14 @@ function CalendarWeek(props) {
         <div>
           <b style={{fontSize: 'xx-small'}}>{arg.timeText}</b>
           <br></br>
-          <b style={{fontSize: 'x-small'}}>{arg.event.title}</b>
+          <b style={{fontSize: 'x-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.title}</b>
           <br></br>
           {
-            (props.variant === 'teacher') ? <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.classe}</b> :
-            <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+            (props.variant === 'teacher') ? <b style={{fontSize: 'xx-small'}}>{arg.event.extendedProps.classe}</b> :
+            <b style={{fontSize: 'xx-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.extendedProps.prof}</b>
           }
           <br></br>
-          <b style={{fontSize: 'x-small'}}>Salle {arg.event.extendedProps.salle}</b>
+          <b style={{fontSize: 'xx-small'}}>Salle {arg.event.extendedProps.salle}</b>
         </div>
       );
     },
