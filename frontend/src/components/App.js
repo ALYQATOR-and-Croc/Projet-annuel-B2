@@ -19,12 +19,12 @@ function App() {
           <Routes>
             <Route path="/*" element={<RouteurAuth/>}/>
             <Route path="/student/*" element={
-              <AuthGuard>
+              <AuthGuard guardType='student'>
                 <RouteurStudent/>
               </AuthGuard>
             }/>
             <Route path="/teacher/*" element={
-              <AuthGuard>
+              <AuthGuard guardType='teacher'>
                 <RouteurTeacher/>
               </AuthGuard>
             }/>
