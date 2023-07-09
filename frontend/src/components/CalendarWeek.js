@@ -13,14 +13,18 @@ function CalendarWeek(props) {
   const ApiPlanning = props.courses;
   if (ApiPlanning !== undefined) {
     courses = ApiPlanning.map((course)=>{
+      let heure_debut = new Date(course.heure_debut_cours);
+      heure_debut.setHours(heure_debut.getHours() - 2);
+      let heure_fin = new Date(course.heure_fin_cours);
+      heure_fin.setHours(heure_fin.getHours() - 2);
       return {
         id: course.id_cours,
         title: course.libelle_matiere,
         prof: course.nom_intervenant,
         classe: course.libelle_classe,
         salle: course.libelle_salle,
-        start: course.heure_debut_cours,
-        end: course.heure_fin_cours,
+        start: heure_debut,
+        end: heure_fin,
       }
     })
   }
