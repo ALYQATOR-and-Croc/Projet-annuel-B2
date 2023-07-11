@@ -57,7 +57,6 @@ const reprographeGETList = (
     const orderBy: UtilisateurPagination = params.orderBy;
 
     sql.connect(config).then((pool) => {
-      console.log(utilisateurColumns[orderBy]);
       const queryGET = queryPaginatedReprographeGET(page, rowsNumber, orderBy);
       pool
         .request()
@@ -86,7 +85,6 @@ const etudiantGETList = (
     const orderBy: UtilisateurPagination = params.orderBy;
 
     sql.connect(config).then((pool) => {
-      console.log(utilisateurColumns[orderBy]);
       const queryGET = queryPaginatedEtudiantGET(page, rowsNumber, orderBy);
       pool
         .request()
@@ -115,8 +113,6 @@ const attachePromoGETList = (
     const orderBy: UtilisateurPagination = params.orderBy;
 
     sql.connect(config).then((pool) => {
-      console.log(utilisateurColumns[orderBy]);
-
       const queryGET = queryPaginatedAttachePromoGET(page, rowsNumber, orderBy);
       pool
         .request()
@@ -144,8 +140,6 @@ const intervenantGETList = (
     const rowsNumber: number = params.rowsNumber;
     const orderBy: UtilisateurPagination = params.orderBy;
     sql.connect(config).then((pool) => {
-      console.log(utilisateurColumns[orderBy]);
-
       const queryGET = queryPaginatedIntervenantPromoGET(
         page,
         rowsNumber,
@@ -177,8 +171,6 @@ const responsablePedagogiqueGETList = (
     const rowsNumber: number = params.rowsNumber;
     const orderBy: UtilisateurPagination = params.orderBy;
     sql.connect(config).then((pool) => {
-      console.log(utilisateurColumns[orderBy]);
-
       const queryGET = queryPaginatedResponsablePedagogiqueGET(
         page,
         rowsNumber,
