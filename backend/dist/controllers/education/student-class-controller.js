@@ -30,9 +30,9 @@ exports.getOneClassByCampusGET = exports.getOneClassByPromoGET = exports.getOneC
 const config = __importStar(require("../../config.json"));
 const mssql_1 = __importDefault(require("mssql"));
 const student_class_model_1 = require("../../models/education/student-class-model");
-const newClassPOST = (request, response) => {
+const newClassPOST = (req, res) => {
     try {
-        const body = request.body;
+        const body = req.body;
         const sqlQueryBody = {
             libelleClasse: body.libelleClasse,
             idPromotion: body.idPromotion,
@@ -50,17 +50,17 @@ const newClassPOST = (request, response) => {
             return pool.request().query(query);
         })
             .then(() => {
-            response.status(201).send('Class successfully created !');
+            res.status(201).send('Class successfully created !');
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.newClassPOST = newClassPOST;
-const patchClassPOST = (request, response) => {
+const patchClassPOST = (req, res) => {
     try {
-        const body = request.body;
+        const body = req.body;
         const sqlQueryBody = {
             libelleClasse: body.libelleClasse,
             idPromotion: body.idPromotion,
@@ -72,22 +72,22 @@ const patchClassPOST = (request, response) => {
             const query = `
             PATCH ${student_class_model_1.StudClassEnum.NOM_TABLE}
             SET ${student_class_model_1.StudClassEnum.LIBELLE} = '${sqlQueryBody.libelleClasse}', ${student_class_model_1.StudClassEnum.FK_CAMPUS} = '${sqlQueryBody.idCampus}', ${student_class_model_1.StudClassEnum.FK_PROMOTION} = '${sqlQueryBody.idPromotion}'
-            WHERE ${student_class_model_1.StudClassEnum.PK} = '${request.params.id}'
+            WHERE ${student_class_model_1.StudClassEnum.PK} = '${req.params.id}'
             `;
             return pool.request().query(query);
         })
             .then(() => {
-            response.status(201).send('Class successfully updated !');
+            res.status(201).send('Class successfully updated !');
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.patchClassPOST = patchClassPOST;
-const deleteClassPOST = (request, response) => {
+const deleteClassPOST = (req, res) => {
     try {
-        const body = request.body;
+        const body = req.body;
         const sqlQueryBody = {
             libelleClasse: body.libelleClasse,
             idPromotion: body.idPromotion,
@@ -98,20 +98,20 @@ const deleteClassPOST = (request, response) => {
             .then((pool) => {
             const query = `
             DELETE FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
-            WHERE ${student_class_model_1.StudClassEnum.PK} = '${request.params.id}'
+            WHERE ${student_class_model_1.StudClassEnum.PK} = '${req.params.id}'
             `;
             return pool.request().query(query);
         })
             .then(() => {
-            response.status(201).send('Class successfully deleted !');
+            res.status(201).send('Class successfully deleted !');
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.deleteClassPOST = deleteClassPOST;
-const getAllClassGET = (request, response) => {
+const getAllClassGET = (req, res) => {
     try {
         mssql_1.default
             .connect(config)
@@ -122,35 +122,35 @@ const getAllClassGET = (request, response) => {
             return pool.request().query(query);
         })
             .then((result) => {
-            response.status(200).send(result.recordset);
+            res.status(200).send(result.recordset);
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.getAllClassGET = getAllClassGET;
-const getOneClassGET = (request, response) => {
+const getOneClassGET = (req, res) => {
     try {
         mssql_1.default
             .connect(config)
             .then((pool) => {
             const query = `
             SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
-            WHERE ${student_class_model_1.StudClassEnum.PK} = '${request.params.id}'
+            WHERE ${student_class_model_1.StudClassEnum.PK} = '${req.params.id}'
             `;
             return pool.request().query(query);
         })
             .then((result) => {
-            response.status(200).send(result.recordset);
+            res.status(200).send(result.recordset);
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.getOneClassGET = getOneClassGET;
-const getOneClassByPromoGET = (request, response) => {
+const getOneClassByPromoGET = (req, res) => {
     try {
         mssql_1.default
             .connect(config)
@@ -158,36 +158,36 @@ const getOneClassByPromoGET = (request, response) => {
             const query = `
 
             SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
-            WHERE ${student_class_model_1.StudClassEnum.FK_PROMOTION} = '${request.params.id}'
+            WHERE ${student_class_model_1.StudClassEnum.FK_PROMOTION} = '${req.params.id}'
             `;
             return pool.request().query(query);
         })
             .then((result) => {
-            response.status(200).send(result.recordset);
+            res.status(200).send(result.recordset);
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.getOneClassByPromoGET = getOneClassByPromoGET;
-const getOneClassByCampusGET = (request, response) => {
+const getOneClassByCampusGET = (req, res) => {
     try {
         mssql_1.default
             .connect(config)
             .then((pool) => {
             const query = `
             SELECT * FROM ${student_class_model_1.StudClassEnum.NOM_TABLE}
-            WHERE ${student_class_model_1.StudClassEnum.FK_CAMPUS} = '${request.params.idCampus}'
+            WHERE ${student_class_model_1.StudClassEnum.FK_CAMPUS} = '${req.params.idCampus}'
             `;
             return pool.request().query(query);
         })
             .then((result) => {
-            response.status(200).send(result.recordset);
+            res.status(200).send(result.recordset);
         });
     }
     catch (error) {
-        response.status(400).send('Bad Request');
+        res.status(400).send('Bad Request');
     }
 };
 exports.getOneClassByCampusGET = getOneClassByCampusGET;

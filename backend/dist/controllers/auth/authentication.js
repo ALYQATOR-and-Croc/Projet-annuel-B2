@@ -41,20 +41,8 @@ const attache_promotion_model_1 = require("../../models/users/attache-promotion-
 const resp_pedago_model_1 = require("../../models/users/resp-pedago-model");
 const roles_model_1 = require("../../models/users/roles-model");
 // TODO : create admin right check
-const ADMIN_RIGHTS = "admin";
-// TODO : create hash
-// Temporary
-// const etudiant = {
-//   id_etudiant: 1,
-//   email_etudiant: 'luigi@emargis.fr',
-//   mot_de_passe_etudiant: 'azerty',
-// };
+const ADMIN_RIGHTS = 'admin';
 /**
- * {
- *  idRole
- *  idClasse
- *
- * }
  * @param request
  * @param response
  */
@@ -98,11 +86,11 @@ const signup = (request, response) => {
                         .request()
                         .query(queryFonction)
                         .then(() => {
-                        response.status(201).send("User was successfully created.");
+                        response.status(201).send('User was successfully created.');
                     });
                 }
                 else {
-                    response.status(201).send("User was successfully created.");
+                    response.status(201).send('User was successfully created.');
                 }
             });
         });
@@ -151,12 +139,12 @@ const newFunctionQuery = (fonctionType, fkUtilisateur, body) => {
             case user_model_2.FonctionEnum.ADMIN:
                 break;
             default:
-                throw new Error("Function does not exists.");
+                throw new Error('Function does not exists.');
         }
         return queryNewFunction;
     }
     catch (error) {
-        throw new Error("Error");
+        throw new Error('Error');
     }
 };
 const login = (request, response) => {
@@ -183,36 +171,36 @@ const login = (request, response) => {
     `;
             return pool.request().query(query);
         })
-            .then((result) => {
+            .then((reqResult) => {
             bcryptjs_1.default
-                .compare(loginPswd, result.recordset[0][user_model_1.UtilisateurEnum.MDP])
+                .compare(loginPswd, reqResult.recordset[0][user_model_1.UtilisateurEnum.MDP])
                 .then((isPswdEqual) => {
                 if (isPswdEqual) {
-                    console.log("Password is correct");
-                    return result;
+                    console.log('Password is correct');
+                    return reqResult;
                 }
                 else {
-                    response.status(401).send("Password is incorrect");
+                    response.status(401).send('Password is incorrect');
                 }
             })
-                .then((result) => {
+                .then((resultAfterPswdTested) => {
                 var _a;
                 try {
-                    if (result === undefined) {
-                        throw new Error("User does not exists");
+                    if (resultAfterPswdTested === undefined) {
+                        throw new Error('User does not exists');
                     }
                     const payload = {
                         sub: loginAlias,
-                        id: result.recordset[0][user_model_1.UtilisateurEnum.PK],
-                        role: result.recordset[0][roles_model_1.RolesEnum.LIBELLE],
+                        id: resultAfterPswdTested.recordset[0][user_model_1.UtilisateurEnum.PK],
+                        role: resultAfterPswdTested.recordset[0][roles_model_1.RolesEnum.LIBELLE],
                     };
                     const claims = {
-                        expiresIn: "5h",
-                        audience: result.recordset[0][roles_model_1.RolesEnum.DROITS],
+                        expiresIn: '5h',
+                        audience: resultAfterPswdTested.recordset[0][roles_model_1.RolesEnum.DROITS],
                     };
                     response.status(200).json({
                         token: jwt.sign(payload, secret_password_json_1.default.passwordToken, claims),
-                        userId: (_a = result.recordset[0][user_model_1.UtilisateurEnum.PK]) === null || _a === void 0 ? void 0 : _a.toString(),
+                        userId: (_a = resultAfterPswdTested.recordset[0][user_model_1.UtilisateurEnum.PK]) === null || _a === void 0 ? void 0 : _a.toString(),
                     });
                 }
                 catch (error) { }

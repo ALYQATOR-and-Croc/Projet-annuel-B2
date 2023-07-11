@@ -37,7 +37,7 @@ const config = __importStar(require("../../config.json"));
 const router = express_1.default.Router();
 const newPresencePOST = (req, res, next) => {
     try {
-        // A function that get value from the request body, create an sql query and create a new row in the presence table 
+        // A function that get value from the request body, create an sql query and create a new row in the presence table
         const body = req.body;
         const idStudent = body.idStudent;
         const idCourse = body.idCourse;
@@ -45,16 +45,19 @@ const newPresencePOST = (req, res, next) => {
         // Create the sql query
         const sqlQuery = `INSERT INTO presence (idStudent, idCourse, date) VALUES (${idStudent}, ${idCourse}, ${date})`;
         // Create a new row in the presence table
-        mssql_1.default.connect(config).then(pool => {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
             return pool.request().query(sqlQuery);
-        }).then(result => {
+        })
+            .then((result) => {
             console.log(result);
-        }).catch((error) => {
+        })
+            .catch((error) => {
             console.log(error);
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
     res.status(200).json({ message: 'ok' });
 };
 // Get a course id and return all the presence of the course
@@ -66,19 +69,22 @@ const getPresenceByCourseIdPOST = (req, res, next) => {
         // Create the sql query
         const sqlQuery = `SELECT * FROM presence WHERE idCourse = ${idCourse}`;
         // Create a new row in the presence table
-        mssql_1.default.connect(config).then(pool => {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
             return pool.request().query(sqlQuery);
-        }).then(result => {
+        })
+            .then((result) => {
             console.log(result);
-        }).catch((error) => {
+        })
+            .catch((error) => {
             console.log(error);
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
     res.status(200).json({ message: 'ok' });
 };
-//Get a presence by id
+// Get a presence by id
 const getPresenceByIdPOST = (req, res, next) => {
     try {
         // A function that get value from the request body, create an sql query and create a new row in the presence table
@@ -87,16 +93,19 @@ const getPresenceByIdPOST = (req, res, next) => {
         // Create the sql query
         const sqlQuery = `SELECT * FROM presence WHERE idPresence = ${idPresence}`;
         // Create a new row in the presence table
-        mssql_1.default.connect(config).then(pool => {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
             return pool.request().query(sqlQuery);
-        }).then(result => {
+        })
+            .then((result) => {
             console.log(result);
-        }).catch((error) => {
+        })
+            .catch((error) => {
             console.log(error);
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
     res.status(200).json({ message: 'ok' });
 };
 // Get a student id and return all the presence of the student
@@ -108,16 +117,19 @@ const getPresenceByStudentIdPOST = (req, res, next) => {
         // Create the sql query
         const sqlQuery = `SELECT * FROM presence WHERE idStudent = ${idStudent}`;
         // Create a new row in the presence table
-        mssql_1.default.connect(config).then(pool => {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
             return pool.request().query(sqlQuery);
-        }).then(result => {
+        })
+            .then((result) => {
             console.log(result);
-        }).catch((error) => {
+        })
+            .catch((error) => {
             console.log(error);
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
     res.status(200).json({ message: 'ok' });
 };
 // Get a course and return all students attending the course with their name, surname and id, return the number of presence of each student at the matiere and the intervenant associated with the course and the intervenant name and surname and id
@@ -160,16 +172,19 @@ const getPresenceByCourseGET = (req, res, next) => {
           AND course.idIntervenant = intervenant.idIntervenant 
           AND course.idPromotion = promotion.idPromotion 
           AND promotion.idCampus = campus.idCampus`;
-        mssql_1.default.connect(config).then(pool => {
+        mssql_1.default
+            .connect(config)
+            .then((pool) => {
             return pool.request().query(sqlQuery);
-        }).then(result => {
+        })
+            .then((result) => {
             res.status(200).json(result.recordset);
-        }).catch((error) => {
+        })
+            .catch((error) => {
             console.log(error);
         });
     }
-    catch (error) {
-    }
+    catch (error) { }
     res.status(200).json({ message: 'ok' });
 };
 //# sourceMappingURL=presence-controller.js.map

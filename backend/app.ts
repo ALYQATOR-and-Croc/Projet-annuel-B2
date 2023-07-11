@@ -13,6 +13,7 @@ import room from './routes/infrastructure/room';
 import matiere from './routes/education/matiere-route';
 import course from './routes/education/course-route';
 import cors from 'cors';
+import { sqlServerTest } from './middleware/slq-test-middleware';
 const app = express();
 const portHost = config.HOST;
 const API_URL = config.API;
@@ -28,7 +29,9 @@ app.use(
     next();
   }
 );
+
 app.use(cors());
+app.use(sqlServerTest);
 // app.use(tokenGenerator);
 app.use(auth);
 app.use(roles);

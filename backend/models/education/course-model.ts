@@ -1,11 +1,11 @@
-import { RoomEnum } from "../infrastructure/room-model";
-import { EtudiantEnum } from "../users/etudiant-model";
-import { IntervenantEnum } from "../users/intervenant";
-import { RolesEnum } from "../users/roles-model";
-import { UtilisateurEnum } from "../users/user-model";
-import { MatiereEnum } from "./matiere-model";
-import { PromotionEnum } from "./promotion-model";
-import { StudClassEnum } from "./student-class-model";
+import { RoomEnum } from '../infrastructure/room-model';
+import { EtudiantEnum } from '../users/etudiant-model';
+import { IntervenantEnum } from '../users/intervenant';
+import { RolesEnum } from '../users/roles-model';
+import { UtilisateurEnum } from '../users/user-model';
+import { MatiereEnum } from './matiere-model';
+import { PromotionEnum } from './promotion-model';
+import { StudClassEnum } from './student-class-model';
 
 export interface CoursePOST {
   courseLabel: string;
@@ -22,19 +22,19 @@ export interface CoursePOST {
 }
 
 export enum CoursEnum {
-  NOM_TABLE = "Cours",
-  PK = "id_cours",
-  LIBELLE = "libelle_cours",
-  DATE = "date_cours",
-  DEBUT = "heure_debut_cours",
-  FIN = "heure_fin_cours",
-  FK_INTERVENANT = "id_intervenant",
-  FK_RESP_PEDAGO = "id_responsable_pedagogique",
-  FK_ATTACH_PROMO = "id_attache_de_promotion",
-  FK_REPROGRAPHE = "id_reprographe",
-  FK_SALLE = "id_salle",
-  FK_MATIERE = "id_matiere",
-  FK_CLASSE = "id_classe",
+  NOM_TABLE = 'Cours',
+  PK = 'id_cours',
+  LIBELLE = 'libelle_cours',
+  DATE = 'date_cours',
+  DEBUT = 'heure_debut_cours',
+  FIN = 'heure_fin_cours',
+  FK_INTERVENANT = 'id_intervenant',
+  FK_RESP_PEDAGO = 'id_responsable_pedagogique',
+  FK_ATTACH_PROMO = 'id_attache_de_promotion',
+  FK_REPROGRAPHE = 'id_reprographe',
+  FK_SALLE = 'id_salle',
+  FK_MATIERE = 'id_matiere',
+  FK_CLASSE = 'id_classe',
 }
 
 export interface CoursePageGET {

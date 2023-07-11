@@ -9,8 +9,5 @@ const student_class_controller_1 = require("../../controllers/education/student-
 const router = express_1.default.Router();
 router.post('/class/new/', is_auth_1.default, roles_middleware_1.isAdmin, student_class_controller_1.newClassPOST);
 router.patch('/class/update/:id', is_auth_1.default, roles_middleware_1.isAdmin, student_class_controller_1.patchClassPOST);
-router.delete('/class/delete/:id', is_auth_1.default, roles_middleware_1.isAdmin, student_class_controller_1.patchClassPOST);
-router.get('/class/promotion/:idPromotion', is_auth_1.default, roles_middleware_1.isAdmin, student_class_controller_1.patchClassPOST);
-router.get('/class/campus/:idCampus', is_auth_1.default, roles_middleware_1.isAdmin, student_class_controller_1.patchClassPOST);
 module.exports = router;
 //# sourceMappingURL=student-class-route.js.map

@@ -102,10 +102,10 @@ const newCoursePOST = (request, response, next) => {
             })
                 .then((result) => {
                 if (result) {
-                    response.status(201).send("New course was successfully created !");
+                    response.status(201).send('New course was successfully created !');
                 }
                 else {
-                    throw new Error("Unacceptable operation.");
+                    throw new Error('Unacceptable operation.');
                 }
             });
         }
@@ -114,7 +114,7 @@ const newCoursePOST = (request, response, next) => {
         }
     }
     else {
-        response.status(405).send("Unacceptable operation.");
+        response.status(405).send('Unacceptable operation.');
     }
 };
 exports.newCoursePOST = newCoursePOST;
@@ -169,11 +169,11 @@ const userFonctionTable = (roleUser, idUser, startDate, numberOfDays) => {
             return (0, course_model_1.coursesUserFunctionIdGETQuery)(resp_pedago_model_1.ResponsablePedagogiqueEnum.PK, resp_pedago_model_1.ResponsablePedagogiqueEnum.NOM_TABLE, resp_pedago_model_1.ResponsablePedagogiqueEnum.FK_UTILISATEUR, idUser, startDate, numberOfDays);
         // case ADMIN
         default:
-            throw new Error("");
+            throw new Error('');
             break;
     }
 };
-//get all students that asisted to a course
+// get all students that asisted to a course
 const coursesStudentGET = (request, response, next) => {
     try {
         const params = request.params;
