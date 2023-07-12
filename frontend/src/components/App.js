@@ -9,6 +9,7 @@ import AuthGuard from './Auth/AuthGuard';
 import RouteurStudent from './Student/RouteurStudent';
 import RouteurTeacher from './Teacher/RouteurTeacher';
 import RouteurAp from './Ap/RouteurAp';
+import RouteurRepro from './Repro/RouteurRepro'
 
 
 function App() {
@@ -32,6 +33,11 @@ function App() {
             <Route path="/ap/*" element={
               <AuthGuard guardType='ap'>
                 <RouteurAp/>
+              </AuthGuard>
+            }/>
+            <Route path="/repro/*" element={
+              <AuthGuard guardType='repro'>
+                <RouteurRepro/>
               </AuthGuard>
             }/>
             <Route path="*" element={<Notfound/>} />
