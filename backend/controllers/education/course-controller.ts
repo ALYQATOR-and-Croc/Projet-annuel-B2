@@ -226,7 +226,7 @@ const coursesStudentGET = (
           .request()
           .query(courseStudentsGETQueryResult.sqlQueryBodyData)
           .then((result) => {
-            return result.recordset[0];
+            return result.recordset;
           })
           .then((resultList) => {
             return response.status(200).send(resultList);

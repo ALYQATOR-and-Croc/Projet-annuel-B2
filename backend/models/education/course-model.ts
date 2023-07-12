@@ -133,5 +133,6 @@ export const allStudentsOfACourseGETQuery = (idCourse: number): string => {
   LEFT JOIN ${UtilisateurEnum.NOM_TABLE} ON ${EtudiantEnum.NOM_TABLE}.${EtudiantEnum.FK_UTILISATEUR} = ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.PK}
   WHERE ${CoursEnum.NOM_TABLE}.${CoursEnum.PK} = ${idCourse};
   `;
+  console.log(query);
   return query;
 };
