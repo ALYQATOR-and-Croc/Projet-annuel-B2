@@ -10,10 +10,9 @@ import {
 } from '../../models/education/student-class-model';
 import { request } from 'http';
 
-
-const newClassPOST = (request: express.Request, response: express.Response) => {
+const newClassPOST = (req: express.Request, res: express.Response) => {
   try {
-    const body = request.body;
+    const body = req.body;
     const sqlQueryBody: StudClassPOST = {
       libelleClasse: body.libelleClasse,
       idPromotion: body.idPromotion,
@@ -31,16 +30,16 @@ const newClassPOST = (request: express.Request, response: express.Response) => {
         return pool.request().query(query);
       })
       .then(() => {
-        response.status(201).send('Class successfully created !');
+        res.status(201).send('Class successfully created !');
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
-const patchClassPOST = (request: express.Request, response: express.Response) => {
+const patchClassPOST = (req: express.Request, res: express.Response) => {
   try {
-    const body = request.body;
+    const body = req.body;
     const sqlQueryBody: StudClassPOST = {
       libelleClasse: body.libelleClasse,
       idPromotion: body.idPromotion,
@@ -52,21 +51,21 @@ const patchClassPOST = (request: express.Request, response: express.Response) =>
         const query = `
             PATCH ${StudClassEnum.NOM_TABLE}
             SET ${StudClassEnum.LIBELLE} = '${sqlQueryBody.libelleClasse}', ${StudClassEnum.FK_CAMPUS} = '${sqlQueryBody.idCampus}', ${StudClassEnum.FK_PROMOTION} = '${sqlQueryBody.idPromotion}'
-            WHERE ${StudClassEnum.PK} = '${request.params.id}'
+            WHERE ${StudClassEnum.PK} = '${req.params.id}'
             `;
         return pool.request().query(query);
       })
       .then(() => {
-        response.status(201).send('Class successfully updated !');
+        res.status(201).send('Class successfully updated !');
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
-const deleteClassPOST = (request: express.Request, response: express.Response) => {
+const deleteClassPOST = (req: express.Request, res: express.Response) => {
   try {
-    const body = request.body;
+    const body = req.body;
     const sqlQueryBody: StudClassPOST = {
       libelleClasse: body.libelleClasse,
 
@@ -78,19 +77,19 @@ const deleteClassPOST = (request: express.Request, response: express.Response) =
       .then((pool) => {
         const query = `
             DELETE FROM ${StudClassEnum.NOM_TABLE}
-            WHERE ${StudClassEnum.PK} = '${request.params.id}'
+            WHERE ${StudClassEnum.PK} = '${req.params.id}'
             `;
         return pool.request().query(query);
       })
       .then(() => {
-        response.status(201).send('Class successfully deleted !');
+        res.status(201).send('Class successfully deleted !');
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
-const getAllClassGET = (request: express.Request, response: express.Response) => {
+const getAllClassGET = (req: express.Request, res: express.Response) => {
   try {
     sql
       .connect(config)
@@ -101,36 +100,33 @@ const getAllClassGET = (request: express.Request, response: express.Response) =>
         return pool.request().query(query);
       })
       .then((result) => {
-        response.status(200).send(result.recordset);
+        res.status(200).send(result.recordset);
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
-const getOneClassGET = (request: express.Request, response: express.Response) => {
+const getOneClassGET = (req: express.Request, res: express.Response) => {
   try {
     sql
       .connect(config)
       .then((pool) => {
         const query = `
             SELECT * FROM ${StudClassEnum.NOM_TABLE}
-            WHERE ${StudClassEnum.PK} = '${request.params.id}'
+            WHERE ${StudClassEnum.PK} = '${req.params.id}'
             `;
         return pool.request().query(query);
       })
       .then((result) => {
-        response.status(200).send(result.recordset);
+        res.status(200).send(result.recordset);
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
-const getOneClassByPromoGET = (
-  request: express.Request,
-  response: express.Response
-) => {
+const getOneClassByPromoGET = (req: express.Request, res: express.Response) => {
   try {
     sql
       .connect(config)
@@ -138,21 +134,21 @@ const getOneClassByPromoGET = (
         const query = `
 
             SELECT * FROM ${StudClassEnum.NOM_TABLE}
-            WHERE ${StudClassEnum.FK_PROMOTION} = '${request.params.id}'
+            WHERE ${StudClassEnum.FK_PROMOTION} = '${req.params.id}'
             `;
         return pool.request().query(query);
       })
       .then((result) => {
-        response.status(200).send(result.recordset);
+        res.status(200).send(result.recordset);
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
 const getOneClassByCampusGET = (
-  request: express.Request,
-  response: express.Response
+  req: express.Request,
+  res: express.Response
 ) => {
   try {
     sql
@@ -161,19 +157,24 @@ const getOneClassByCampusGET = (
       .then((pool) => {
         const query = `
             SELECT * FROM ${StudClassEnum.NOM_TABLE}
-            WHERE ${StudClassEnum.FK_CAMPUS} = '${request.params.idCampus}'
+            WHERE ${StudClassEnum.FK_CAMPUS} = '${req.params.idCampus}'
             `;
         return pool.request().query(query);
       })
       .then((result) => {
-        response.status(200).send(result.recordset);
+        res.status(200).send(result.recordset);
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    res.status(400).send('Bad Request');
   }
 };
 
-
-
-
-export { newClassPOST, patchClassPOST, deleteClassPOST, getAllClassGET, getOneClassGET, getOneClassByPromoGET, getOneClassByCampusGET };
+export {
+  newClassPOST,
+  patchClassPOST,
+  deleteClassPOST,
+  getAllClassGET,
+  getOneClassGET,
+  getOneClassByPromoGET,
+  getOneClassByCampusGET,
+};

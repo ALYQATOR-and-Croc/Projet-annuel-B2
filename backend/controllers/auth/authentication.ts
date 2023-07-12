@@ -1,43 +1,29 @@
-import bcrypt from "bcryptjs";
-import validationResult from "express-validator";
-import { LoginBody } from "../../models/auth/auth-model";
-import * as config from "../../config.json";
-import sql from "mssql";
-import secretPass from "../../CONFIG-FILES/secret-password.json";
-import * as jwt from "jsonwebtoken";
-import express from "express";
-import { error } from "console";
-import { UtilisateurEnum } from "../../models/users/user-model";
+import bcrypt from 'bcryptjs';
+import validationResult from 'express-validator';
+import { LoginBody } from '../../models/auth/auth-model';
+import * as config from '../../config.json';
+import sql from 'mssql';
+import secretPass from '../../CONFIG-FILES/secret-password.json';
+import * as jwt from 'jsonwebtoken';
+import express from 'express';
+import { error } from 'console';
+import { UtilisateurEnum } from '../../models/users/user-model';
 import {
   UtilisateurPOST,
   FonctionEnum,
   FonctionType,
-} from "../../models/users/user-model";
-import { EtudiantEnum } from "../../models/users/etudiant-model";
-import { ReprographeEnum } from "../../models/users/reprographe-model";
-import { IntervenantEnum } from "../../models/users/intervenant";
-import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
-import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
-import { RolesEnum } from "../../models/users/roles-model";
+} from '../../models/users/user-model';
+import { EtudiantEnum } from '../../models/users/etudiant-model';
+import { ReprographeEnum } from '../../models/users/reprographe-model';
+import { IntervenantEnum } from '../../models/users/intervenant';
+import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
+import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
+import { RolesEnum } from '../../models/users/roles-model';
 
 // TODO : create admin right check
-const ADMIN_RIGHTS = "admin";
-
-// TODO : create hash
-
-// Temporary
-// const etudiant = {
-//   id_etudiant: 1,
-//   email_etudiant: 'luigi@emargis.fr',
-//   mot_de_passe_etudiant: 'azerty',
-// };
+const ADMIN_RIGHTS = 'admin';
 
 /**
- * {
- *  idRole
- *  idClasse
- *
- * }
  * @param request
  * @param response
  */
@@ -86,10 +72,10 @@ const signup = (request: express.Request, response: express.Response) => {
               .request()
               .query(queryFonction)
               .then(() => {
-                response.status(201).send("User was successfully created.");
+                response.status(201).send('User was successfully created.');
               });
           } else {
-            response.status(201).send("User was successfully created.");
+            response.status(201).send('User was successfully created.');
           }
         });
     });
@@ -142,11 +128,11 @@ const newFunctionQuery = (
         break;
 
       default:
-        throw new Error("Function does not exists.");
+        throw new Error('Function does not exists.');
     }
     return queryNewFunction;
   } catch (error) {
-    throw new Error("Error");
+    throw new Error('Error');
   }
 };
 
@@ -175,35 +161,38 @@ const login = (request: express.Request, response: express.Response) => {
     `;
         return pool.request().query(query);
       })
-      .then((result) => {
+      .then((reqResult) => {
         bcrypt
-          .compare(loginPswd, result.recordset[0][UtilisateurEnum.MDP])
+          .compare(loginPswd, reqResult.recordset[0][UtilisateurEnum.MDP])
           .then((isPswdEqual) => {
             if (isPswdEqual) {
-              console.log("Password is correct");
-              return result;
+              console.log('Password is correct');
+              return reqResult;
             } else {
-              response.status(401).send("Password is incorrect");
+              response.status(401).send('Password is incorrect');
             }
           })
-          .then((result) => {
+          .then((resultAfterPswdTested) => {
             try {
-              if (result === undefined) {
-                throw new Error("User does not exists");
+              if (resultAfterPswdTested === undefined) {
+                throw new Error('User does not exists');
               }
 
               const payload = {
                 sub: loginAlias,
-                id: result.recordset[0][UtilisateurEnum.PK],
-                role: result.recordset[0][RolesEnum.LIBELLE],
+                id: resultAfterPswdTested.recordset[0][UtilisateurEnum.PK],
+                role: resultAfterPswdTested.recordset[0][RolesEnum.LIBELLE],
               };
               const claims = {
-                expiresIn: "5h",
-                audience: result.recordset[0][RolesEnum.DROITS],
+                expiresIn: '5h',
+                audience: resultAfterPswdTested.recordset[0][RolesEnum.DROITS],
               };
               response.status(200).json({
                 token: jwt.sign(payload, secretPass.passwordToken, claims),
-                userId: result.recordset[0][UtilisateurEnum.PK]?.toString(),
+                userId:
+                  resultAfterPswdTested.recordset[0][
+                    UtilisateurEnum.PK
+                  ]?.toString(),
               });
             } catch (error) {}
           });

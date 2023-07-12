@@ -26,6 +26,6 @@ router.get(
   '/courses/course/:idCourse/page/students/',
   isAuthenticated,
   coursesStudentGET
-)
+);
 
 export = router;

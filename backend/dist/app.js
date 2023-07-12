@@ -40,6 +40,7 @@ const room_1 = __importDefault(require("./routes/infrastructure/room"));
 const matiere_route_1 = __importDefault(require("./routes/education/matiere-route"));
 const course_route_1 = __importDefault(require("./routes/education/course-route"));
 const cors_1 = __importDefault(require("cors"));
+const slq_test_middleware_1 = require("./middleware/slq-test-middleware");
 const app = (0, express_1.default)();
 const portHost = config.HOST;
 const API_URL = config.API;
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use((0, cors_1.default)());
+app.use(slq_test_middleware_1.sqlServerTest);
 // app.use(tokenGenerator);
 app.use(auth_route_1.default);
 app.use(roles_route_1.default);

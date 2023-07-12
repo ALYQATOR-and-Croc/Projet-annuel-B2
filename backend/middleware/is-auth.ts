@@ -24,7 +24,7 @@ const isAuthenticated = (
     response.status(401).send('Error unauthorized');
   }
 };
- 
+
 const isCourseManager = (
   request: express.Request,
   response: express.Response,
@@ -34,8 +34,7 @@ const isCourseManager = (
     const authHeader = request.get('Authorization');
     const token = authHeader!.replace('Bearer ', '');
     const decodedToken: any = jwt.verify(token, secretPass.passwordToken);
-    if (  
-
+    if (
       decodedToken.aud !== 'admin' ||
       decodedToken.aud !== 'respPedago' ||
       decodedToken.aud !== 'attProm' ||
@@ -49,6 +48,5 @@ const isCourseManager = (
     response.status(401).send(error);
   }
 };
-
 
 export = isAuthenticated;

@@ -6,47 +6,21 @@ import CheckIcon from '@mui/icons-material/Check';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CalendarDay from '../CalendarDay';
 import { calendarService } from '../../_services/calendar.service';
+import { courseService } from '../../_services/course.service';
 
 export default function RegisterStudents(props) {
 
   const [dayPlanning, setDayPlanning] = useState([]);
+  const [courseStudentList, setCourseStudentList] = useState([]);
   const [isCoursSelected, setIsCoursSelected] = useState(false);
   const [idCoursSelected, setIdCoursSelected] = useState(null);
+  const [previousIdCoursSelected, setPreviousIdCoursSelected] = useState(null);
 
-  // const cours = [
-  //   {
-  //     id: 1,
-  //     title: 'Mathématique',
-  //     classe:'B2 ESGI',
-  //     salle: 'SALLE 515',
-  //     start: '2023-07-05T09:45:00',
-  //     end: '2023-07-05T11:15:00',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Mathématique',
-  //     classe:'B2 ESGI',
-  //     salle: 'SALLE 515',
-  //     start: '2023-07-05T11:30:00',
-  //     end: '2023-07-05T13:00:00',
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Python',
-  //     classe:'M1 ESGI',
-  //     salle: 'SALLE 205',
-  //     start: '2023-07-05T14:00:00',
-  //     end: '2023-07-05T15:30:00',
-  //   },
-  //   {
-  //     id: 4,
-  //     title: 'Algorithmie',
-  //     classe:'M1 ESGI',
-  //     salle: 'SALLE 145',
-  //     start: '2023-07-05T15:45:00',
-  //     end: '2023-07-05T17:15:00',
-  //   },
-  // ];
+  // Header cours affiché
+  const [dateCours, setDateCours] = useState('');
+  const [heureDebutCours, setHeureDebutCours] = useState('');
+  const [heureFinCours, setHeureFinCours] = useState('');
+  const [matiereCours, setMatiereCours] = useState('');
 
   const requestCalendar = (idUser) => {
     calendarService.day(props.idUser)
@@ -59,23 +33,41 @@ export default function RegisterStudents(props) {
         })
   }
 
+  const requestCourseStudentList = (idCours) => {
+    courseService.studentList(idCours)
+        .then(res => {
+            let resList = undefined;  
+            if (!Array.isArray(res.data)) {
+              resList = [res.data];
+            } else {
+              resList = res.data;
+            }
+            resList = resList.map((eleve) => {
+              return { ...eleve, id: eleve.id_utilisateur, nom: eleve.nom.toUpperCase()};
+            })
+            setCourseStudentList(resList);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
+
   if (dayPlanning.length === 0) {
     requestCalendar(props.idUser);
   }
 
-  let date = '';
-  let heureDebut = '';
-  let heureFin = '';
-  let matiere = '';
-
   if (isCoursSelected) {
-    let selectedCourse = dayPlanning.find(cours => cours.id_cours === parseInt(idCoursSelected));
-    date = selectedCourse.date_cours.substr(8,2) + '/' 
-    + selectedCourse.date_cours.substr(5,2) + '/' 
-    + selectedCourse.date_cours.substr(0,4);
-    heureDebut = selectedCourse.heure_debut_cours.substr(11,5).replace(':', 'h');
-    heureFin = selectedCourse.heure_fin_cours.substr(11,5).replace(':', 'h');
-    matiere = selectedCourse.libelle_matiere.toUpperCase();
+    if (idCoursSelected !== previousIdCoursSelected) {
+      let selectedCourse = dayPlanning.find(cours => cours.id_cours === parseInt(idCoursSelected));
+      setDateCours(selectedCourse.date_cours.substr(8,2) + '/' 
+      + selectedCourse.date_cours.substr(5,2) + '/' 
+      + selectedCourse.date_cours.substr(0,4));
+      setHeureDebutCours(selectedCourse.heure_debut_cours.substr(11,5).replace(':', 'h'));
+      setHeureFinCours(selectedCourse.heure_fin_cours.substr(11,5).replace(':', 'h'));
+      setMatiereCours(selectedCourse.libelle_matiere.toUpperCase());
+      requestCourseStudentList(idCoursSelected);
+      setPreviousIdCoursSelected(idCoursSelected);
+    }
   }
 
   const showSelectedCours = (idCours) => {
@@ -95,12 +87,12 @@ export default function RegisterStudents(props) {
       { isCoursSelected ? 
       <div className="RegisterStudentsTable">
         <div className="titreEmargement">
-          <h1>Appel du {date}</h1>
-          <h2>{heureDebut}-{heureFin} : {matiere}</h2>
+          <h1>Appel du {dateCours}</h1>
+          <h2>{heureDebutCours}-{heureFinCours} : {matiereCours}</h2>
         </div>
         <div className='btnEmargement'><Button variant="contained" endIcon={<CheckIcon/>} onClick={() => setIsCoursSelected(false)}>Confirmer l'appel</Button></div>
         {/* Avec l'idCours récupéré, requete api pour récupérer elèves du cours */}
-        <div className="RegisterTable"><RegisterTable eleves={[]}/></div>
+        <div className="RegisterTable"><RegisterTable eleves={courseStudentList}/></div>
       </div> :
       <div className="titreNotEmargement">
         <EventBusyIcon className='notEmargementIcon' fontSize='large'/>

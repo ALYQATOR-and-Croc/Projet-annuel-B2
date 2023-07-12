@@ -3,8 +3,8 @@ import * as jwt from 'jsonwebtoken';
 import express, { response } from 'express';
 import * as secretPass from '../CONFIG-FILES/secret-password.json';
 import { onlyLowercaseRegExp } from '../Regex/string-regex';
+import { isRightRoleEnum } from '../models/users/roles-model';
 
-const ADMIN_RIGHTS = 'admin';
 const isRolesPOSTModel = (
   req: express.Request,
   res: express.Response,
@@ -25,24 +25,66 @@ const isRolesPOSTModel = (
     res.status(403).send('Forbidden request parameters.');
   }
 };
-const isAdmin = (
+
+const isAdmin = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) => {
   try {
     const authHeader = req.get('Authorization');
-    const token = authHeader!.replace('Bearer ', '');
-    const decodedToken: any = jwt.verify(token, secretPass.passwordToken);
-    if (decodedToken.aud !== 'admin') {
-      throw new Error('Not authorized');
-    } else {
-      next();
-    }
+    await hasTheRights(authHeader, ['admin']).then((isRightRole) => {
+      if (isRightRole) {
+        next();
+      } else {
+        res.status(401).send('Unauthorized request.');
+      }
+    });
   } catch (error) {
-    console.log(error);
-    res.status(401).send(error);
+    res.status(403).send('Forbidden request parameters.');
+  }
+};
+const isEducationManager = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const authHeader = req.get('Authorization');
+    await hasTheRights(authHeader, [
+      isRightRoleEnum.ADMIN,
+      isRightRoleEnum.ATTACHE_PROMO,
+      isRightRoleEnum.REPROGRAPHE,
+      isRightRoleEnum.RESPONSABLE_PEDA,
+    ]).then((isRightRole) => {
+      if (isRightRole) {
+        next();
+      } else {
+        res.status(401).send('Unauthorized request.');
+      }
+    });
+  } catch (error) {
+    res.status(403).send('Forbidden request parameters.');
   }
 };
 
-export { isRolesPOSTModel, isAdmin };
+const hasTheRights = async (
+  authHeader: any,
+  roles: string[]
+): Promise<boolean> => {
+  const token = authHeader!.replace('Bearer ', '');
+  return await decodeToken(token).then((decodedToken) => {
+    if (roles.includes(decodedToken.aud)) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+};
+
+async function decodeToken(token: string) {
+  const decodedToken: any = jwt.verify(token, secretPass.passwordToken);
+  return decodedToken;
+}
+
+export { isRolesPOSTModel, isAdmin, isEducationManager };
