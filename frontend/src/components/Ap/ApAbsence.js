@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { calendarService } from '../../_services/calendar.service';
 
-export default function Dashboard(props) {
+export default function ApAbsence(props) {
     const [monthPlanning, setMonthPlanning] = useState([]);
   
     const requestCalendar = (idUser) => {
@@ -21,7 +21,7 @@ export default function Dashboard(props) {
 
   
     return (
-<div className="ApDashboard"> 
-Dashboad Ap </div>
+<div className="ApAbsence"> 
+Absence Ap </div>
     )
 }

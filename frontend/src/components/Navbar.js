@@ -29,7 +29,7 @@ function ResponsiveAppBar(props) {
       pages = [{title:'Dashboard', path:'/teacher/dashboard'}, {title:'Planning', path:'/teacher/planning'}, {title:'Emarger', path:'/teacher/register-students'}];
       break;
     case 'ap':
-      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      pages = [{title:'Dashboard', path:'/ap/dashboard'}, {title:'Elèves', path:'/ap/eleves'}, {title:'Classes', path:'/ap/classes'}, {title:'Absences/Retards', path:'/ap/absence'}];
       break;
     case 'rp':
       pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
