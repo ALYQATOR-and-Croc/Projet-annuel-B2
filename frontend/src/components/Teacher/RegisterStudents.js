@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RegisterTable from '../RegisterTable';
 import '../../styles/RegisterStudents.css';
 import { Button, Divider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import CalendarDay from '../CalendarDay';
 import { calendarService } from '../../_services/calendar.service';
@@ -15,6 +16,19 @@ export default function RegisterStudents(props) {
   const [isCoursSelected, setIsCoursSelected] = useState(false);
   const [idCoursSelected, setIdCoursSelected] = useState(null);
   const [previousIdCoursSelected, setPreviousIdCoursSelected] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [absenceSent, setAbsenceSent] = useState(false);
+  const [delaySent, setDelaySent] = useState(false);
+
+  // useEffect(() => {
+  //   // affichage des élèves non en retard
+  //   let delayIds = selectedRows.map(row=>row.id);
+  //   setCourseStudentList(courseStudentList.filter((eleve)=>{
+  //     if (!delayIds.includes(eleve.id)) {
+  //       return true;
+  //     }
+  //   }));
+  // }, [delaySent]);
 
   // Header cours affiché
   const [dateCours, setDateCours] = useState('');
@@ -67,13 +81,42 @@ export default function RegisterStudents(props) {
       setMatiereCours(selectedCourse.libelle_matiere.toUpperCase());
       requestCourseStudentList(idCoursSelected);
       setPreviousIdCoursSelected(idCoursSelected);
+      setDelaySent(false);
     }
   }
 
   const showSelectedCours = (idCours) => {
+    if (idCoursSelected !== previousIdCoursSelected) {
+      setDelaySent(false);
+    }
     setIdCoursSelected(idCours);
     setIsCoursSelected(true);
   };
+
+  const uploadDelayAbsence = () => {
+    if (delaySent) {
+      console.log('absences : ', selectedRows);
+      setDelaySent(false);
+      setAbsenceSent(true);
+      setIsCoursSelected(false); 
+    } else {
+      console.log('retards : ', selectedRows);
+      filterStudentList();
+      setDelaySent(true)
+    }
+  }
+
+  const filterStudentList = () => {
+    // affichage des élèves non en retard
+    let delayIds = selectedRows.map(row=>row.id);
+    setCourseStudentList(courseStudentList.filter((eleve)=>{
+      if (!delayIds.includes(eleve.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    }));
+  }
 
   return (
     <div className="RegisterStudents">
@@ -87,12 +130,26 @@ export default function RegisterStudents(props) {
       { isCoursSelected ? 
       <div className="RegisterStudentsTable">
         <div className="titreEmargement">
-          <h1>Appel du {dateCours}</h1>
+          <h1>
+            {delaySent ? "ABSENCES " : "RETARDS "}
+            du {dateCours}
+          </h1>
           <h2>{heureDebutCours}-{heureFinCours} : {matiereCours}</h2>
         </div>
-        <div className='btnEmargement'><Button variant="contained" endIcon={<CheckIcon/>} onClick={() => setIsCoursSelected(false)}>Confirmer l'appel</Button></div>
+        <div className='btnsEmargement'>
+          <div className='btnConfirm'>
+            <Button variant="contained" endIcon={<CheckIcon/>} onClick={uploadDelayAbsence}>
+              {delaySent ? "Confirmer les absences" : "Confirmer les retards"}
+            </Button>
+          </div>
+          <div className='btnCancel'>
+            <Button variant="contained" endIcon={<CloseIcon/>} onClick={()=>setIsCoursSelected(false)}>
+              Annuler
+            </Button>
+          </div>
+        </div>
         {/* Avec l'idCours récupéré, requete api pour récupérer elèves du cours */}
-        <div className="RegisterTable"><RegisterTable eleves={courseStudentList}/></div>
+        <div className="RegisterTable"><RegisterTable eleves={courseStudentList} setSelectedRows={setSelectedRows}/></div>
       </div> :
       <div className="titreNotEmargement">
         <EventBusyIcon className='notEmargementIcon' fontSize='large'/>
