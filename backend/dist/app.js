@@ -39,6 +39,7 @@ const promotion_routes_1 = __importDefault(require("./routes/education/promotion
 const room_1 = __importDefault(require("./routes/infrastructure/room"));
 const matiere_route_1 = __importDefault(require("./routes/education/matiere-route"));
 const course_route_1 = __importDefault(require("./routes/education/course-route"));
+const presence_route_1 = __importDefault(require("./routes/education/presence-route"));
 const cors_1 = __importDefault(require("cors"));
 const slq_test_middleware_1 = require("./middleware/slq-test-middleware");
 const app = (0, express_1.default)();
@@ -62,6 +63,7 @@ app.use(promotion_routes_1.default);
 app.use(room_1.default);
 app.use(matiere_route_1.default);
 app.use(course_route_1.default);
+app.use(presence_route_1.default);
 app.get('/', (request, response) => {
     response.send(request.body);
 });

@@ -1,9 +1,11 @@
 import { RoomEnum } from '../infrastructure/room-model';
+import { PresenceEnum } from '../presence-model';
 import { EtudiantEnum } from '../users/etudiant-model';
 import { IntervenantEnum } from '../users/intervenant';
 import { RolesEnum } from '../users/roles-model';
 import { UtilisateurEnum } from '../users/user-model';
 import { MatiereEnum } from './matiere-model';
+import { PresenceModel } from './presence-model';
 import { PromotionEnum } from './promotion-model';
 import { StudClassEnum } from './student-class-model';
 
@@ -134,5 +136,67 @@ export const allStudentsOfACourseGETQuery = (idCourse: number): string => {
   WHERE ${CoursEnum.NOM_TABLE}.${CoursEnum.PK} = ${idCourse};
   `;
   console.log(query);
+  return query;
+};
+
+export const queryNewCoursesPOST = (sqlQueryBodyData: CoursePOST): string => {
+  const query = `
+  INSERT INTO ${CoursEnum.NOM_TABLE} 
+        (${CoursEnum.LIBELLE}, 
+            ${CoursEnum.DATE}, 
+            ${CoursEnum.DEBUT}, 
+            ${CoursEnum.FIN}, 
+            ${CoursEnum.FK_INTERVENANT}, 
+            ${CoursEnum.FK_RESP_PEDAGO}, 
+            ${CoursEnum.FK_ATTACH_PROMO}, 
+            ${CoursEnum.FK_REPROGRAPHE},
+            ${CoursEnum.FK_SALLE}, 
+            ${CoursEnum.FK_MATIERE}, 
+            ${CoursEnum.FK_CLASSE} )      
+        OUTPUT inserted.${CoursEnum.PK}  
+        VALUES
+        ('${sqlQueryBodyData.courseLabel}', 
+        '${sqlQueryBodyData.courseDate}', 
+        '${sqlQueryBodyData.startCourse}', 
+        '${sqlQueryBodyData.endCourse}', 
+        ${sqlQueryBodyData.idTeacher}, 
+        ${sqlQueryBodyData.idRespPedago}, 
+        ${sqlQueryBodyData.idAttachePromotion}, 
+        ${sqlQueryBodyData.idReprographe}, 
+        ${sqlQueryBodyData.idClassRoom}, 
+        ${sqlQueryBodyData.idCourseSubject}, 
+        ${sqlQueryBodyData.idClass})
+  `;
+  return query;
+};
+
+export const queryGetCourseAndStudentsGET = (idCours: string): string => {
+  const query = `
+  SELECT
+  ${CoursEnum.NOM_TABLE}.${CoursEnum.PK} AS idCours,
+  ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.PK} AS idUtilisateur,
+  ${EtudiantEnum.NOM_TABLE}.${EtudiantEnum.PK} AS idEtudiant,
+  ${CoursEnum.NOM_TABLE}.${CoursEnum.LIBELLE} AS libelleCours,
+  ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.NOM} AS nomUtilisateur,
+  ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.PRENOM} AS prenomUtilisateur,
+  ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.EMAIL} AS emailUtilisateur
+  FROM ${CoursEnum.NOM_TABLE}
+  LEFT JOIN ${EtudiantEnum.NOM_TABLE} ON ${EtudiantEnum.NOM_TABLE}.${EtudiantEnum.FK_CLASSE} = ${CoursEnum.NOM_TABLE}.${CoursEnum.FK_CLASSE}
+  LEFT JOIN ${UtilisateurEnum.NOM_TABLE} ON ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.PK} = ${EtudiantEnum.NOM_TABLE}.${EtudiantEnum.FK_UTILISATEUR}
+  WHERE ${CoursEnum.NOM_TABLE}.${CoursEnum.PK} = '${idCours}'
+  `;
+  console.log('\n\n\n', query, '\n\n\n');
+  return query;
+};
+
+export const queryCreateAStudentPresencePOST = (
+  newStudentPresence: PresenceModel
+): string => {
+  const query = `
+  INSERT INTO ${PresenceEnum.NOM_TABLE}
+  (${PresenceEnum.FK_ETUDIANT}, ${PresenceEnum.FK_COURS})
+  VALUES
+  (${newStudentPresence.id_etudiant}, ${newStudentPresence.id_cours})
+  `;
   return query;
 };

@@ -7,8 +7,10 @@ import sql from 'mssql';
 import {
   StudClassEnum,
   StudClassPOST,
+  queryGetOneClassGET,
 } from '../../models/education/student-class-model';
 import { request } from 'http';
+import { EtudiantEnum } from '../../models/users/etudiant-model';
 
 const newClassPOST = (req: express.Request, res: express.Response) => {
   try {
@@ -112,10 +114,7 @@ const getOneClassGET = (req: express.Request, res: express.Response) => {
     sql
       .connect(config)
       .then((pool) => {
-        const query = `
-            SELECT * FROM ${StudClassEnum.NOM_TABLE}
-            WHERE ${StudClassEnum.PK} = '${req.params.id}'
-            `;
+        const query = queryGetOneClassGET(req.params.id);
         return pool.request().query(query);
       })
       .then((result) => {
