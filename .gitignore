@@ -15,6 +15,7 @@ backend/dist/Regex
 backend/dist/models
 backend/dist/routes
 backend/dist/bin
+backend/dist/utils
 
 # FRONTEND
 frontend/node_modules/

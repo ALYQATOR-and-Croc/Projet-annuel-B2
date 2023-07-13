@@ -12,6 +12,7 @@ import promotion from './routes/education/promotion-routes';
 import room from './routes/infrastructure/room';
 import matiere from './routes/education/matiere-route';
 import course from './routes/education/course-route';
+import presence from './routes/education/presence-route';
 import cors from 'cors';
 import { sqlServerTest } from './middleware/slq-test-middleware';
 const app = express();
@@ -42,6 +43,7 @@ app.use(promotion);
 app.use(room);
 app.use(matiere);
 app.use(course);
+app.use(presence);
 
 app.get('/', (request: express.Request, response: express.Response) => {
   response.send(request.body);

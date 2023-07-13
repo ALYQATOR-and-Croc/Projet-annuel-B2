@@ -5,6 +5,8 @@ import {
   CoursePageGET,
   coursesUserFunctionIdGETQuery,
   coursesUserGETQuery,
+  queryGetCourseAndStudentsGET,
+  queryNewCoursesPOST,
 } from '../../models/education/course-model';
 import isId from '../../models/integer-model';
 import { onlyLowercaseRegExp } from '../../Regex/string-regex';
@@ -18,6 +20,11 @@ import { IntervenantEnum } from '../../models/users/intervenant';
 import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
 import { RolesEnum } from '../../models/users/roles-model';
 import { allStudentsOfACourseGETQuery } from '../../models/education/course-model';
+import { queryGetOneClassGET } from '../../models/education/student-class-model';
+import {
+  StudentPresence,
+  queryNewPresencePOST,
+} from '../../models/education/presence-model';
 
 const newCoursePOST = (
   request: express.Request,
@@ -53,40 +60,41 @@ const newCoursePOST = (
     };
 
     try {
-      const queryPOSTCourses = `
-        INSERT INTO ${CoursEnum.NOM_TABLE} 
-        (${CoursEnum.LIBELLE}, 
-            ${CoursEnum.DATE}, 
-            ${CoursEnum.DEBUT}, 
-            ${CoursEnum.FIN}, 
-            ${CoursEnum.FK_INTERVENANT}, 
-            ${CoursEnum.FK_RESP_PEDAGO}, 
-            ${CoursEnum.FK_ATTACH_PROMO}, 
-            ${CoursEnum.FK_REPROGRAPHE},
-            ${CoursEnum.FK_SALLE}, 
-            ${CoursEnum.FK_MATIERE}, 
-            ${CoursEnum.FK_CLASSE})
-        VALUES
-        ('${sqlQueryBodyData.courseLabel}', 
-        '${sqlQueryBodyData.courseDate}', 
-        '${sqlQueryBodyData.startCourse}', 
-        '${sqlQueryBodyData.endCourse}', 
-        ${sqlQueryBodyData.idTeacher}, 
-        ${sqlQueryBodyData.idRespPedago}, 
-        ${sqlQueryBodyData.idAttachePromotion}, 
-        ${sqlQueryBodyData.idReprographe}, 
-        ${sqlQueryBodyData.idClassRoom}, 
-        ${sqlQueryBodyData.idCourseSubject}, 
-        ${sqlQueryBodyData.idClass})
-        `;
+      const queryPOSTCourses = queryNewCoursesPOST(sqlQueryBodyData);
+      console.log(queryPOSTCourses);
       sql
         .connect(config)
         .then((pool) => {
-          return pool.request().query(queryPOSTCourses);
+          return {
+            result: pool.request().query(queryPOSTCourses),
+            poolValue: pool,
+          };
         })
-        .then((result) => {
-          if (result) {
-            response.status(201).send('New course was successfully created !');
+        .then(async (returnedValueWhenInserted) => {
+          console.log(returnedValueWhenInserted);
+          if ((await returnedValueWhenInserted.result).rowsAffected[0] === 1) {
+            returnedValueWhenInserted.poolValue
+              .request()
+              .query(
+                queryGetCourseAndStudentsGET(
+                  (await returnedValueWhenInserted.result).recordset[0].id_cours
+                )
+              )
+              .then((result) => {
+                result.recordset.forEach((element) => {
+                  console.log(element);
+                  returnedValueWhenInserted.poolValue
+                    .request()
+                    .query(
+                      queryNewPresencePOST(element.idCours, element.idEtudiant)
+                    );
+                });
+              })
+              .then(() => {
+                response
+                  .status(201)
+                  .send({ message: 'New course was successfully created !' });
+              });
           } else {
             throw new Error('Unacceptable operation.');
           }
