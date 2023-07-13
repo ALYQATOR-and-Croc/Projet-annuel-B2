@@ -20,16 +20,6 @@ export default function RegisterStudents(props) {
   const [absenceSent, setAbsenceSent] = useState(false);
   const [delaySent, setDelaySent] = useState(false);
 
-  // useEffect(() => {
-  //   // affichage des élèves non en retard
-  //   let delayIds = selectedRows.map(row=>row.id);
-  //   setCourseStudentList(courseStudentList.filter((eleve)=>{
-  //     if (!delayIds.includes(eleve.id)) {
-  //       return true;
-  //     }
-  //   }));
-  // }, [delaySent]);
-
   // Header cours affiché
   const [dateCours, setDateCours] = useState('');
   const [heureDebutCours, setHeureDebutCours] = useState('');
@@ -94,16 +84,45 @@ export default function RegisterStudents(props) {
   };
 
   const uploadDelayAbsence = () => {
+    let uploadData = {};
     if (delaySent) {
-      console.log('absences : ', selectedRows);
       setDelaySent(false);
       setAbsenceSent(true);
       setIsCoursSelected(false); 
+      uploadData = {
+        "idCourse":idCoursSelected, 
+        "listStudents":selectedRows.map((absent) => {
+          return {
+            "idStudent":absent.id,
+            "isAbsent":true,
+            "isLate":false,
+            "hasSigned":false
+          }
+        })
+      }
     } else {
-      console.log('retards : ', selectedRows);
       filterStudentList();
       setDelaySent(true)
+      uploadData = {
+        "idCourse":idCoursSelected, 
+        "listStudents":selectedRows.map((absent) => {
+          return {
+            "idStudent":absent.id,
+            "isAbsent":false,
+            "isLate":true,
+            "hasSigned":true
+          }
+        })
+      }
     }
+    console.log(uploadData);
+    courseService.sendPresence(uploadData)
+    .then(res => {
+      console.log(res);
+      })
+    .catch(error => {
+        console.log(error);
+    });
   }
 
   const filterStudentList = () => {
