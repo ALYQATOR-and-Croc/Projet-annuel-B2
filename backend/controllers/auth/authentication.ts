@@ -20,9 +20,6 @@ import { AttachePromotionEnum } from '../../models/users/attache-promotion-model
 import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
 import { RolesEnum } from '../../models/users/roles-model';
 
-// TODO : create admin right check
-const ADMIN_RIGHTS = 'admin';
-
 /**
  * @param request
  * @param response
@@ -162,6 +159,9 @@ const login = (request: express.Request, response: express.Response) => {
         return pool.request().query(query);
       })
       .then((reqResult) => {
+        if (reqResult.recordset[0] === undefined) {
+          throw new Error('User does not exists');
+        }
         bcrypt
           .compare(loginPswd, reqResult.recordset[0][UtilisateurEnum.MDP])
           .then((isPswdEqual) => {
@@ -182,6 +182,11 @@ const login = (request: express.Request, response: express.Response) => {
                 sub: loginAlias,
                 id: resultAfterPswdTested.recordset[0][UtilisateurEnum.PK],
                 role: resultAfterPswdTested.recordset[0][RolesEnum.LIBELLE],
+                prenom:
+                  resultAfterPswdTested.recordset[0][UtilisateurEnum.PRENOM],
+                nom: resultAfterPswdTested.recordset[0][UtilisateurEnum.NOM],
+                email:
+                  resultAfterPswdTested.recordset[0][UtilisateurEnum.EMAIL],
               };
               const claims = {
                 expiresIn: '5h',
@@ -194,8 +199,15 @@ const login = (request: express.Request, response: express.Response) => {
                     UtilisateurEnum.PK
                   ]?.toString(),
               });
-            } catch (error) {}
+            } catch (error) {
+              response.status(401).send(error);
+            }
           });
+      })
+      .catch(() => {
+        response
+          .status(400)
+          .send({ message: 'User does not exists !', error: 'User login ' });
       });
   } catch (error) {
     response.status(401).send(error);

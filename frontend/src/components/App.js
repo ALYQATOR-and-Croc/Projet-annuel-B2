@@ -21,22 +21,22 @@ function App() {
           <Routes>
             <Route path="/*" element={<RouteurAuth/>}/>
             <Route path="/student/*" element={
-              <AuthGuard guardType='student'>
+              <AuthGuard guardType='ETUDIANT'>
                 <RouteurStudent/>
               </AuthGuard>
             }/>
             <Route path="/teacher/*" element={
-              <AuthGuard guardType='teacher'>
+              <AuthGuard guardType='INTERVENANT'>
                 <RouteurTeacher/>
               </AuthGuard>
             }/>
             <Route path="/ap/*" element={
-              <AuthGuard guardType='ap'>
+              <AuthGuard guardType='ATTACHE_PROMO'>
                 <RouteurAp/>
               </AuthGuard>
             }/>
             <Route path="/repro/*" element={
-              <AuthGuard guardType='repro'>
+              <AuthGuard guardType='REPROGRAPHE'>
                 <RouteurRepro/>
               </AuthGuard>
             }/>

@@ -5,7 +5,7 @@ import { calendarService } from '../../_services/calendar.service';
 import '../../styles/PlanningPage.css';
 
 export default function StudentPlanning(props) {
-
+  const [getPlanning, setGetPlanning] = useState(true);
   const [monthPlanning, setMonthPlanning] = useState([]);
   const [SelectedDate, setSelectedDate] = useState(null);
 
@@ -24,8 +24,9 @@ export default function StudentPlanning(props) {
         })
   }
 
-  if (monthPlanning.length === 0) {
+  if (getPlanning) {
     requestCalendar(props.idUser);
+    setGetPlanning(false);
   }
 
   return (
