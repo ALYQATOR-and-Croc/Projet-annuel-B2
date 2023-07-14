@@ -1,4 +1,5 @@
 import Axios from "./caller.service";
+import jwt from 'jwt-decode';
 
 let login = (credentials) => {
     return Axios.post('/login/', credentials);
@@ -11,7 +12,7 @@ let logout = () => {
 }
 
 let isLogged = () => {
-    let token = localStorage.getItem('AuthToken');
+    const token = localStorage.getItem('AuthToken');
     return !!token
 } 
 
@@ -20,28 +21,30 @@ let saveToken = (token) => {
 }
 
 let getToken = () => {
-    let token = localStorage.getItem('AuthToken');
+    const token = localStorage.getItem('AuthToken');
     return token;
 }
 
-let saveUserId = (id) => {
-    localStorage.setItem('UserId', id)
-}
-
 let getUserId = () => {
-    let UserId = localStorage.getItem('UserId');
-    return UserId;
-}
-
-let saveUserRole = (role) => {
-    localStorage.setItem('UserRole', role)
+    const tokenData = jwt(getToken());
+    return tokenData.id;
 }
 
 let getUserRole = () => {
-    let UserRole = localStorage.getItem('UserRole');
-    return UserRole;
+    const tokenData = jwt(getToken());
+    return tokenData.aud;
+}
+
+let getUserFirstname = () => {
+    const tokenData = jwt(getToken());
+    return tokenData.prenom;
+}
+
+let getUserLastname = () => {
+    const tokenData = jwt(getToken());
+    return tokenData.nom;
 }
 
 export const accountService = {
-    login, saveToken, logout, isLogged, getToken, saveUserId, getUserId, saveUserRole, getUserRole
+    login, saveToken, logout, isLogged, getToken, getUserId, getUserRole, getUserLastname, getUserFirstname
 }
