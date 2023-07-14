@@ -11,12 +11,12 @@ export enum RolesEnum {
 }
 
 export enum isRightRoleEnum {
-  ETUDIANT = 'etudiant',
-  INTERVENANT = 'intervenant',
-  ATTACHE_PROMO = 'attache_promo',
-  RESPONSABLE_PEDA = 'responsable_peda',
-  REPROGRAPHE = 'reprographe',
-  ADMIN = 'admin',
+  ETUDIANT = 'ETUDIANT',
+  INTERVENANT = 'INTERVENANT',
+  ATTACHE_PROMO = 'ATTACHE_PROMO',
+  RESPONSABLE_PEDA = 'RESPONSABLE_PEDA',
+  REPROGRAPHE = 'REPROGRAPHE',
+  ADMINISTRATEUR = 'ADMINISTRATEUR',
 }
 
 export type UtilisateurPagination = 'NOM' | 'PRENOM' | 'EMAIL' | 'PK';

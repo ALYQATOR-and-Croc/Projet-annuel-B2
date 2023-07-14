@@ -33,7 +33,7 @@ const isAdmin = async (
 ) => {
   try {
     const authHeader = req.get('Authorization');
-    await hasTheRights(authHeader, ['admin']).then((isRightRole) => {
+    await hasTheRights(authHeader, ['ADMINISTRATEUR']).then((isRightRole) => {
       if (isRightRole) {
         next();
       } else {
@@ -52,7 +52,7 @@ const isEducationManager = async (
   try {
     const authHeader = req.get('Authorization');
     await hasTheRights(authHeader, [
-      isRightRoleEnum.ADMIN,
+      isRightRoleEnum.ADMINISTRATEUR,
       isRightRoleEnum.ATTACHE_PROMO,
       isRightRoleEnum.REPROGRAPHE,
       isRightRoleEnum.RESPONSABLE_PEDA,
