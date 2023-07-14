@@ -14,7 +14,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { accountService } from '../_services/account.service';
 import { Alert } from '@mui/material';
-import jwt from 'jwt-decode';
 
 function Login() {
 
@@ -40,11 +39,8 @@ function Login() {
         accountService.login(credentials)
             .then(res => {
                 accountService.saveToken(res.data.token);
-                let tokenData = jwt(res.data.token);
-                accountService.saveUserId(tokenData.id);
-                accountService.saveUserRole(tokenData.role);
                 let redirect = '';
-                switch (tokenData.role)  {
+                switch (accountService.getUserRole()) {
                     case 'ETUDIANT':
                         redirect = '/student';
                         break;

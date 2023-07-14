@@ -39,7 +39,7 @@ function ResponsiveAppBar(props) {
       break;
   }
 
-const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
+  const fullname = accountService.getUserFirstname() + ' ' + accountService.getUserLastname().toUpperCase();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
