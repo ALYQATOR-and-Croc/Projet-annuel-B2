@@ -8,8 +8,8 @@ let studentList = (idCours) => {
 }
 
 let sendPresence = (presenceList) => {
-    return Axios.put(`/course/presences/`, 
-    { body: {presenceList}, headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    return Axios.put(`/course/presences/`, presenceList,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }
 
