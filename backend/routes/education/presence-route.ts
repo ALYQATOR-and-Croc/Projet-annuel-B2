@@ -1,11 +1,16 @@
 import { updatePresencesPUT } from '../../controllers/education/presence-controller';
 import isAuthenticated from '../../middleware/is-auth';
-import { isAdmin } from '../../middleware/roles-middleware';
+import { isCourseManager } from '../../middleware/roles-middleware';
 import express from 'express';
 
 const router = express.Router();
 
-router.put('/course/presences/', isAuthenticated, isAdmin, updatePresencesPUT);
+router.put(
+  '/course/presences/',
+  isAuthenticated,
+  isCourseManager,
+  updatePresencesPUT
+);
 
 // router.put('/course/presence/', isAuthenticated, isAdmin, updatePresencePUT);
 
