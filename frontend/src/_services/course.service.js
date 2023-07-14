@@ -7,6 +7,12 @@ let studentList = (idCours) => {
     );
 }
 
+let sendPresence = (presenceList) => {
+    return Axios.put(`/course/presences/`, 
+    { body: {presenceList}, headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 export const courseService = {
-    studentList
+    studentList, sendPresence
 }

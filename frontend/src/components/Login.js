@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { accountService } from '../_services/account.service';
 import { Alert } from '@mui/material';
-
+import jwt from 'jwt-decode';
 
 function Login() {
 
@@ -40,8 +40,31 @@ function Login() {
         accountService.login(credentials)
             .then(res => {
                 accountService.saveToken(res.data.token);
-                accountService.saveUserId(res.data.userId);
-                navigate('/student');  
+                let tokenData = jwt(res.data.token);
+                accountService.saveUserId(tokenData.id);
+                accountService.saveUserRole(tokenData.role);
+                let redirect = '';
+                switch (tokenData.role)  {
+                    case 'ETUDIANT':
+                        redirect = '/student';
+                        break;
+                    case 'INTERVENANT':
+                        redirect = '/teacher';
+                        break;
+                    case 'RESPONSABLE_PEDA':
+                        redirect = '/rp';
+                        break;
+                    case 'ATTACHE_PROMO':
+                        redirect = '/ap';
+                        break;
+                    case 'admin':
+                        redirect = '/admin';
+                        break;
+                    case 'REPROGRAPHE':
+                        redirect = '/repro';
+                        break;
+                }
+                navigate(redirect);  
             })
             .catch(error => {
                 setIdInvalides(true);

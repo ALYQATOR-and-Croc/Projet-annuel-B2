@@ -52,14 +52,14 @@ function CalendarWeek(props) {
     allDaySlot: false,
     eventContent: function (arg) {
       return (
-        <div>
+        <div style={{overflow: "hidden"}}>
           <b style={{fontSize: 'xx-small'}}>{arg.timeText}</b>
           <br></br>
-          <b style={{fontSize: 'x-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.title}</b>
+          <b style={{fontSize: 'x-small'}}>{arg.event.title}</b>
           <br></br>
           {
-            (props.variant === 'teacher') ? <b style={{fontSize: 'xx-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.extendedProps.classe}</b> :
-            <b style={{fontSize: 'xx-small', whiteSpace: 'noWrap', overflow: 'hidden'}}>{arg.event.extendedProps.prof}</b>
+            (props.variant === 'teacher') ? <b style={{fontSize: 'xx-small'}}>{arg.event.extendedProps.classe}</b> :
+            <b style={{fontSize: 'xx-small'}}>{arg.event.extendedProps.prof}</b>
           }
           <br></br>
           <b style={{fontSize: 'xx-small'}}>Salle {arg.event.extendedProps.salle}</b>

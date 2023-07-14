@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid, frFR } from '@mui/x-data-grid';
 import '../styles/RegisterTable.css';
 
@@ -9,6 +9,13 @@ const columns = [
 ];
 
 export default function RegisterTable(props) {
+
+  const [selectedRows, setSelectedRows] = useState([]);
+  useEffect(() => {
+    props.setSelectedRows(selectedRows);
+  }, [selectedRows]);
+
+  const eleves = props.eleves;
   
   return (
     <div className="RegisterTable">
@@ -20,10 +27,10 @@ export default function RegisterTable(props) {
         localeText={{...frFR.components.MuiDataGrid.defaultProps.localeText, 
             footerRowSelected: (count) =>
                             count > 1
-                ? `${count.toLocaleString()} élèves sélectionnés`
-                : `${count.toLocaleString()} élève sélectionné`,
+                ? `${count.toLocaleString()} élèves sélectionné(e)s`
+                : `${count.toLocaleString()} élève sélectionné(e)`,
         }}
-        rows={props.eleves}
+        rows={eleves}
         columns={columns}
         initialState={{
             pagination: {
@@ -31,6 +38,13 @@ export default function RegisterTable(props) {
             },
         }}
         checkboxSelection
+        onRowSelectionModelChange={(ids) => {
+          const selectedIDs = new Set(ids);
+          const selectedRowData = eleves.filter((eleve) =>
+            selectedIDs.has(eleve.id)
+          );
+          setSelectedRows(selectedRowData);
+        }}
         disableColumnSelector
       />
     </div>
