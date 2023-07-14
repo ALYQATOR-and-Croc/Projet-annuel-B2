@@ -11,6 +11,7 @@ import { courseService } from '../../_services/course.service';
 
 export default function RegisterStudents(props) {
 
+  const [getPlanning, setGetPlanning] = useState(true);
   const [dayPlanning, setDayPlanning] = useState([]);
   const [courseStudentList, setCourseStudentList] = useState([]);
   const [isCoursSelected, setIsCoursSelected] = useState(false);
@@ -56,8 +57,9 @@ export default function RegisterStudents(props) {
         })
   }
 
-  if (dayPlanning.length === 0) {
+  if (getPlanning) {
     requestCalendar(props.idUser);
+    setGetPlanning(false);
   }
 
   if (isCoursSelected) {

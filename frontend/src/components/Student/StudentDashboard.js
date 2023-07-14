@@ -10,6 +10,7 @@ import { calendarService } from '../../_services/calendar.service';
 
 
 export default function Dashboard(props) {
+  const [getPlanning, setGetPlanning] = useState(true);
   const [monthPlanning, setMonthPlanning] = useState([]);
 
   const requestCalendar = (idUser) => {
@@ -23,8 +24,9 @@ export default function Dashboard(props) {
         })
   }
 
-  if (monthPlanning.length === 0) {
+  if (getPlanning) {
     requestCalendar(props.idUser);
+    setGetPlanning(false);
   }
 
   const absenceDelays = [

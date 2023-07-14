@@ -8,6 +8,7 @@ import '../../styles/PlanningPage.css'
 
 export default function TeacherPlanning(props) {
 
+  const [getPlanning, setGetPlanning] = useState(true);
   const [monthPlanning, setMonthPlanning] = useState([]);
   const [SelectedDate, setSelectedDate] = useState(null);
 
@@ -26,8 +27,9 @@ export default function TeacherPlanning(props) {
         })
   }
 
-  if (monthPlanning.length === 0) {
+  if (getPlanning) {
     requestCalendar(props.idUser);
+    setGetPlanning(false);
   }
 
   return (

@@ -9,6 +9,8 @@ import { calendarService } from '../../_services/calendar.service';
 import '../../styles/TeacherDashboard.css';
 
 export default function Dashboard(props) {
+  const [getPlanning, setGetPlanning] = useState(true);
+  const [getAbsenceDelays, setGetAbsenceDelays] = useState(true);
   const [monthPlanning, setMonthPlanning] = useState([]);
   const [absenceDelays, setAbsenceDelays] = useState([]);
 
@@ -23,11 +25,12 @@ export default function Dashboard(props) {
         })
   }
 
-  if (monthPlanning.length === 0) {
+  if (getPlanning) {
     requestCalendar(props.idUser);
+    setGetPlanning(false);
   }
 
-  if (monthPlanning.length !== 0 && absenceDelays.length === 0) {
+  if (monthPlanning.length !== 0 && getAbsenceDelays) {
     let todayCourses = monthPlanning.filter((cours)=>{
       let actualDay = new Date();
       actualDay.setHours(actualDay.getHours() + 2);
@@ -57,39 +60,8 @@ export default function Dashboard(props) {
       return parseInt(a.heure.substring(0, 2)) - parseInt(b.heure.substring(0, 2));
     })
     setAbsenceDelays(absenceDelayRaw.slice(0,3));
+    setGetAbsenceDelays(false);
   }
-
-  // if (absenceDelays.length > 0 ) {
-  //   console.log('fin', absenceDelays);
-  // }
-
-  // const fillAbsenceDelays = (monthPlanning) => {
-  //   setAbsenceDelays(monthPlanning.map(cours => {
-  //     return cours.id_cours
-  //   }));
-    
-  // }
-    // let actualDay = new Date().toISOString();
-    // let courseDay = cours.date_cours;
-    // console.log(actualDay.substring(0,10), courseDay.substring(0,10));
-    // if (new Date().toISOString().substring(0,10) === cours.date_cours.substring(0,10)) {
-      // let heureCours = cours.heure_debut_cours.substring(11, 16).replace(':', 'h');
-      // heureCours += '-' + cours.heure_fin_cours.substring(11, 16).replace(':', 'h');
-      // let dateCours = new Date();
-      // dateCours = dateCours.toLocaleDateString("fr");
-      // return (new Date().toISOString().substring(0,10) === cours.date_cours.substring(0,10)) ? {
-      // id: cours.id_cours, 
-      // date: new Date.now().toLocaleDateString("fr"), 
-      // heure: cours.heure_debut_cours.substring(11, 16).replace(':', 'h')
-      // + '-' + cours.heure_fin_cours.substring(11, 16).replace(':', 'h'),
-      // matiere: cours.libelle_matiere.toUpperCase(),
-      // classe: cours.libelle_classe.toUpperCase(),
-      // Emarger: true
-      // } : ['test']
-    // } else {
-      // return([]);
-    // }
-  // }))}
 
   return (
     <div className="TeacherDashboard">

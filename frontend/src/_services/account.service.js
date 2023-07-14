@@ -6,6 +6,8 @@ let login = (credentials) => {
 
 let logout = () => {
     localStorage.removeItem('AuthToken')
+    localStorage.removeItem('UserId')
+    localStorage.removeItem('UserRole')
 }
 
 let isLogged = () => {
@@ -17,13 +19,13 @@ let saveToken = (token) => {
     localStorage.setItem('AuthToken', token)
 }
 
-let saveUserId = (id) => {
-    localStorage.setItem('UserId', id)
-}
-
 let getToken = () => {
     let token = localStorage.getItem('AuthToken');
     return token;
+}
+
+let saveUserId = (id) => {
+    localStorage.setItem('UserId', id)
 }
 
 let getUserId = () => {
@@ -31,6 +33,15 @@ let getUserId = () => {
     return UserId;
 }
 
+let saveUserRole = (role) => {
+    localStorage.setItem('UserRole', role)
+}
+
+let getUserRole = () => {
+    let UserRole = localStorage.getItem('UserRole');
+    return UserRole;
+}
+
 export const accountService = {
-    login, saveToken, logout, isLogged, getToken, saveUserId, getUserId
+    login, saveToken, logout, isLogged, getToken, saveUserId, getUserId, saveUserRole, getUserRole
 }
