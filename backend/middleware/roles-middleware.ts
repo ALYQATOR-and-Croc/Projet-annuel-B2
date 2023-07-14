@@ -87,4 +87,29 @@ async function decodeToken(token: string) {
   return decodedToken;
 }
 
-export { isRolesPOSTModel, isAdmin, isEducationManager };
+const isCourseManager = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const authHeader = req.get('Authorization');
+    await hasTheRights(authHeader, [
+      isRightRoleEnum.ADMINISTRATEUR,
+      isRightRoleEnum.ATTACHE_PROMO,
+      isRightRoleEnum.REPROGRAPHE,
+      isRightRoleEnum.RESPONSABLE_PEDA,
+      isRightRoleEnum.INTERVENANT,
+    ]).then((isRightRole) => {
+      if (isRightRole) {
+        next();
+      } else {
+        res.status(401).send('Unauthorized request.');
+      }
+    });
+  } catch (error) {
+    res.status(403).send('Forbidden request parameters.');
+  }
+};
+
+export { isRolesPOSTModel, isAdmin, isEducationManager, isCourseManager };
