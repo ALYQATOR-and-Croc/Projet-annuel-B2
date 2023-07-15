@@ -12,7 +12,7 @@ import {
 import { request } from 'http';
 import { EtudiantEnum } from '../../models/users/etudiant-model';
 
-const newClassPOST = (req: express.Request, res: express.Response) => {
+const  newClassPOST = (req: express.Request, res: express.Response) => {
   try {
     const body = req.body;
     const sqlQueryBody: StudClassPOST = {

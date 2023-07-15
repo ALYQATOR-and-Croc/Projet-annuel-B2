@@ -1,7 +1,8 @@
 import express from 'express';
 import isAuthenticated from '../../middleware/is-auth';
-import { isAdmin } from '../../middleware/roles-middleware';
+import { isAdmin, isEducationManager } from '../../middleware/roles-middleware';
 import {
+  getAllClassGET,
   newClassPOST,
   patchClassPOST,
 } from '../../controllers/education/student-class-controller';
@@ -9,6 +10,8 @@ import {
 const router = express.Router();
 
 router.post('/class/new/', isAuthenticated, isAdmin, newClassPOST);
+
+router.get('/class/', isAuthenticated, isEducationManager, getAllClassGET);
 
 router.patch('/class/update/:id', isAuthenticated, isAdmin, patchClassPOST);
 
