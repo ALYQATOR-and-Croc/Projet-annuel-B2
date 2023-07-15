@@ -1,9 +1,19 @@
-import { updatePresencesPUT } from '../../controllers/education/presence-controller';
+import {
+  getPresencesByStudentGET,
+  updatePresencesPUT,
+} from '../../controllers/education/presence-controller';
 import isAuthenticated from '../../middleware/is-auth';
 import { isCourseManager } from '../../middleware/roles-middleware';
 import express from 'express';
 
 const router = express.Router();
+
+router.get(
+  '/course/presences/student/:idStudent/',
+  isAuthenticated,
+  isCourseManager,
+  getPresencesByStudentGET
+);
 
 router.put(
   '/course/presences/',

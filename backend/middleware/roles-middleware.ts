@@ -33,13 +33,17 @@ const isAdmin = async (
 ) => {
   try {
     const authHeader = req.get('Authorization');
-    await hasTheRights(authHeader, ['ADMINISTRATEUR']).then((isRightRole) => {
-      if (isRightRole) {
-        next();
-      } else {
-        res.status(401).send('Unauthorized request.');
-      }
-    });
+    await hasTheRights(authHeader, ['ADMINISTRATEUR'])
+      .then((isRightRole) => {
+        if (isRightRole) {
+          next();
+        } else {
+          res.status(401).send('Unauthorized request.');
+        }
+      })
+      .catch((error) => {
+        res.status(403).send('Forbidden request parameters.');
+      });
   } catch (error) {
     res.status(403).send('Forbidden request parameters.');
   }
@@ -56,13 +60,17 @@ const isEducationManager = async (
       isRightRoleEnum.ATTACHE_PROMO,
       isRightRoleEnum.REPROGRAPHE,
       isRightRoleEnum.RESPONSABLE_PEDA,
-    ]).then((isRightRole) => {
-      if (isRightRole) {
-        next();
-      } else {
-        res.status(401).send('Unauthorized request.');
-      }
-    });
+    ])
+      .then((isRightRole) => {
+        if (isRightRole) {
+          next();
+        } else {
+          res.status(401).send('Unauthorized request.');
+        }
+      })
+      .catch((error) => {
+        res.status(403).send('Forbidden request parameters.');
+      });
   } catch (error) {
     res.status(403).send('Forbidden request parameters.');
   }
@@ -100,13 +108,47 @@ const isCourseManager = async (
       isRightRoleEnum.REPROGRAPHE,
       isRightRoleEnum.RESPONSABLE_PEDA,
       isRightRoleEnum.INTERVENANT,
-    ]).then((isRightRole) => {
-      if (isRightRole) {
-        next();
-      } else {
-        res.status(401).send('Unauthorized request.');
-      }
-    });
+    ])
+      .then((isRightRole) => {
+        if (isRightRole) {
+          next();
+        } else {
+          res.status(401).send('Unauthorized request.');
+        }
+      })
+      .catch((error) => {
+        res.status(403).send('Forbidden request parameters.');
+      });
+  } catch (error) {
+    res.status(403).send('Forbidden request parameters.');
+  }
+};
+
+const isCOncernedByCourse = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const authHeader = req.get('Authorization');
+    await hasTheRights(authHeader, [
+      isRightRoleEnum.ADMINISTRATEUR,
+      isRightRoleEnum.ATTACHE_PROMO,
+      isRightRoleEnum.REPROGRAPHE,
+      isRightRoleEnum.RESPONSABLE_PEDA,
+      isRightRoleEnum.INTERVENANT,
+      isRightRoleEnum.ETUDIANT,
+    ])
+      .then((isRightRole) => {
+        if (isRightRole) {
+          next();
+        } else {
+          res.status(401).send('Unauthorized request.');
+        }
+      })
+      .catch((error) => {
+        res.status(403).send('Forbidden request parameters.');
+      });
   } catch (error) {
     res.status(403).send('Forbidden request parameters.');
   }

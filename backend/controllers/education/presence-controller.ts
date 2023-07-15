@@ -15,6 +15,7 @@ import {
   queryUpdatePresencePUT,
 } from '../../models/education/presence-model';
 import { isPresenceDataCoherent } from '../../utils/data-coherence-utils';
+import { PresenceEnum } from '../../models/presence-model';
 
 const updatePresencesPUT = (
   req: express.Request,
@@ -79,4 +80,69 @@ const updatePresencePUT = (
   } catch (error) {}
 };
 
-export { updatePresencesPUT };
+const getPresencesByStudentGET = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = req.params;
+    const idStudent: number = Number(params.idStudent);
+
+    const queryGET = `SELECT * FROM ${PresenceEnum.NOM_TABLE} WHERE ${PresenceEnum.FK_ETUDIANT} = ${idStudent}`;
+    sql.connect(config).then((pool) => {
+      pool
+
+        .request()
+        .query(queryGET)
+        .then((result) => {
+          if (result) {
+            res.status(200).send(result.recordset);
+          } else {
+            res.status(405).send('Unacceptable operation.');
+          }
+        })
+        .catch((error) => {
+          res.status(405).send('Unacceptable operation.');
+        });
+    });
+  } catch (error) {
+    res.status(405).send('Unacceptable operation.');
+  }
+};
+
+const getPresencesByCourseGET = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = req.params;
+    const idCourse: number = Number(params.idCourse);
+
+    const queryGET = `SELECT * FROM ${PresenceEnum.NOM_TABLE} WHERE ${PresenceEnum.FK_COURS} = ${idCourse}`;
+    sql.connect(config).then((pool) => {
+      pool
+        .request()
+        .query(queryGET)
+        .then((result) => {
+          if (result) {
+            res.status(200).send(result.recordset);
+          } else {
+            res.status(405).send('Unacceptable operation.');
+          }
+        })
+        .catch((error) => {
+          res.status(405).send('Unacceptable operation.');
+        });
+    });
+  } catch (error) {
+    res.status(405).send('Unacceptable operation.');
+  }
+};
+
+export {
+  updatePresencesPUT,
+  getPresencesByStudentGET,
+  getPresencesByCourseGET,
+};
