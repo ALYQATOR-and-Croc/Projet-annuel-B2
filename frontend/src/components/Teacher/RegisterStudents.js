@@ -48,8 +48,9 @@ export default function RegisterStudents(props) {
               resList = res.data;
             }
             resList = resList.map((eleve) => {
-              return { ...eleve, id: eleve.id_utilisateur, nom: eleve.nom.toUpperCase()};
+              return { ...eleve, id: eleve.id_etudiant, nom: eleve.nom.toUpperCase()};
             })
+            console.log(res);
             setCourseStudentList(resList);
         })
         .catch(error => {
