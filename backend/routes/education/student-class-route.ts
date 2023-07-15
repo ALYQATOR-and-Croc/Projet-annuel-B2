@@ -11,7 +11,7 @@ const router = express.Router();
 
 router.post('/class/new/', isAuthenticated, isAdmin, newClassPOST);
 
-router.get('/class/', isAuthenticated, isEducationManager, getAllClassGET);
+router.get('/classes/', isAuthenticated, isEducationManager, getAllClassGET);
 
 router.patch('/class/update/:id', isAuthenticated, isAdmin, patchClassPOST);
 
