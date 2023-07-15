@@ -1,24 +1,24 @@
-import bcrypt from 'bcryptjs';
-import validationResult from 'express-validator';
-import { LoginBody } from '../../models/auth/auth-model';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import secretPass from '../../CONFIG-FILES/secret-password.json';
-import * as jwt from 'jsonwebtoken';
-import express from 'express';
-import { error } from 'console';
-import { UtilisateurEnum } from '../../models/users/user-model';
+import bcrypt from "bcryptjs";
+import validationResult from "express-validator";
+import { LoginBody } from "../../models/auth/auth-model";
+import * as config from "../../config.json";
+import sql from "mssql";
+import secretPass from "../../CONFIG-FILES/secret-password.json";
+import * as jwt from "jsonwebtoken";
+import express from "express";
+import { error } from "console";
+import { UtilisateurEnum } from "../../models/users/user-model";
 import {
   UtilisateurPOST,
   FonctionEnum,
   FonctionType,
-} from '../../models/users/user-model';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
-import { ReprographeEnum } from '../../models/users/reprographe-model';
-import { IntervenantEnum } from '../../models/users/intervenant';
-import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
-import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
-import { RolesEnum } from '../../models/users/roles-model';
+} from "../../models/users/user-model";
+import { EtudiantEnum } from "../../models/users/etudiant-model";
+import { ReprographeEnum } from "../../models/users/reprographe-model";
+import { IntervenantEnum } from "../../models/users/intervenant";
+import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
+import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
+import { RolesEnum } from "../../models/users/roles-model";
 
 /**
  * @param request
@@ -69,10 +69,10 @@ const signup = (request: express.Request, response: express.Response) => {
               .request()
               .query(queryFonction)
               .then(() => {
-                response.status(201).send('User was successfully created.');
+                response.status(201).send("User was successfully created.");
               });
           } else {
-            response.status(201).send('User was successfully created.');
+            response.status(201).send("User was successfully created.");
           }
         });
     });
@@ -125,11 +125,11 @@ const newFunctionQuery = (
         break;
 
       default:
-        throw new Error('Function does not exists.');
+        throw new Error("Function does not exists.");
     }
     return queryNewFunction;
   } catch (error) {
-    throw new Error('Error');
+    throw new Error("Error");
   }
 };
 
@@ -138,7 +138,6 @@ const login = (request: express.Request, response: express.Response) => {
     const loginBody: LoginBody = request!.body;
     const loginAlias: string = loginBody.login;
     const loginPswd: string = loginBody.password;
-
     sql
       .connect(config)
       .then((pool) => {
@@ -158,9 +157,12 @@ const login = (request: express.Request, response: express.Response) => {
     `;
         return pool.request().query(query);
       })
+      .catch((error) => {
+        throw new Error("Unauthorized");
+      })
       .then((reqResult) => {
         if (reqResult.recordset[0] === undefined) {
-          throw new Error('User does not exists');
+          throw new Error("User does not exists");
         }
         bcrypt
           .compare(loginPswd, reqResult.recordset[0][UtilisateurEnum.MDP])
@@ -168,48 +170,47 @@ const login = (request: express.Request, response: express.Response) => {
             if (isPswdEqual) {
               return reqResult;
             } else {
-              response.status(401).send('Password is incorrect');
+              throw new Error("Unauthorized");
             }
           })
+          .catch((error) => {
+            throw new Error("Unauthorized");
+          })
           .then((resultAfterPswdTested) => {
-            try {
-              if (resultAfterPswdTested === undefined) {
-                throw new Error('User does not exists');
-              }
-
-              const payload = {
-                sub: loginAlias,
-                id: resultAfterPswdTested.recordset[0][UtilisateurEnum.PK],
-                role: resultAfterPswdTested.recordset[0][RolesEnum.LIBELLE],
-                prenom:
-                  resultAfterPswdTested.recordset[0][UtilisateurEnum.PRENOM],
-                nom: resultAfterPswdTested.recordset[0][UtilisateurEnum.NOM],
-                email:
-                  resultAfterPswdTested.recordset[0][UtilisateurEnum.EMAIL],
-              };
-              const claims = {
-                expiresIn: '5h',
-                audience: resultAfterPswdTested.recordset[0][RolesEnum.DROITS],
-              };
-              response.status(200).json({
-                token: jwt.sign(payload, secretPass.passwordToken, claims),
-                userId:
-                  resultAfterPswdTested.recordset[0][
-                    UtilisateurEnum.PK
-                  ]?.toString(),
-              });
-            } catch (error) {
-              response.status(401).send(error);
+            if (resultAfterPswdTested === undefined) {
+              throw new Error("User does not exists");
             }
+
+            const payload = {
+              sub: loginAlias,
+              id: resultAfterPswdTested.recordset[0][UtilisateurEnum.PK],
+              role: resultAfterPswdTested.recordset[0][RolesEnum.LIBELLE],
+              prenom:
+                resultAfterPswdTested.recordset[0][UtilisateurEnum.PRENOM],
+              nom: resultAfterPswdTested.recordset[0][UtilisateurEnum.NOM],
+              email: resultAfterPswdTested.recordset[0][UtilisateurEnum.EMAIL],
+            };
+            const claims = {
+              expiresIn: "5h",
+              audience: resultAfterPswdTested.recordset[0][RolesEnum.DROITS],
+            };
+            response.status(200).json({
+              token: jwt.sign(payload, secretPass.passwordToken, claims),
+              userId:
+                resultAfterPswdTested.recordset[0][
+                  UtilisateurEnum.PK
+                ]?.toString(),
+            });
+          })
+          .catch((error) => {
+            return response.status(401).send("Unauthorized");
           });
       })
-      .catch(() => {
-        response
-          .status(400)
-          .send({ message: 'User does not exists !', error: 'User login ' });
+      .catch((error) => {
+        return response.status(401).send("Unauthorized");
       });
   } catch (error) {
-    response.status(401).send(error);
+    return response.status(401).send("Unauthorized");
   }
 };
 
