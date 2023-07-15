@@ -1,25 +1,25 @@
-import { AttachePromotionEnum } from "./attache-promotion-model";
-import { EtudiantEnum } from "./etudiant-model";
-import { IntervenantEnum } from "./intervenant";
-import { ReprographeEnum } from "./reprographe-model";
-import { ResponsablePedagogiqueEnum } from "./resp-pedago-model";
-import { UtilisateurPagination } from "./roles-model";
+import { AttachePromotionEnum } from './attache-promotion-model';
+import { EtudiantEnum } from './etudiant-model';
+import { IntervenantEnum } from './intervenant';
+import { ReprographeEnum } from './reprographe-model';
+import { ResponsablePedagogiqueEnum } from './resp-pedago-model';
+import { UtilisateurPagination } from './roles-model';
 
 export enum UtilisateurEnum {
-  NOM_TABLE = "Utilisateur",
-  PK = "id_utilisateur",
-  NOM = "nom",
-  PRENOM = "prenom",
-  EMAIL = "adresse_email",
-  MDP = "motdepasse",
-  FK_ROLE_UTILISATEUR = "id_role_utilisateur",
+  NOM_TABLE = 'Utilisateur',
+  PK = 'id_utilisateur',
+  NOM = 'nom',
+  PRENOM = 'prenom',
+  EMAIL = 'adresse_email',
+  MDP = 'motdepasse',
+  FK_ROLE_UTILISATEUR = 'id_role_utilisateur',
 }
 
 export const utilisateurColumns = {
-  NOM: "nom",
-  PRENOM: "prenom",
-  EMAIL: "adresse_email",
-  PK: "id_utilisateur",
+  NOM: 'nom',
+  PRENOM: 'prenom',
+  EMAIL: 'adresse_email',
+  PK: 'id_utilisateur',
 };
 
 export interface UtilisateurPOST {
@@ -32,20 +32,20 @@ export interface UtilisateurPOST {
 }
 
 export type FonctionType =
-  | "ETUDIANT"
-  | "INTERVENANT"
-  | "ATTACHE_PROMO"
-  | "RESPONSABLE_PEDA"
-  | "REPROGRAPHE"
-  | "ADMIN";
+  | 'ETUDIANT'
+  | 'INTERVENANT'
+  | 'ATTACHE_PROMO'
+  | 'RESPONSABLE_PEDA'
+  | 'REPROGRAPHE'
+  | 'ADMIN';
 
 export enum FonctionEnum {
-  ETUDIANT = "ETUDIANT",
-  INTERVENANT = "INTERVENANT",
-  ATTACHE_PROMO = "ATTACHE_PROMO",
-  RESPONSABLE_PEDA = "RESPONSABLE_PEDA",
-  REPROGRAPHE = "REPROGRAPHE",
-  ADMIN = "ADMIN",
+  ETUDIANT = 'ETUDIANT',
+  INTERVENANT = 'INTERVENANT',
+  ATTACHE_PROMO = 'ATTACHE_PROMO',
+  RESPONSABLE_PEDA = 'RESPONSABLE_PEDA',
+  REPROGRAPHE = 'REPROGRAPHE',
+  ADMIN = 'ADMIN',
 }
 
 export const queryPaginatedEtudiantGET = (

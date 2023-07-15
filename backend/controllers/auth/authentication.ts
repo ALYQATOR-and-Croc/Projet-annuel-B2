@@ -1,24 +1,24 @@
-import bcrypt from "bcryptjs";
-import validationResult from "express-validator";
-import { LoginBody } from "../../models/auth/auth-model";
-import * as config from "../../config.json";
-import sql from "mssql";
-import secretPass from "../../CONFIG-FILES/secret-password.json";
-import * as jwt from "jsonwebtoken";
-import express from "express";
-import { error } from "console";
-import { UtilisateurEnum } from "../../models/users/user-model";
+import bcrypt from 'bcryptjs';
+import validationResult from 'express-validator';
+import { LoginBody } from '../../models/auth/auth-model';
+import * as config from '../../config.json';
+import sql from 'mssql';
+import secretPass from '../../CONFIG-FILES/secret-password.json';
+import * as jwt from 'jsonwebtoken';
+import express from 'express';
+import { error } from 'console';
+import { UtilisateurEnum } from '../../models/users/user-model';
 import {
   UtilisateurPOST,
   FonctionEnum,
   FonctionType,
-} from "../../models/users/user-model";
-import { EtudiantEnum } from "../../models/users/etudiant-model";
-import { ReprographeEnum } from "../../models/users/reprographe-model";
-import { IntervenantEnum } from "../../models/users/intervenant";
-import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
-import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
-import { RolesEnum } from "../../models/users/roles-model";
+} from '../../models/users/user-model';
+import { EtudiantEnum } from '../../models/users/etudiant-model';
+import { ReprographeEnum } from '../../models/users/reprographe-model';
+import { IntervenantEnum } from '../../models/users/intervenant';
+import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
+import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
+import { RolesEnum } from '../../models/users/roles-model';
 
 /**
  * @param request
@@ -69,10 +69,10 @@ const signup = (request: express.Request, response: express.Response) => {
               .request()
               .query(queryFonction)
               .then(() => {
-                response.status(201).send("User was successfully created.");
+                response.status(201).send('User was successfully created.');
               });
           } else {
-            response.status(201).send("User was successfully created.");
+            response.status(201).send('User was successfully created.');
           }
         });
     });
@@ -85,6 +85,7 @@ const newFunctionQuery = (
 ): string | null => {
   try {
     let queryNewFunction: string | null = null;
+    let idSalle: number | null = null;
     switch (fonctionType) {
       case FonctionEnum.ETUDIANT:
         queryNewFunction = `
@@ -101,6 +102,7 @@ const newFunctionQuery = (
       `;
         break;
       case FonctionEnum.RESPONSABLE_PEDA:
+        body.idSalle ? (idSalle = body.idSalle) : (idSalle = null);
         queryNewFunction = `
       INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR}, ${ResponsablePedagogiqueEnum.FK_SALLE})
       VALUES
@@ -108,6 +110,7 @@ const newFunctionQuery = (
       `;
         break;
       case FonctionEnum.REPROGRAPHE:
+        body.idSalle ? (idSalle = body.idSalle) : (idSalle = null);
         queryNewFunction = `
       INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR}, ${ReprographeEnum.FK_SALLE})
       VALUES
@@ -115,6 +118,7 @@ const newFunctionQuery = (
       `;
         break;
       case FonctionEnum.ATTACHE_PROMO:
+        body.idSalle ? (idSalle = body.idSalle) : (idSalle = null);
         queryNewFunction = `
       INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR}, ${AttachePromotionEnum.FK_SALLE})
       VALUES
@@ -125,11 +129,11 @@ const newFunctionQuery = (
         break;
 
       default:
-        throw new Error("Function does not exists.");
+        throw new Error('Function does not exists.');
     }
     return queryNewFunction;
   } catch (error) {
-    throw new Error("Error");
+    throw new Error('Error');
   }
 };
 
@@ -158,11 +162,11 @@ const login = (request: express.Request, response: express.Response) => {
         return pool.request().query(query);
       })
       .catch((error) => {
-        throw new Error("Unauthorized");
+        throw new Error('Unauthorized');
       })
       .then((reqResult) => {
         if (reqResult.recordset[0] === undefined) {
-          throw new Error("User does not exists");
+          throw new Error('User does not exists');
         }
         bcrypt
           .compare(loginPswd, reqResult.recordset[0][UtilisateurEnum.MDP])
@@ -170,15 +174,15 @@ const login = (request: express.Request, response: express.Response) => {
             if (isPswdEqual) {
               return reqResult;
             } else {
-              throw new Error("Unauthorized");
+              throw new Error('Unauthorized');
             }
           })
           .catch((error) => {
-            throw new Error("Unauthorized");
+            throw new Error('Unauthorized');
           })
           .then((resultAfterPswdTested) => {
             if (resultAfterPswdTested === undefined) {
-              throw new Error("User does not exists");
+              throw new Error('User does not exists');
             }
 
             const payload = {
@@ -191,7 +195,7 @@ const login = (request: express.Request, response: express.Response) => {
               email: resultAfterPswdTested.recordset[0][UtilisateurEnum.EMAIL],
             };
             const claims = {
-              expiresIn: "5h",
+              expiresIn: '5h',
               audience: resultAfterPswdTested.recordset[0][RolesEnum.DROITS],
             };
             response.status(200).json({
@@ -203,14 +207,14 @@ const login = (request: express.Request, response: express.Response) => {
             });
           })
           .catch((error) => {
-            return response.status(401).send("Unauthorized");
+            return response.status(401).send('Unauthorized');
           });
       })
       .catch((error) => {
-        return response.status(401).send("Unauthorized");
+        return response.status(401).send('Unauthorized');
       });
   } catch (error) {
-    return response.status(401).send("Unauthorized");
+    return response.status(401).send('Unauthorized');
   }
 };
 
