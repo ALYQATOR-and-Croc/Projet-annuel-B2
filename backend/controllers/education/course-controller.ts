@@ -61,7 +61,6 @@ const newCoursePOST = (
 
     try {
       const queryPOSTCourses = queryNewCoursesPOST(sqlQueryBodyData);
-      console.log(queryPOSTCourses);
       sql
         .connect(config)
         .then((pool) => {
@@ -71,7 +70,6 @@ const newCoursePOST = (
           };
         })
         .then(async (returnedValueWhenInserted) => {
-          console.log(returnedValueWhenInserted);
           if ((await returnedValueWhenInserted.result).rowsAffected[0] === 1) {
             returnedValueWhenInserted.poolValue
               .request()

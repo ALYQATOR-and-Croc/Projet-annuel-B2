@@ -69,7 +69,6 @@ export const queryGetOneClassGET = (idClass: string): string => {
   LEFT JOIN ${UtilisateurEnum.NOM_TABLE} ON ${UtilisateurEnum.NOM_TABLE}.${UtilisateurEnum.PK} = ${EtudiantEnum.NOM_TABLE}.${EtudiantEnum.FK_UTILISATEUR}
   WHERE ${StudClassEnum.NOM_TABLE}.${StudClassEnum.PK} = '${idClass}'
   `;
-  console.log('\n\n\n', query, '\n\n\n');
   return query;
 };
 

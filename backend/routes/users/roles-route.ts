@@ -5,9 +5,10 @@ import {
   newRolePOST,
   reprographeGETList,
   etudiantGETList,
-  attache_promoGETList,
+  attachePromoGETList,
   intervenantGETList,
   responsablePedagogiqueGETList,
+  paginatedRoleGET,
 } from '../../controllers/users/roles-controller';
 
 const router = express.Router();
@@ -32,7 +33,7 @@ router.get(
   '/roles/attache_promo/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
   isAuthenticated,
   isEducationManager,
-  attache_promoGETList
+  attachePromoGETList
 );
 
 router.get(
@@ -49,4 +50,5 @@ router.get(
   responsablePedagogiqueGETList
 );
 
+router.get('/roles/', isAuthenticated, isEducationManager, paginatedRoleGET);
 export = router;

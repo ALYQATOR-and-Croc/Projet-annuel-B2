@@ -1,25 +1,20 @@
 import * as config from '../../config.json';
 import sql from 'mssql';
-import express, { query } from 'express';
+import express from 'express';
 import {
   RolesTypePOST,
   RolesEnum,
   UtilisateurPagination,
+  RolePagination,
 } from '../../models/users/roles-model';
-import { ReprographeEnum } from '../../models/users/reprographe-model';
 import {
-  UtilisateurEnum,
   queryPaginatedIntervenantPromoGET,
   queryPaginatedAttachePromoGET,
   queryPaginatedEtudiantGET,
   queryPaginatedReprographeGET,
   queryPaginatedResponsablePedagogiqueGET,
-  utilisateurColumns,
 } from '../../models/users/user-model';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
-import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
-import { IntervenantEnum } from '../../models/users/intervenant';
-import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
+import { queryRoleGET } from '../../models/users/roles-model';
 
 const newRolePOST = (request: express.Request, response: express.Response) => {
   const body = request.body;
@@ -44,6 +39,25 @@ const newRolePOST = (request: express.Request, response: express.Response) => {
   } catch (error) {
     response.status(405).send(error);
   }
+};
+
+const paginatedRoleGET = (req: express.Request, res: express.Response) => {
+  sql.connect(config).then((pool) => {
+    const queryGET = queryRoleGET();
+    pool
+      .request()
+      .query(queryGET)
+      .then((result) => {
+        if (result) {
+          res.status(200).send(result.recordset);
+        } else {
+          res.status(405).send('Unacceptable operation.');
+        }
+      })
+      .catch((error) => {
+        res.status(405).send('Unacceptable operation.');
+      });
+  });
 };
 
 const reprographeGETList = (
@@ -85,7 +99,11 @@ const etudiantGETList = (
     const orderBy: UtilisateurPagination = params.orderBy;
 
     sql.connect(config).then((pool) => {
-      const queryGET = queryPaginatedEtudiantGET(page, rowsNumber, orderBy);
+      const queryGET: string = queryPaginatedEtudiantGET(
+        page,
+        rowsNumber,
+        orderBy
+      );
       pool
         .request()
         .query(queryGET)
@@ -196,7 +214,8 @@ export {
   newRolePOST,
   reprographeGETList,
   etudiantGETList,
-  attachePromoGETList as attache_promoGETList,
+  attachePromoGETList,
   intervenantGETList,
   responsablePedagogiqueGETList,
+  paginatedRoleGET,
 };

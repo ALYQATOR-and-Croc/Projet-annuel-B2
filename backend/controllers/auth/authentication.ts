@@ -166,7 +166,6 @@ const login = (request: express.Request, response: express.Response) => {
           .compare(loginPswd, reqResult.recordset[0][UtilisateurEnum.MDP])
           .then((isPswdEqual) => {
             if (isPswdEqual) {
-              console.log('Password is correct');
               return reqResult;
             } else {
               response.status(401).send('Password is incorrect');
