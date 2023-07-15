@@ -36,7 +36,7 @@ const campus_route_1 = __importDefault(require("./routes/infrastructure/campus-r
 const school_route_1 = __importDefault(require("./routes/infrastructure/school-route"));
 const student_class_route_1 = __importDefault(require("./routes/education/student-class-route"));
 const promotion_routes_1 = __importDefault(require("./routes/education/promotion-routes"));
-const room_1 = __importDefault(require("./routes/infrastructure/room"));
+const room_route_1 = __importDefault(require("./routes/infrastructure/room-route"));
 const matiere_route_1 = __importDefault(require("./routes/education/matiere-route"));
 const course_route_1 = __importDefault(require("./routes/education/course-route"));
 const presence_route_1 = __importDefault(require("./routes/education/presence-route"));
@@ -60,7 +60,7 @@ app.use(campus_route_1.default);
 app.use(school_route_1.default);
 app.use(student_class_route_1.default);
 app.use(promotion_routes_1.default);
-app.use(room_1.default);
+app.use(room_route_1.default);
 app.use(matiere_route_1.default);
 app.use(course_route_1.default);
 app.use(presence_route_1.default);

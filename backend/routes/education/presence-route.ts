@@ -3,7 +3,7 @@ import {
   updatePresencesPUT,
 } from '../../controllers/education/presence-controller';
 import isAuthenticated from '../../middleware/is-auth';
-import { isCourseManager } from '../../middleware/roles-middleware';
+import {isConcernedByStudentCourse, isCourseManager } from '../../middleware/roles-middleware';
 import express from 'express';
 
 const router = express.Router();
@@ -11,7 +11,7 @@ const router = express.Router();
 router.get(
   '/course/presences/student/:idStudent/',
   isAuthenticated,
-  isCourseManager,
+  isConcernedByStudentCourse,
   getPresencesByStudentGET
 );
 

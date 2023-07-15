@@ -124,7 +124,7 @@ const isCourseManager = async (
   }
 };
 
-const isCOncernedByCourse = async (
+const isConcernedByStudentCourse = async (
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
@@ -154,4 +154,4 @@ const isCOncernedByCourse = async (
   }
 };
 
-export { isRolesPOSTModel, isAdmin, isEducationManager, isCourseManager };
+export { isRolesPOSTModel, isAdmin, isEducationManager, isCourseManager, isConcernedByStudentCourse  };

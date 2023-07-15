@@ -9,7 +9,7 @@
     "prettier:base": "prettier --parser typescript --single-quote",
     "prettier:check": "npm run prettier:base -- --list-different \"**/*.{ts,tsx}\"",
     "prettier:write": "npm run prettier:base -- --write \"**/*.{ts,tsx}\"",
-    "pretty" : " npm run prettier:check ; npm run prettier:write",
+    "pretty" : " npm run prettier:check && npm run prettier:write",
     "tslint": "tslint --project tsconfig.json"
   },
   "dependencies": {

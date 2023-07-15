@@ -9,7 +9,7 @@ import campus from './routes/infrastructure/campus-route';
 import school from './routes/infrastructure/school-route';
 import studClass from './routes/education/student-class-route';
 import promotion from './routes/education/promotion-routes';
-import room from './routes/infrastructure/room';
+import room from './routes/infrastructure/room-route';
 import matiere from './routes/education/matiere-route';
 import course from './routes/education/course-route';
 import presence from './routes/education/presence-route';

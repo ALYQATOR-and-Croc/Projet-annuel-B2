@@ -102,34 +102,34 @@ const newFunctionQuery = (
       `;
         break;
       case FonctionEnum.RESPONSABLE_PEDA:
-        body.idSalle ? (idSalle = body.idSalle) : (idSalle = null);
+        'idSalle' in body ? (idSalle = body.idSalle) : (idSalle = 10);
         queryNewFunction = `
       INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR}, ${ResponsablePedagogiqueEnum.FK_SALLE})
       VALUES
-      (${fkUtilisateur}, ${body.idSalle})
+      (${fkUtilisateur}, ${idSalle})
       `;
         break;
       case FonctionEnum.REPROGRAPHE:
-        body.idSalle ? (idSalle = body.idSalle) : (idSalle = null);
+        'idSalle' in body ? (idSalle = body.idSalle) : (idSalle = 10);
         queryNewFunction = `
       INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR}, ${ReprographeEnum.FK_SALLE})
       VALUES
-      (${fkUtilisateur}, ${body.idSalle})
+      (${fkUtilisateur}, ${idSalle})
       `;
         break;
       case FonctionEnum.ATTACHE_PROMO:
-        body.idSalle ? (idSalle = body.idSalle) : (idSalle = null);
+        'idSalle' in body ? (idSalle = body.idSalle) : (idSalle = 10);
         queryNewFunction = `
       INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR}, ${AttachePromotionEnum.FK_SALLE})
       VALUES
-      (${fkUtilisateur}, ${body.idSalle})
+      (${fkUtilisateur}, ${idSalle})
       `;
         break;
       case FonctionEnum.ADMIN:
         break;
 
       default:
-        throw new Error('Function does not exists.');
+        throw new Error('');
     }
     return queryNewFunction;
   } catch (error) {
