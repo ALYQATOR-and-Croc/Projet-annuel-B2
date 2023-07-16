@@ -5,6 +5,8 @@ import { Divider } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import { courseService } from '../../_services/course.service';
+import { accountService } from '../../_services/account.service';
+
 
 
 export default function RegisterStudents() {
@@ -62,7 +64,7 @@ export default function RegisterStudents() {
   }
 
   if (getAbsenceDelays) {
-    requestAbsenceDelays(6)
+    requestAbsenceDelays(accountService.getUserFunctionId())
     setGetAbsenceDelays(false);
   }
 
