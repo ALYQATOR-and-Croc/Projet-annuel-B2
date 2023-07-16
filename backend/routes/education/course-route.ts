@@ -3,6 +3,7 @@ import isAuthenticated from '../../middleware/is-auth';
 import {
   isConcernedByStudentCourse,
   isCourseManager,
+  isEducationManager,
 } from '../../middleware/roles-middleware';
 import {
   courseByIdGET,
@@ -17,7 +18,7 @@ const router = express.Router();
 router.post(
   '/courses/new/',
   isAuthenticated,
-  // isCourseManager,
+  isEducationManager,
   newCoursePOST
 );
 
@@ -38,13 +39,14 @@ router.get(
 router.get(
   '/courses/course/:idCourse/page/students/',
   isAuthenticated,
+  isConcernedByStudentCourse,
   coursesStudentGET
 );
 
 router.delete(
   '/courses/course/:idCourse/',
   isAuthenticated,
-  isCourseManager,
+  isEducationManager,
   deleteCourseDELETE
 );
 
