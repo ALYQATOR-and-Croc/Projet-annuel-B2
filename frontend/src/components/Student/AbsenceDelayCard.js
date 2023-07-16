@@ -15,39 +15,39 @@ export default function AbsenceDelayCard(props) {
     const matiere = props.infos.matiere;
     const heure = props.infos.heure;
     const prof = props.infos.prof;
-    const justified = props.infos.justified;
+    // const justified = props.infos.justified;
 
-    const justifyStatusRender = (status) => {
-        if (status === true) {
-            return (
-                <div className='absenceDelayJustified'>
-                    <div className='justifyStatus'>
-                        <CheckCircleIcon className='justifyStatusIcon'/>
-                        <Typography variant="h6">
-                            Justifié 
-                        </Typography>
-                    </div>
-                </div>
-            )
-        } else {
-            return (
-                <div className='absenceDelayJustify'>
-                    <div className='justifyStatus'>
-                        <CancelIcon className='justifyStatusIcon'/>
-                        <Typography variant="h6">
-                            Non justifié 
-                        </Typography>
-                    </div>
-                    <Button 
-                    href={`mailto:${props.mailap}?subject=Justificatif ${props.type} du ${props.infos.date}`} 
-                    target='_blank' 
-                    size="small" 
-                    variant="contained" 
-                    startIcon={<AttachEmailIcon/>}>Justifier</Button>
-                </div>
-            )
-        }
-    }
+    // const justifyStatusRender = (status) => {
+    //     if (status === true) {
+    //         return (
+    //             <div className='absenceDelayJustified'>
+    //                 <div className='justifyStatus'>
+    //                     <CheckCircleIcon className='justifyStatusIcon'/>
+    //                     <Typography variant="h6">
+    //                         Justifié 
+    //                     </Typography>
+    //                 </div>
+    //             </div>
+    //         )
+    //     } else {
+    //         return (
+    //             <div className='absenceDelayJustify'>
+    //                 <div className='justifyStatus'>
+    //                     <CancelIcon className='justifyStatusIcon'/>
+    //                     <Typography variant="h6">
+    //                         Non justifié 
+    //                     </Typography>
+    //                 </div>
+    //                 <Button 
+    //                 href={`mailto:${props.mailap}?subject=Justificatif ${props.type} du ${props.infos.date}`} 
+    //                 target='_blank' 
+    //                 size="small" 
+    //                 variant="contained" 
+    //                 startIcon={<AttachEmailIcon/>}>Justifier</Button>
+    //             </div>
+    //         )
+    //     }
+    // }
 
     return (
         <div className='AbsenceDelayCard'>
@@ -69,7 +69,16 @@ export default function AbsenceDelayCard(props) {
                             </Typography>
                         </div>
                         <Divider orientation="vertical" flexItem></Divider>
-                        {justifyStatusRender(justified)}
+                        <div className='absenceDelayJustify'>
+                            <Button 
+                            href={`mailto:${props.mailap}?subject=Justificatif ${props.type} du ${props.infos.date}`} 
+                            target='_blank' 
+                            size="large" 
+                            variant="contained" 
+                            startIcon={<AttachEmailIcon/>}>
+                                Justifier
+                            </Button>
+                        </div>
                     </div>
                 </CardContent>
             </Card>

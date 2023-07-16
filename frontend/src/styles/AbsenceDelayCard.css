@@ -13,7 +13,12 @@
 }
 .absenceDelayJustify{
     width: 50%;
-    padding-top: 20px;
+    padding-top: 2em;
+}
+
+.registerStudentsEmarge{
+    width: 50%;
+    padding-top: 3em;
 }
 .absenceDelayJustified{
     width: 50%;

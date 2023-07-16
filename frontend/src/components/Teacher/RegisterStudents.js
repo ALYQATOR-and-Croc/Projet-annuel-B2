@@ -50,7 +50,6 @@ export default function RegisterStudents(props) {
             resList = resList.map((eleve) => {
               return { ...eleve, id: eleve.id_etudiant, nom: eleve.nom.toUpperCase()};
             })
-            console.log(res);
             setCourseStudentList(resList);
         })
         .catch(error => {

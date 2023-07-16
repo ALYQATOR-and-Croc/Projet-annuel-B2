@@ -7,14 +7,15 @@ import PersonOffIcon from '@mui/icons-material/PersonOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CalendarWeek from '../CalendarWeek';
 import { calendarService } from '../../_services/calendar.service';
+import { courseService } from '../../_services/course.service';
 
 
 export default function Dashboard(props) {
-  const [getPlanning, setGetPlanning] = useState(true);
+  const [getPlanningAndAbsenceDelays, setGetPlanningAndAbsenceDelays] = useState(true);
   const [monthPlanning, setMonthPlanning] = useState([]);
 
   const requestCalendar = (idUser) => {
-    calendarService.month(props.idUser)
+    calendarService.month(idUser)
         .then(res => {
             console.log(res);  
             setMonthPlanning(res.data);
@@ -23,17 +24,53 @@ export default function Dashboard(props) {
             console.log(error);
         })
   }
+  const requestCourse = (idCourse) => {
+    calendarService.specificCourse(idCourse)
+        .then(res => {
+            console.log(res);  
+            return(res.data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
+  const requestAbsenceDelays = (idUser) => {
+    courseService.getPresence(idUser)
+        .then(res => {
+            console.log(res); 
+            let resList = undefined;  
+            if (!Array.isArray(res.data)) {
+              resList = [res.data];
+            } else {
+              resList = res.data;
+            }
+            resList = resList.filter((presence) => presence.a_signe !== null);
+            let absenceDelaysList = [];
+            resList.forEach((presence)=>{
+              let courseInfo = requestCourse(presence.id_cours);
+              console.log(courseInfo);
+            })
+            // get cours by id
+            // resList = resList.map((presence) => {
+            //   return { ...eleve, id: eleve.id_etudiant, nom: eleve.nom.toUpperCase()};
+            
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
 
-  if (getPlanning) {
+  if (getPlanningAndAbsenceDelays) {
     requestCalendar(props.idUser);
-    setGetPlanning(false);
+    requestAbsenceDelays(6)
+    setGetPlanningAndAbsenceDelays(false);
   }
 
   const absenceDelays = [
-  {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", prof:"M. BONNETON", justified:false},
-  {id:2, date: "02/06/2023", heure: "14h-15h30", matiere: "Langage C", prof:"M. BONCHE", justified:true},
-  {id:3, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ", justified:true},
-  {id:4, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ", justified:true}
+  {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", prof:"M. BONNETON"},
+  {id:2, date: "02/06/2023", heure: "14h-15h30", matiere: "Langage C", prof:"M. BONCHE"},
+  {id:3, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ"},
+  {id:4, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ"}
   ];
 
   return (
