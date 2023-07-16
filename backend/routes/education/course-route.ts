@@ -4,6 +4,7 @@ import { isCourseManager } from '../../middleware/roles-middleware';
 import {
   coursesPagesGET,
   coursesStudentGET,
+  deleteCourseDELETE,
   newCoursePOST,
 } from '../../controllers/education/course-controller';
 
@@ -26,6 +27,13 @@ router.get(
   '/courses/course/:idCourse/page/students/',
   isAuthenticated,
   coursesStudentGET
+);
+
+router.delete(
+  '/courses/course/:idCourse/',
+  isAuthenticated,
+  isCourseManager,
+  deleteCourseDELETE
 );
 
 export = router;

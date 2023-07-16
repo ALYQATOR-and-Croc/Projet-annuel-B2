@@ -63,8 +63,7 @@ const getCampusGET = (
       });
   } catch (error) {
     response.status(405).send('Unacceptable operation.');
-  } 
+  }
 };
-
 
 export { newCampusPOST, getCampusGET };

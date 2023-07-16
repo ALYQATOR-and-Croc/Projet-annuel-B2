@@ -53,8 +53,8 @@ const getRoomsGET = (
             WHERE ${RoomEnum.PK} != 10
             `;
         return pool.request().query(query);
-      }).catch
-      ((error) => {
+      })
+      .catch((error) => {
         response.status(405).send('Unacceptable operation.');
       })
       .then((result) => {
@@ -63,8 +63,8 @@ const getRoomsGET = (
         } else {
           throw new Error('Unacceptable operation.');
         }
-      }).catch
-      ((error) => {
+      })
+      .catch((error) => {
         response.status(405).send('Unacceptable operation.');
       });
   } catch (error) {
@@ -86,10 +86,10 @@ const getRoomsByCampusGET = (
         const query = `
             SELECT * FROM ${RoomEnum.NOM_TABLE}
             WHERE ${RoomEnum.FK_CAMPUS} = ${idCampus} AND ${RoomEnum.PK} != 10
-            `;    
+            `;
         return pool.request().query(query);
-      }).catch
-      ((error) => {
+      })
+      .catch((error) => {
         response.status(400).send('Bad request');
       })
       .then((result) => {
@@ -98,14 +98,13 @@ const getRoomsByCampusGET = (
         } else {
           throw new Error('Bad request');
         }
-      }).catch
-      ((error) => {
+      })
+      .catch((error) => {
         response.status(400).send('Bad request');
       });
   } catch (error) {
     return response.status(400).send('Bad request');
   }
 };
-
 
 export { newRoomPOST, getRoomsGET };

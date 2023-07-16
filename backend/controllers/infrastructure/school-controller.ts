@@ -57,5 +57,4 @@ const getSchoolGET = (
     });
 };
 
-
-export { newSchoolPOST , getSchoolGET};
+export { newSchoolPOST, getSchoolGET };

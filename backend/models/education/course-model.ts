@@ -200,3 +200,15 @@ export const queryCreateAStudentPresencePOST = (
   `;
   return query;
 };
+
+export const queryDeleteCourseAndPresencesDELETE = (
+  idCourse: number
+): string => {
+  const query = `
+  DELETE FROM ${PresenceEnum.NOM_TABLE}
+  WHERE ${PresenceEnum.FK_COURS} = ${idCourse};
+  DELETE FROM ${CoursEnum.NOM_TABLE}
+  WHERE ${CoursEnum.PK} = ${idCourse};
+  `;
+  return query;
+};

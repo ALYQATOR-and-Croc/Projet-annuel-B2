@@ -1,10 +1,10 @@
-import express, { query } from 'express';
+import express from 'express';
 import {
-  CoursEnum,
   CoursePOST,
   CoursePageGET,
   coursesUserFunctionIdGETQuery,
   coursesUserGETQuery,
+  queryDeleteCourseAndPresencesDELETE,
   queryGetCourseAndStudentsGET,
   queryNewCoursesPOST,
 } from '../../models/education/course-model';
@@ -20,11 +20,7 @@ import { IntervenantEnum } from '../../models/users/intervenant';
 import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
 import { RolesEnum } from '../../models/users/roles-model';
 import { allStudentsOfACourseGETQuery } from '../../models/education/course-model';
-import { queryGetOneClassGET } from '../../models/education/student-class-model';
-import {
-  StudentPresence,
-  queryNewPresencePOST,
-} from '../../models/education/presence-model';
+import { queryNewPresencePOST } from '../../models/education/presence-model';
 
 const newCoursePOST = (
   request: express.Request,
@@ -80,7 +76,6 @@ const newCoursePOST = (
               )
               .then((result) => {
                 result.recordset.forEach((element) => {
-                  console.log(element);
                   returnedValueWhenInserted.poolValue
                     .request()
                     .query(
@@ -243,4 +238,43 @@ const coursesStudentGET = (
   }
 };
 
-export { newCoursePOST, coursesPagesGET, coursesStudentGET };
+const deleteCourseDELETE = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = request.params;
+    sql
+      .connect(config)
+      .then((pool) => {
+        const sqlDeleteQueryBodyData = queryDeleteCourseAndPresencesDELETE(
+          Number(params.idCourse)
+        );
+        return { sqlDeleteQueryBodyData, pool };
+      })
+      .then((courseStudentsGETQueryResult) => {
+        courseStudentsGETQueryResult.pool
+          .request()
+          .query(courseStudentsGETQueryResult.sqlDeleteQueryBodyData)
+          .then((result) => {
+            return response.status(200).send(result.recordset);
+          })
+          .catch((error) => {
+            return response.status(400).send('Bad request');
+          });
+      })
+      .catch((error) => {
+        return response.status(400).send('Bad request');
+      });
+  } catch (error) {
+    return response.status(400).send('Bad request');
+  }
+};
+
+export {
+  newCoursePOST,
+  coursesPagesGET,
+  coursesStudentGET,
+  deleteCourseDELETE,
+};

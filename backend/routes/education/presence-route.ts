@@ -3,7 +3,10 @@ import {
   updatePresencesPUT,
 } from '../../controllers/education/presence-controller';
 import isAuthenticated from '../../middleware/is-auth';
-import {isConcernedByStudentCourse, isCourseManager } from '../../middleware/roles-middleware';
+import {
+  isConcernedByStudentCourse,
+  isCourseManager,
+} from '../../middleware/roles-middleware';
 import express from 'express';
 
 const router = express.Router();

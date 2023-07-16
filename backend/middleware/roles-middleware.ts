@@ -154,4 +154,10 @@ const isConcernedByStudentCourse = async (
   }
 };
 
-export { isRolesPOSTModel, isAdmin, isEducationManager, isCourseManager, isConcernedByStudentCourse  };
+export {
+  isRolesPOSTModel,
+  isAdmin,
+  isEducationManager,
+  isCourseManager,
+  isConcernedByStudentCourse,
+};
