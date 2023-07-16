@@ -2,6 +2,7 @@ import express from 'express';
 import isAuthenticated from '../../middleware/is-auth';
 import { isCourseManager } from '../../middleware/roles-middleware';
 import {
+  courseByIdGET,
   coursesPagesGET,
   coursesStudentGET,
   deleteCourseDELETE,
@@ -21,6 +22,13 @@ router.get(
   '/courses/page/user/:idUser/start-date/:startDate/number-of-days/:numberOfDays/',
   isAuthenticated,
   coursesPagesGET
+);
+
+router.get(
+  '/course/:idCourse/',
+  isAuthenticated,
+  isCourseManager,
+  courseByIdGET
 );
 
 router.get(

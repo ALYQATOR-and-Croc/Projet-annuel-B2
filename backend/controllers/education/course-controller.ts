@@ -1,5 +1,6 @@
 import express from 'express';
 import {
+  CoursEnum,
   CoursePOST,
   CoursePageGET,
   coursesUserFunctionIdGETQuery,
@@ -147,6 +148,37 @@ const coursesPagesGET = (
   }
 };
 
+const courseByIdGET = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = req.params;
+    sql.connect(config).then((pool) => {
+      const query = `
+      SELECT * FROM ${CoursEnum.NOM_TABLE}
+      WHERE ${CoursEnum.PK} = ${params.idCourse}
+      `;
+      pool
+        .request()
+        .query(query)
+        .then((result) => {
+          if (result) {
+            return res.status(200).send(result.recordset);
+          } else {
+            return res.status(405).send('Unacceptable operation.');
+          }
+        })
+        .catch((error) => {
+          return res.status(405).send('Unacceptable operation.');
+        });
+    });
+  } catch (error) {
+    return res.status(400).send('Bad Request');
+  }
+};
+
 const userFonctionTable = (
   roleUser: FonctionType,
   idUser: number,
@@ -277,4 +309,5 @@ export {
   coursesPagesGET,
   coursesStudentGET,
   deleteCourseDELETE,
+  courseByIdGET,
 };
