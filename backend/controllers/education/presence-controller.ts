@@ -16,6 +16,12 @@ import {
 } from '../../models/education/presence-model';
 import { isPresenceDataCoherent } from '../../utils/data-coherence-utils';
 import { PresenceEnum } from '../../models/presence-model';
+import { CoursEnum } from '../../models/education/course-model';
+import { UtilisateurEnum } from '../../models/users/user-model';
+import { StudClassEnum } from '../../models/education/student-class-model';
+import { RoomEnum } from '../../models/infrastructure/room-model';
+import { MatiereEnum } from '../../models/education/matiere-model';
+import { EtudiantEnum } from '../../models/users/etudiant-model';
 
 const updatePresencesPUT = (
   req: express.Request,
@@ -88,8 +94,60 @@ const getPresencesByStudentGET = (
   try {
     const params = req.params;
     const idStudent: number = Number(params.idStudent);
+    const queryGET = `
+    SELECT 
+    P.${PresenceEnum.PK} AS id_presence,
+    P.${PresenceEnum.RETARD} AS en_retard,
+    P.${PresenceEnum.ABSENT} AS est_absent,
+    P.${PresenceEnum.FK_ETUDIANT} AS id_etudiant,
+    C.${CoursEnum.PK},
+    C.${CoursEnum.LIBELLE},
+    C.${CoursEnum.DATE},
+    C.${CoursEnum.DEBUT},
+    C.${CoursEnum.FIN},
 
-    const queryGET = `SELECT * FROM ${PresenceEnum.NOM_TABLE} WHERE ${PresenceEnum.FK_ETUDIANT} = ${idStudent}`;
+    U1.${UtilisateurEnum.PK} AS id_reprographe,
+    U1.${UtilisateurEnum.NOM} AS nom_reprographe,
+    U1.${UtilisateurEnum.PRENOM} AS prenom_reprographe,
+
+    U2.${UtilisateurEnum.PK} AS id_intervenant,
+    U2.${UtilisateurEnum.NOM} AS nom_intervenant,
+    U2.${UtilisateurEnum.PRENOM} AS prenom_intervenant,
+    U2.${UtilisateurEnum.EMAIL} AS email_intervenant,
+
+    U3.${UtilisateurEnum.PK} AS id_attache_de_promotion,
+    U3.${UtilisateurEnum.NOM} AS nom_attache_de_promotion,
+    U3.${UtilisateurEnum.PRENOM} AS prenom_attache_de_promotion,
+    U3.${UtilisateurEnum.EMAIL} AS email_attache_de_promotion,
+
+    U4.${UtilisateurEnum.PK} AS id_responsable_pedagogique,
+    U4.${UtilisateurEnum.NOM} AS nom_responsable_pedagogique,
+    U4.${UtilisateurEnum.PRENOM} AS prenom_responsable_pedagogique,
+    U4.${UtilisateurEnum.EMAIL} AS email_responsable_pedagogique,
+
+    U5.${UtilisateurEnum.PK} AS id_user_etudiant,
+    U5.${UtilisateurEnum.NOM} AS nom_etudiant,
+    Cl.${StudClassEnum.LIBELLE},
+    S.${RoomEnum.LIBELLE},
+    M.${MatiereEnum.LIBELLE}
+    FROM 
+    ${PresenceEnum.NOM_TABLE} AS P
+    LEFT JOIN ${CoursEnum.NOM_TABLE} C ON P.${PresenceEnum.FK_COURS} = C.${CoursEnum.PK}
+    LEFT JOIN Etudiant E ON P.${PresenceEnum.FK_ETUDIANT} = E.${EtudiantEnum.PK}
+    LEFT JOIN Reprographe R ON C.id_reprographe = R.id_reprographe
+    LEFT JOIN Intervenant I ON C.id_intervenant = I.id_intervenant
+    LEFT JOIN Attache_de_promotion AP ON C.id_attache_de_promotion = AP.id_attache_de_promotion
+    LEFT JOIN Responsable_pedagogique RP ON C.id_responsable_pedagogique = RP.id_responsable_pedagogique
+    LEFT JOIN Classe CL ON C.id_classe = CL.id_classe
+    LEFT JOIN Salle S ON C.id_salle = S.id_salle
+    LEFT JOIN Matiere M ON C.id_matiere = M.id_matiere
+    LEFT JOIN Utilisateur U1 ON R.id_utilisateur = U1.id_utilisateur
+    LEFT JOIN Utilisateur U2 ON I.id_utilisateur = U2.id_utilisateur
+    LEFT JOIN Utilisateur U3 ON AP.id_utilisateur = U3.id_utilisateur
+    LEFT JOIN Utilisateur U4 ON RP.id_utilisateur = U4.id_utilisateur
+    LEFT JOIN Utilisateur U5 ON E.id_utilisateur = U5.id_utilisateur
+    WHERE P.${PresenceEnum.FK_ETUDIANT} = ${idStudent}   
+    `;
     sql.connect(config).then((pool) => {
       pool
 
@@ -103,6 +161,7 @@ const getPresencesByStudentGET = (
           }
         })
         .catch((error) => {
+          console.log(error);
           res.status(405).send('Unacceptable operation.');
         });
     });

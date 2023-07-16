@@ -82,7 +82,7 @@ export const coursesUserFunctionIdGETQuery = (
   U3.${UtilisateurEnum.PRENOM} AS prenom_attache_de_promotion,
   U4.${UtilisateurEnum.PK} AS id_responsable_pedagogique,
   U4.${UtilisateurEnum.NOM} AS nom_responsable_pedagogique,
-  U4.${UtilisateurEnum.NOM} AS prenom_responsable_pedagogique,
+  U4.${UtilisateurEnum.PRENOM} AS prenom_responsable_pedagogique,
   Cl.${StudClassEnum.LIBELLE},
   S.${RoomEnum.LIBELLE},
   M.${MatiereEnum.LIBELLE}

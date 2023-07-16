@@ -1,6 +1,9 @@
 import express from 'express';
 import isAuthenticated from '../../middleware/is-auth';
-import { isConcernedByStudentCourse, isCourseManager } from '../../middleware/roles-middleware';
+import {
+  isConcernedByStudentCourse,
+  isCourseManager,
+} from '../../middleware/roles-middleware';
 import {
   courseByIdGET,
   coursesPagesGET,
