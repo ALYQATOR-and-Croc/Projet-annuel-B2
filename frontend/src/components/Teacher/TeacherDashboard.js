@@ -52,8 +52,7 @@ export default function Dashboard(props) {
         date: dateCours, 
         heure: heureCours,
         matiere: cours.libelle_matiere.toUpperCase(),
-        classe: cours.libelle_classe.toUpperCase(),
-        Emarger: false
+        classe: cours.libelle_classe.toUpperCase()
       }
     });
     absenceDelayRaw.sort((a, b) =>{

@@ -1,24 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../styles/AbsenceDelayStudent.css';
 import AbsenceDelayGrid from './AbsenceDelayGrid';
 import { Divider } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
+import { courseService } from '../../_services/course.service';
 
 
 export default function RegisterStudents() {
+  const [absences, setAbsences] = useState([]);
+  const [delays, setDelays] = useState([]);
+  const [getAbsenceDelays, setGetAbsenceDelays] = useState(true);
+  
+  const formatAbsenceDelay = (inputArray) => {
+    let outputArray = [];
+    inputArray.forEach((presence)=>{
+      let dateAbsenceDelay = presence.date_cours.substr(8,2) + '/' 
+      + presence.date_cours.substr(5,2) + '/' 
+      + presence.date_cours.substr(0,4);
+      let heureAbsenceDelay = presence.heure_debut_cours.substr(11,5).replace(':', 'h') 
+      + '-' + presence.heure_fin_cours.substr(11,5).replace(':', 'h');
+      let typeAbsenceDelay = "absence";
+      if (presence.en_retard === true) {
+        typeAbsenceDelay = "retard";
+      }
+      outputArray.push(
+        {
+          id:presence.id_presence, 
+          date:dateAbsenceDelay,
+          heure:heureAbsenceDelay,
+          matiere: presence.libelle_matiere.toUpperCase(), 
+          prof : (presence.nom_intervenant[0] + '.' + presence.prenom_intervenant).toUpperCase(),
+          mailap : presence.email_attache_de_promotion,
+          type : typeAbsenceDelay
+        }
+      );
+    })
+    return outputArray;
+  };
 
-  const absences = [
-  {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", prof:"M. BONNETON", justified:false},
-  {id:2, date: "02/06/2023", heure: "14h-15h30", matiere: "Langage C", prof:"M. BONCHE", justified:true},
-  {id:3, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ", justified:true}
-  ];
-               
-  const delays = [
-  {id:1, date: "23/06/2023", heure: "11h30-13h", matiere: "Python", prof:"M. BONNETON", justified:false},
-  {id:2, date: "19/02/2023", heure: "8h-9h30", matiere: "NodeJS", prof:"M. BENDAHMANE", justified:false},
-  {id:3, date: "01/02/2023", heure: "17h30-19h", matiere: "Modélisation UML", prof:"M. BONCHE", justified:true}
-  ];
+  const requestAbsenceDelays = (idUser) => {
+    courseService.getPresence(idUser)
+        .then(res => {
+            console.log(res); 
+            let resList = undefined;  
+            if (!Array.isArray(res.data)) {
+              resList = [res.data];
+            } else {
+              resList = res.data;
+            }
+            let resListAbsences = resList.filter((presence) => presence.est_absent === true);
+            let resListDelays = resList.filter((presence) => presence.en_retard === true);
+            let absencesList = formatAbsenceDelay(resListAbsences);
+            let delaysList = formatAbsenceDelay(resListDelays);
+            setAbsences(absencesList);
+            setDelays(delaysList);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+  }
+
+  if (getAbsenceDelays) {
+    requestAbsenceDelays(6)
+    setGetAbsenceDelays(false);
+  }
 
   return (
     <div className="AbsenceDelayStudent">
@@ -28,7 +74,7 @@ export default function RegisterStudents() {
               <PersonOffIcon className='delaysTitleLogo' fontSize='large'/>
               Absences
             </h1>
-            <AbsenceDelayGrid data={absences} mailap="mail.ap@esgi.fr" type="absence"/>
+            <AbsenceDelayGrid data={absences} type="absence"/>
           </div>
           <Divider orientation="vertical" flexItem></Divider>
           <div className='delays'>
@@ -36,7 +82,7 @@ export default function RegisterStudents() {
             <AccessAlarmIcon className='delaysTitleLogo' fontSize='large'/>
             Retards
           </h1>
-            <AbsenceDelayGrid data={delays} mailap="mail.ap@esgi.fr" type="retard"/>
+            <AbsenceDelayGrid data={delays} type="retard"/>
           </div>
         </div>
     </div>

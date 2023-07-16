@@ -13,6 +13,12 @@ let sendPresence = (presenceList) => {
     );
 }
 
+let getPresence = (idStudent) => {
+    return Axios.get(`/course/presences/student/${idStudent}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 export const courseService = {
-    studentList, sendPresence
+    studentList, sendPresence, getPresence
 }

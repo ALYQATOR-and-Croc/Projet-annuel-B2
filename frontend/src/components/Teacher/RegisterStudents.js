@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import RegisterTable from '../RegisterTable';
 import '../../styles/RegisterStudents.css';
 import { Button, Divider } from '@mui/material';
@@ -18,7 +18,7 @@ export default function RegisterStudents(props) {
   const [idCoursSelected, setIdCoursSelected] = useState(null);
   const [previousIdCoursSelected, setPreviousIdCoursSelected] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
-  const [absenceSent, setAbsenceSent] = useState(false);
+  // const [absenceSent, setAbsenceSent] = useState(false);
   const [delaySent, setDelaySent] = useState(false);
 
   // Header cours affiché
@@ -50,7 +50,6 @@ export default function RegisterStudents(props) {
             resList = resList.map((eleve) => {
               return { ...eleve, id: eleve.id_etudiant, nom: eleve.nom.toUpperCase()};
             })
-            console.log(res);
             setCourseStudentList(resList);
         })
         .catch(error => {
@@ -90,7 +89,7 @@ export default function RegisterStudents(props) {
     let uploadData = {};
     if (delaySent) {
       setDelaySent(false);
-      setAbsenceSent(true);
+      // setAbsenceSent(true);
       setIsCoursSelected(false); 
       uploadData = {
         "idCourse":idCoursSelected, 

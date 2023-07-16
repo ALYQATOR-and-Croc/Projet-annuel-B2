@@ -14,7 +14,7 @@ export default function StudentPlanning(props) {
   };
 
   const requestCalendar = (idUser) => {
-    calendarService.month(props.idUser)
+    calendarService.month(idUser)
         .then(res => {
             console.log(res);  
             setMonthPlanning(res.data);
