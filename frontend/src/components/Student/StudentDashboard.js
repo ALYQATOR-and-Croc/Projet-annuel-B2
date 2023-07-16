@@ -7,6 +7,7 @@ import PersonOffIcon from '@mui/icons-material/PersonOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CalendarWeek from '../CalendarWeek';
 import { calendarService } from '../../_services/calendar.service';
+import { accountService } from '../../_services/account.service';
 import { courseService } from '../../_services/course.service';
 
 
@@ -68,7 +69,7 @@ export default function Dashboard(props) {
 
   if (getPlanningAndAbsenceDelays) {
     requestCalendar(props.idUser);
-    requestAbsenceDelays(6)
+    requestAbsenceDelays(accountService.getUserFunctionId())
     setGetPlanningAndAbsenceDelays(false);
   }
 

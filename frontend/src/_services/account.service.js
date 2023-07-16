@@ -30,6 +30,11 @@ let getUserId = () => {
     return tokenData.id;
 }
 
+let getUserFunctionId = () => {
+    const tokenData = jwt(getToken());
+    return tokenData.idFunction;
+}
+
 let getUserRole = () => {
     const tokenData = jwt(getToken());
     return tokenData.aud;
@@ -46,5 +51,5 @@ let getUserLastname = () => {
 }
 
 export const accountService = {
-    login, saveToken, logout, isLogged, getToken, getUserId, getUserRole, getUserLastname, getUserFirstname
+    login, saveToken, logout, isLogged, getToken, getUserId, getUserRole, getUserLastname, getUserFirstname, getUserFunctionId
 }
