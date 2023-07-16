@@ -11,6 +11,7 @@ import { courseService } from '../../_services/course.service';
 
 
 export default function Dashboard(props) {
+  const [absenceDelays, setAbsenceDelays] = useState([]);
   const [getPlanningAndAbsenceDelays, setGetPlanningAndAbsenceDelays] = useState(true);
   const [monthPlanning, setMonthPlanning] = useState([]);
 
@@ -19,16 +20,6 @@ export default function Dashboard(props) {
         .then(res => {
             console.log(res);  
             setMonthPlanning(res.data);
-        })
-        .catch(error => {
-            console.log(error);
-        })
-  }
-  const requestCourse = (idCourse) => {
-    calendarService.specificCourse(idCourse)
-        .then(res => {
-            console.log(res);  
-            return(res.data);
         })
         .catch(error => {
             console.log(error);
@@ -44,16 +35,31 @@ export default function Dashboard(props) {
             } else {
               resList = res.data;
             }
-            resList = resList.filter((presence) => presence.a_signe !== null);
+            resList = resList.filter((presence) => presence.est_absent === true || presence.en_retard === true);
             let absenceDelaysList = [];
             resList.forEach((presence)=>{
-              let courseInfo = requestCourse(presence.id_cours);
-              console.log(courseInfo);
+              let dateAbsenceDelay = presence.date_cours.substr(8,2) + '/' 
+              + presence.date_cours.substr(5,2) + '/' 
+              + presence.date_cours.substr(0,4);
+              let heureAbsenceDelay = presence.heure_debut_cours.substr(11,5).replace(':', 'h') 
+              + '-' + presence.heure_fin_cours.substr(11,5).replace(':', 'h');
+              let typeAbsenceDelay = "absence";
+              if (presence.en_retard === true) {
+                typeAbsenceDelay = "retard";
+              }
+              absenceDelaysList.push(
+                {
+                  id:presence.id_presence, 
+                  date:dateAbsenceDelay,
+                  heure:heureAbsenceDelay,
+                  matiere: presence.libelle_matiere.toUpperCase(), 
+                  prof : (presence.nom_intervenant[0] + '.' + presence.prenom_intervenant).toUpperCase(), 
+                  mailap : presence.email_attache_de_promotion,
+                  type : typeAbsenceDelay
+                }
+              );
             })
-            // get cours by id
-            // resList = resList.map((presence) => {
-            //   return { ...eleve, id: eleve.id_etudiant, nom: eleve.nom.toUpperCase()};
-            
+            setAbsenceDelays(absenceDelaysList);
         })
         .catch(error => {
             console.log(error);
@@ -65,13 +71,6 @@ export default function Dashboard(props) {
     requestAbsenceDelays(6)
     setGetPlanningAndAbsenceDelays(false);
   }
-
-  const absenceDelays = [
-  {id:1, date: "06/07/2023", heure: "8h-9h30", matiere: "Algorithmie", prof:"M. BONNETON"},
-  {id:2, date: "02/06/2023", heure: "14h-15h30", matiere: "Langage C", prof:"M. BONCHE"},
-  {id:3, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ"},
-  {id:4, date: "18/02/2023", heure: "8h-9h30", matiere: "Linux", prof:"M. LOPEZ"}
-  ];
 
   return (
     <div className="StudentDashboard">
@@ -86,7 +85,7 @@ export default function Dashboard(props) {
             </div>
             <h2 className='absenceDelayDashSubTitle'>Dernières absences et retards</h2>
             {/* prendre les dernières absences/retards si le tri est par date la plus ancienne d'abord. */}
-            <AbsenceDelayGrid data={absenceDelays.slice(0,3)} mailap="mail.ap@esgi.fr" type="absence"/>
+            <AbsenceDelayGrid data={absenceDelays.slice(0,3)} type="absence ou retard"/>
           </div>
           <Divider orientation="vertical" flexItem></Divider>
           <div className='planningDash'>

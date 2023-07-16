@@ -9,16 +9,16 @@
     display: flex;
 }
 .absenceDelayInfos{
-    width: 50%;
+    width: 60%;
 }
 .absenceDelayJustify{
-    width: 50%;
-    padding-top: 2em;
+    width: 40%;
+    padding-top: 1em;
 }
 
 .registerStudentsEmarge{
-    width: 50%;
-    padding-top: 3em;
+    width: 40%;
+    padding-top: 2em;
 }
 .absenceDelayJustified{
     width: 50%;

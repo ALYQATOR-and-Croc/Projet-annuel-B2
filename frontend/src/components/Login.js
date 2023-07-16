@@ -53,11 +53,14 @@ function Login() {
                     case 'ATTACHE_PROMO':
                         redirect = '/ap';
                         break;
-                    case 'admin':
+                    case 'ADMINISTRATEUR':
                         redirect = '/admin';
                         break;
                     case 'REPROGRAPHE':
                         redirect = '/repro';
+                        break;
+                    default:
+                        redirect ='/login'
                         break;
                 }
                 navigate(redirect);  
