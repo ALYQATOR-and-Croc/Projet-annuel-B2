@@ -6,7 +6,7 @@ import Notfound from '../Notfound'
 import ChangePassword from '../ChangePassword'
 import { accountService } from '../../_services/account.service';
 import ApUser from './ApUser'
-import ApClasses from './ApClasses'
+import ApInfra from './ApInfra'
 import ApAbsence from './ApAbsence'
 
 export default function RouteurAp() {
@@ -19,7 +19,7 @@ export default function RouteurAp() {
             <Route index element={<ApDashboard idUser = {idUser}/>} />
             <Route path="dashboard" element={<ApDashboard idUser = {idUser}/>} />
             <Route path="user" element={<ApUser idUser = {idUser}/>} />
-            <Route path="classes" element={<ApClasses idUser = {idUser}/>} />
+            <Route path="infra" element={<ApInfra idUser = {idUser}/>} />
             <Route path="absence" element={<ApAbsence idUser = {idUser}/>} />
             <Route path="change-password" element={<ChangePassword idUser = {idUser}/>} />
             <Route path="*" element={<Notfound/>} />
