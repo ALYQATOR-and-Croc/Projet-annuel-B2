@@ -5,8 +5,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import '../../styles/AbsenceDelayCard.css';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Divider } from '@mui/material';
 
 export default function AbsenceDelayCard(props) {
@@ -15,39 +13,8 @@ export default function AbsenceDelayCard(props) {
     const matiere = props.infos.matiere;
     const heure = props.infos.heure;
     const prof = props.infos.prof;
-    // const justified = props.infos.justified;
-
-    // const justifyStatusRender = (status) => {
-    //     if (status === true) {
-    //         return (
-    //             <div className='absenceDelayJustified'>
-    //                 <div className='justifyStatus'>
-    //                     <CheckCircleIcon className='justifyStatusIcon'/>
-    //                     <Typography variant="h6">
-    //                         Justifié 
-    //                     </Typography>
-    //                 </div>
-    //             </div>
-    //         )
-    //     } else {
-    //         return (
-    //             <div className='absenceDelayJustify'>
-    //                 <div className='justifyStatus'>
-    //                     <CancelIcon className='justifyStatusIcon'/>
-    //                     <Typography variant="h6">
-    //                         Non justifié 
-    //                     </Typography>
-    //                 </div>
-    //                 <Button 
-    //                 href={`mailto:${props.mailap}?subject=Justificatif ${props.type} du ${props.infos.date}`} 
-    //                 target='_blank' 
-    //                 size="small" 
-    //                 variant="contained" 
-    //                 startIcon={<AttachEmailIcon/>}>Justifier</Button>
-    //             </div>
-    //         )
-    //     }
-    // }
+    const mailap = props.infos.mailap;
+    const type = props.infos.type;
 
     return (
         <div className='AbsenceDelayCard'>
@@ -70,8 +37,9 @@ export default function AbsenceDelayCard(props) {
                         </div>
                         <Divider orientation="vertical" flexItem></Divider>
                         <div className='absenceDelayJustify'>
+                            <Typography variant="body1" component="div">{type.toUpperCase()}</Typography>
                             <Button 
-                            href={`mailto:${props.mailap}?subject=Justificatif ${props.type} du ${props.infos.date}`} 
+                            href={`mailto:${mailap}?subject=Justificatif ${type} du ${date}`} 
                             target='_blank' 
                             size="large" 
                             variant="contained" 

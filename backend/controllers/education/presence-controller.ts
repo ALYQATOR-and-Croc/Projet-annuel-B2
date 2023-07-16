@@ -99,6 +99,7 @@ const getPresencesByStudentGET = (
     P.${PresenceEnum.PK} AS id_presence,
     P.${PresenceEnum.RETARD} AS en_retard,
     P.${PresenceEnum.ABSENT} AS est_absent,
+    P.${PresenceEnum.SIGNE} AS a_signe,
     P.${PresenceEnum.FK_ETUDIANT} AS id_etudiant,
     C.${CoursEnum.PK},
     C.${CoursEnum.LIBELLE},

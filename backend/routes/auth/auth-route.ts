@@ -9,5 +9,6 @@ const router = express.Router();
 
 router.post('/signup/', signup);
 router.post('/login/', login);
+// router.put('/pswd/', isAuthenticated,updatePasswordPUT)
 
 export = router;

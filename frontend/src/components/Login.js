@@ -59,6 +59,9 @@ function Login() {
                     case 'REPROGRAPHE':
                         redirect = '/repro';
                         break;
+                    default:
+                        redirect ='/login'
+                        break;
                 }
                 navigate(redirect);  
             })

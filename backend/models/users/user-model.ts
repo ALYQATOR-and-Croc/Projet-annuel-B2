@@ -37,7 +37,7 @@ export type FonctionType =
   | 'ATTACHE_PROMO'
   | 'RESPONSABLE_PEDA'
   | 'REPROGRAPHE'
-  | 'ADMIN';
+  | 'ADMINISTRATEUR';
 
 export enum FonctionEnum {
   ETUDIANT = 'ETUDIANT',
@@ -45,7 +45,7 @@ export enum FonctionEnum {
   ATTACHE_PROMO = 'ATTACHE_PROMO',
   RESPONSABLE_PEDA = 'RESPONSABLE_PEDA',
   REPROGRAPHE = 'REPROGRAPHE',
-  ADMIN = 'ADMIN',
+  ADMIN = 'ADMINISTRATEUR',
 }
 
 export const queryPaginatedEtudiantGET = (
@@ -54,7 +54,6 @@ export const queryPaginatedEtudiantGET = (
   orderBy: UtilisateurPagination
 ) => {
   const query = `
-
         DECLARE @PageNumber AS INT
         DECLARE @PageSize AS INT
         SET @PageNumber=${page}
