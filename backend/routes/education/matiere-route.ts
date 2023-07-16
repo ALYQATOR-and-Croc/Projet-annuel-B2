@@ -1,16 +1,40 @@
 import express from 'express';
 import isAuthenticated from '../../middleware/is-auth';
-import { isCourseManager } from '../../middleware/roles-middleware';
-import { newCoursePOST } from '../../controllers/education/course-controller';
-import { newMatierePOST } from '../../controllers/education/matiere-controller';
+import {
+  newMatierePOST,
+  patchMatierePATCH,
+  getMatiereByIdGET,
+  getMatierePaginatedGET,
+} from '../../controllers/education/matiere-controller';
+import { isEducationManager } from '../../middleware/roles-middleware';
 
 const router = express.Router();
 
 router.post(
   '/matiere/new/',
   isAuthenticated,
-  // isCourseManager,
+  isEducationManager,
   newMatierePOST
+);
+
+router.patch(
+  '/matiere/:idMatiere/',
+  isAuthenticated,
+  isEducationManager,
+  patchMatierePATCH
+);
+router.get(
+  '/matiere/:idMatiere/',
+  isAuthenticated,
+  isEducationManager,
+  getMatiereByIdGET
+);
+
+router.get(
+  '/matiere/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
+  isAuthenticated,
+  isEducationManager,
+  getMatierePaginatedGET
 );
 
 export = router;

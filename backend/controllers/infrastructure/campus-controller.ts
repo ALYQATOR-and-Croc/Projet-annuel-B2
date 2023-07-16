@@ -5,6 +5,7 @@ import {
 } from '../../models/infrastructure/campus-model';
 import * as config from '../../config.json';
 import sql from 'mssql';
+import isId from '../../models/integer-model';
 
 const newCampusPOST = (
   request: express.Request,
@@ -29,10 +30,10 @@ const newCampusPOST = (
         return pool.request().query(query);
       })
       .then(() => {
-        response.status(201).send('Campus Successfully created');
+        return response.status(201).send('Campus Successfully created');
       });
   } catch (error) {
-    response.status(400);
+    return response.status(400);
   }
 };
 
@@ -53,17 +54,59 @@ const getCampusGET = (
       })
       .then((result) => {
         if (result) {
-          response.status(200).send(result.recordset);
+          return response.status(200).send(result.recordset);
         } else {
-          response.status(405).send('Unacceptable operation.');
+          return response.status(405).send('Unacceptable operation.');
         }
       })
       .catch((error) => {
-        response.status(405).send('Unacceptable operation.');
+        return response.status(405).send('Unacceptable operation.');
       });
   } catch (error) {
-    response.status(405).send('Unacceptable operation.');
+    return response.status(405).send('Unacceptable operation.');
   }
 };
 
-export { newCampusPOST, getCampusGET };
+const patchCampusPATCH = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const body = request.body;
+    const params = request.params;
+    const idCampus = Number(params.idCampus);
+    if (!isId([idCampus])) {
+      throw new Error('Bad Request');
+    }
+    const sqlQueryData: CampusPOST = {
+      libelleCampus: body.libelleCampus,
+      adresseCampus: body.adresseCampus,
+      codePostalCampus: body.codePostalCampus,
+    };
+    sql.connect(config).then((pool) => {
+      const query = `
+            UPDATE ${CampusEnum.NOM_TABLE}
+            SET ${CampusEnum.LIBELLE} = '${sqlQueryData.libelleCampus}', ${CampusEnum.ADRESSE} = '${sqlQueryData.adresseCampus}', ${CampusEnum.CODEPOSTAL} = '${sqlQueryData.codePostalCampus}'
+            WHERE ${CampusEnum.PK} = ${idCampus}
+            `;
+      return pool
+        .request()
+        .query(query)
+        .then((result) => {
+          if (result) {
+            return response.status(200).send('Campus successfully updated');
+          } else {
+            return response.status(405).send('Unacceptable operation.');
+          }
+        })
+        .catch((error) => {
+          return response.status(405).send('Unacceptable operation.');
+        });
+    });
+  } catch (error) {
+    return response.status(405).send('Unacceptable operation.');
+  }
+};
+
+export { newCampusPOST, getCampusGET, patchCampusPATCH };

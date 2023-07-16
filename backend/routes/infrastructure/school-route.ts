@@ -1,32 +1,32 @@
 import express from 'express';
 import isAuthenticated from '../../middleware/is-auth';
-import {
-  isAdmin,
-  isEducationManager,
-  isRolesPOSTModel,
-} from '../../middleware/roles-middleware';
+import { isEducationManager } from '../../middleware/roles-middleware';
 import {} from '../../controllers/users/roles-controller';
 import {
   getSchoolGET,
   newSchoolPOST,
+  getSchoolByIdGET,
+  patchSchoolPATCH,
 } from '../../controllers/infrastructure/school-controller';
 
 const router = express.Router();
 
-router.post(
-  '/school/new/',
-  isAuthenticated,
-  isEducationManager,
-  // isRolesPOSTModel,
-  newSchoolPOST
-);
+router.post('/school/new/', isAuthenticated, isEducationManager, newSchoolPOST);
+
+router.get('/schools/', isAuthenticated, isEducationManager, getSchoolGET);
 
 router.get(
-  '/schools/',
+  '/school/:idSchool/',
   isAuthenticated,
   isEducationManager,
-  // isRolesPOSTModel,
-  getSchoolGET
+  getSchoolByIdGET
+);
+
+router.patch(
+  '/school/:idSchool/',
+  isAuthenticated,
+  isEducationManager,
+  patchSchoolPATCH
 );
 
 export = router;

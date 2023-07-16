@@ -1,13 +1,13 @@
 import express from 'express';
 import isAuthenticated from '../../middleware/is-auth';
-import { isAdmin, isCourseManager } from '../../middleware/roles-middleware';
+import { isAdmin, isEducationManager } from '../../middleware/roles-middleware';
 import {} from '../../controllers/users/roles-controller';
-import { newSchoolPOST } from '../../controllers/infrastructure/school-controller';
 import {
-  getRoomsGET,
   newRoomPOST,
+  getRoomsGET,
+  getRoomsByCampusGET,
+  patchRoomPATCH,
 } from '../../controllers/infrastructure/room-controller';
-import { request } from 'http';
 
 const router = express.Router();
 
@@ -15,16 +15,25 @@ router.post(
   '/room/new/',
   isAuthenticated,
   isAdmin,
-  // isRolesPOSTModel,
+  isEducationManager,
   newRoomPOST
 );
 
-router.get('/rooms/', isAuthenticated, isCourseManager, getRoomsGET);
+router.get('/rooms/', isAuthenticated, isEducationManager, getRoomsGET);
+
+router.patch(
+  '/room/:idRoom/',
+  isAuthenticated,
+  isAdmin,
+  isEducationManager,
+  patchRoomPATCH
+);
 
 router.get(
-  '/rooms/campus/:idcampus',
+  '/rooms/campus/:idCampus/',
   isAuthenticated,
-  isCourseManager,
-  getRoomsGET
+  isEducationManager,
+  getRoomsByCampusGET
 );
+
 export = router;

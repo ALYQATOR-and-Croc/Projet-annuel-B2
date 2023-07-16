@@ -6,8 +6,15 @@ export enum MatiereEnum {
   FK_ECOLE = 'id_ecole',
 }
 
-export interface MatierePOST {
+export interface MatiereType {
   libelleMatiere: string;
   idEcole: number;
   idIntervenant: number;
 }
+
+export type MatiereColumns = 'LIBELLE' | 'PK';
+
+export const matiereColumns = {
+  LIBELLE: 'libelle_matiere',
+  PK: 'id_matiere',
+};
