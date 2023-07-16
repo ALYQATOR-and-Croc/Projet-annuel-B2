@@ -31,4 +31,31 @@ const newSchoolPOST = (
     });
 };
 
-export { newSchoolPOST };
+const getSchoolGET = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  sql
+    .connect(config)
+    .then((pool) => {
+      const query = `
+
+            SELECT * FROM ${SchoolEnum.NOM_TABLE}
+            `;
+      return pool.request().query(query);
+    })
+    .then((result) => {
+      if (result) {
+        response.status(200).send(result.recordset);
+      } else {
+        response.status(405).send('Unacceptable operation.');
+      }
+    })
+    .catch((error) => {
+      response.status(405).send('Unacceptable operation.');
+    });
+};
+
+
+export { newSchoolPOST , getSchoolGET};

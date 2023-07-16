@@ -36,4 +36,35 @@ const newCampusPOST = (
   }
 };
 
-export { newCampusPOST };
+const getCampusGET = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    sql
+
+      .connect(config)
+      .then((pool) => {
+        const query = `
+            SELECT * FROM ${CampusEnum.NOM_TABLE}
+            `;
+        return pool.request().query(query);
+      })
+      .then((result) => {
+        if (result) {
+          response.status(200).send(result.recordset);
+        } else {
+          response.status(405).send('Unacceptable operation.');
+        }
+      })
+      .catch((error) => {
+        response.status(405).send('Unacceptable operation.');
+      });
+  } catch (error) {
+    response.status(405).send('Unacceptable operation.');
+  } 
+};
+
+
+export { newCampusPOST, getCampusGET };
