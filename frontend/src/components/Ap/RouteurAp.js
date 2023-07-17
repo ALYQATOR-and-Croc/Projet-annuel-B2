@@ -8,6 +8,7 @@ import { accountService } from '../../_services/account.service';
 import ApUser from './ApUser'
 import ApInfra from './ApInfra'
 import ApAbsence from './ApAbsence'
+import ApEduc from './ApEduc'
 
 export default function RouteurAp() {
 
@@ -20,6 +21,7 @@ export default function RouteurAp() {
             <Route path="dashboard" element={<ApDashboard idUser = {idUser}/>} />
             <Route path="user" element={<ApUser idUser = {idUser}/>} />
             <Route path="infra" element={<ApInfra idUser = {idUser}/>} />
+            <Route path="educ" element={<ApEduc idUser = {idUser}/>} />
             <Route path="absence" element={<ApAbsence idUser = {idUser}/>} />
             <Route path="change-password" element={<ChangePassword idUser = {idUser}/>} />
             <Route path="*" element={<Notfound/>} />
