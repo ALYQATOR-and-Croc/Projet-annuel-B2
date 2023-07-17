@@ -13,7 +13,7 @@ let roomsList = () => {
     );
 }
 
-let schoolsUser = () => {
+let schoolsList = () => {
     return Axios.get(`/schools/`,
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
@@ -37,6 +37,43 @@ let saveSchool = (schoolData) => {
     );
 }
 
+let changeCampus = (idCampus, campusData) => {
+    return Axios.patch(`/campus/${idCampus}/`, campusData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let changeRoom = (idRoom, roomData) => {
+    return Axios.patch(`/room/${idRoom}/`, roomData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let changeSchool = (idSchool, schoolData) => {
+    return Axios.patch(`/school/${idSchool}/`, schoolData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let removeCampus = (idCampus) => {
+    return Axios.delete(`/campus/${idCampus}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let removeRoom = (idRoom) => {
+    return Axios.delete(`/room/${idRoom}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let removeSchool = (idSchool) => {
+    return Axios.delete(`/school/${idSchool}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 export const infraService = {
-    campusList, roomsList, schoolsUser, saveSchool, saveRoom, saveCampus
+    campusList, roomsList, schoolsList, saveSchool, saveRoom, saveCampus,
+    changeCampus, changeRoom, changeSchool, removeCampus, removeRoom, removeSchool
 }
