@@ -36,13 +36,6 @@ app.use(
 ///// 2
 app.use(cors());
 
-///// 3
-app.use(
-  cors({
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-  })
-);
-
 app.use(sqlServerTest);
 // app.use(tokenGenerator);
 app.use(auth);

@@ -54,10 +54,6 @@ app.use((req, res, next) => {
 });
 ///// 2
 app.use((0, cors_1.default)());
-///// 3
-app.use((0, cors_1.default)({
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-}));
 app.use(slq_test_middleware_1.sqlServerTest);
 // app.use(tokenGenerator);
 app.use(auth_route_1.default);
