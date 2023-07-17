@@ -331,12 +331,12 @@ const patchCoursePATCH = (
             return response.status(200).send(result.recordset);
           })
           .catch((error) => {
-            console.log(error);
+            console.log(error.message);
             return response.status(400).send("Bad request");
           });
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
         return response.status(400).send("Bad request");
       });
   } catch (error) {

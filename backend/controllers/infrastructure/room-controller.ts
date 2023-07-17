@@ -66,7 +66,7 @@ const getRoomsGET = (
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
         response.status(405).send("Unacceptable operation.");
       });
   } catch (error) {
@@ -110,7 +110,7 @@ const getRoomsByCampusGET = (
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
           return response.status(400).send("Bad request");
         });
     });
@@ -153,7 +153,7 @@ const patchRoomPATCH = (
           });
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
         return response.status(400).send("Bad request");
       });
   } catch (error) {
@@ -161,4 +161,48 @@ const patchRoomPATCH = (
   }
 };
 
-export { newRoomPOST, getRoomsGET, getRoomsByCampusGET, patchRoomPATCH };
+const deleteRoomDELETE = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = request.params;
+    const idRoom = Number(params.idRoom);
+    if (!isId([idRoom])) {
+      throw new Error("Bad Request");
+    }
+    sql
+      .connect(config)
+      .then((pool) => {
+        const query = `
+            DELETE FROM ${RoomEnum.NOM_TABLE}
+            WHERE ${RoomEnum.PK} = ${idRoom}
+            `;
+        return pool
+          .request()
+          .query(query)
+          .then(() => {
+            return response.status(200).send("Room Successfully deleted");
+          })
+          .catch((error) => {
+            console.log(error.message);
+            return response.status(405).send("Unacceptable operation.");
+          });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return response.status(405).send("Unacceptable operation.");
+      });
+  } catch (error) {
+    return response.status(400).send("Bad request");
+  }
+};
+
+export {
+  newRoomPOST,
+  getRoomsGET,
+  getRoomsByCampusGET,
+  patchRoomPATCH,
+  deleteRoomDELETE,
+};

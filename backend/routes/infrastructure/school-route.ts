@@ -7,6 +7,7 @@ import {
   newSchoolPOST,
   getSchoolByIdGET,
   patchSchoolPATCH,
+  deleteSchoolDELETE,
 } from '../../controllers/infrastructure/school-controller';
 
 const router = express.Router();
@@ -27,6 +28,13 @@ router.patch(
   isAuthenticated,
   isEducationManager,
   patchSchoolPATCH
+);
+
+router.delete(
+  '/school/:idSchool/',
+  isAuthenticated,
+  isEducationManager,
+  deleteSchoolDELETE
 );
 
 export = router;

@@ -1,11 +1,11 @@
-import express from 'express';
+import express from "express";
 import {
   SchoolEnum,
   SchoolType,
-} from '../../models/infrastructure/school-model';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import isId from '../../models/integer-model';
+} from "../../models/infrastructure/school-model";
+import * as config from "../../config.json";
+import sql from "mssql";
+import isId from "../../models/integer-model";
 
 const newSchoolPOST = (
   request: express.Request,
@@ -29,16 +29,16 @@ const newSchoolPOST = (
         return pool.request().query(query);
       })
       .catch((error) => {
-        return response.status(400).send('Bad Request');
+        return response.status(400).send("Bad Request");
       })
       .then(() => {
-        return response.status(201).send('School Successfully created');
+        return response.status(201).send("School Successfully created");
       })
       .catch((error) => {
-        return response.status(400).send('Bad Request');
+        return response.status(400).send("Bad Request");
       });
   } catch (error) {
-    return response.status(400).send('Bad Request');
+    return response.status(400).send("Bad Request");
   }
 };
 
@@ -60,11 +60,11 @@ const getSchoolGET = (
       if (result) {
         return response.status(200).send(result.recordset);
       } else {
-        return response.status(405).send('Unacceptable operation.');
+        return response.status(405).send("Unacceptable operation.");
       }
     })
     .catch((error) => {
-      return response.status(405).send('Unacceptable operation.');
+      return response.status(405).send("Unacceptable operation.");
     });
 };
 
@@ -75,7 +75,7 @@ const getSchoolByIdGET = (
 ) => {
   const idSchool = Number(request.params.idSchool);
   if (!isId([idSchool])) {
-    throw new Error('Bad Request');
+    throw new Error("Bad Request");
   }
   sql
     .connect(config)
@@ -88,17 +88,17 @@ const getSchoolByIdGET = (
         .request()
         .query(query)
         .catch((error) => {
-          throw new Error('Bad Request');
+          throw new Error("Bad Request");
         })
         .then((result) => {
           return response.status(200).json(result.recordset);
         })
         .catch((error) => {
-          return response.status(400).send('Bad Request');
+          return response.status(400).send("Bad Request");
         });
     })
     .catch((error) => {
-      return response.status(400).send('Bad Request');
+      return response.status(400).send("Bad Request");
     });
 };
 
@@ -115,7 +115,7 @@ const patchSchoolPATCH = (
   };
   const idSchool = Number(params.idSchool);
   if (!isId([idSchool])) {
-    throw new Error('Bad Request');
+    throw new Error("Bad Request");
   }
   sql
     .connect(config)
@@ -128,11 +128,49 @@ const patchSchoolPATCH = (
       return pool.request().query(query);
     })
     .then(() => {
-      return response.status(200).send('School successfully updated !');
+      return response.status(200).send("School successfully updated !");
     })
     .catch((error) => {
-      return response.status(400).send('Bad Request');
+      return response.status(400).send("Bad Request");
     });
 };
 
-export { newSchoolPOST, getSchoolGET, getSchoolByIdGET, patchSchoolPATCH };
+const deleteSchoolDELETE = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = request.params;
+    const idSchool = Number(params.idSchool);
+    if (!isId([idSchool])) {
+      throw new Error("Bad Request");
+    }
+    sql
+      .connect(config)
+      .then((pool) => {
+        const query = `
+            DELETE FROM ${SchoolEnum.NOM_TABLE}
+            WHERE ${SchoolEnum.PK} = ${idSchool}
+            `;
+        return pool.request().query(query);
+      })
+      .then(() => {
+        return response.status(200).send("School successfully deleted !");
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return response.status(405).send("Unacceptable operation.");
+      });
+  } catch (error) {
+    return response.status(400).send("Bad Request");
+  }
+};
+
+export {
+  newSchoolPOST,
+  getSchoolGET,
+  getSchoolByIdGET,
+  patchSchoolPATCH,
+  deleteSchoolDELETE,
+};

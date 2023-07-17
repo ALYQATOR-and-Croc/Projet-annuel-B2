@@ -131,7 +131,7 @@ const getMatierePaginatedGET = (
         return response.status(200).json(result.recordset);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
         return response.status(400).send("Bad Request");
       });
   } catch (error) {

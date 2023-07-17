@@ -176,7 +176,7 @@ const login = (request: express.Request, response: express.Response) => {
                 }
               })
               .catch((error1) => {
-                console.log(error1);
+                console.log(error1.message);
                 throw new Error('Unauthorized');
               })
               .then((resultAfterPswdTested) => {
@@ -232,12 +232,12 @@ const login = (request: express.Request, response: express.Response) => {
                     });
                   })
                   .catch((error2) => {
-                    console.log(error2);
+                    console.log(error2.message);
                     return response.status(401).send('Unauthorized');
                   });
               })
               .catch((error3) => {
-                console.log(error3);
+                console.log(error3.message);
                 return response.status(401).send('Unauthorized');
               });
           })

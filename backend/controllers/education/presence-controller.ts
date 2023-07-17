@@ -63,7 +63,7 @@ const updatePresencesPUT = (
         res.status(400).json({ message: error.message });
       });
   } catch (error: any) {
-    console.log(error);
+    console.log(error.message);
     res.status(400).json({ message: error.message });
   }
 };
@@ -162,7 +162,7 @@ const getPresencesByStudentGET = (
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
           res.status(405).send('Unacceptable operation.');
         });
     });

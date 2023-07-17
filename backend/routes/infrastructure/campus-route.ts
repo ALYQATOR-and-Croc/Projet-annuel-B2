@@ -3,6 +3,7 @@ import isAuthenticated from "../../middleware/is-auth";
 import { isAdmin, isEducationManager } from "../../middleware/roles-middleware";
 import {} from "../../controllers/users/roles-controller";
 import {
+  deleteCampusDELETE,
   getCampusGET,
   newCampusPOST,
   patchCampusPATCH,
@@ -18,5 +19,12 @@ router.patch(
   isAuthenticated,
   isEducationManager,
   patchCampusPATCH
+);
+
+router.delete(
+  "/campus/:idCampus/",
+  isAuthenticated,
+  isEducationManager,
+  deleteCampusDELETE
 );
 export = router;

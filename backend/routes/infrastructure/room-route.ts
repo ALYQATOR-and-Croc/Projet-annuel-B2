@@ -7,6 +7,7 @@ import {
   getRoomsGET,
   getRoomsByCampusGET,
   patchRoomPATCH,
+  deleteRoomDELETE
 } from "../../controllers/infrastructure/room-controller";
 
 const router = express.Router();
@@ -27,6 +28,13 @@ router.get(
   isAuthenticated,
   isEducationManager,
   getRoomsByCampusGET
+);
+
+router.delete(
+  "/room/:idRoom/",
+  isAuthenticated,
+  isEducationManager,
+  deleteRoomDELETE
 );
 
 export = router;
