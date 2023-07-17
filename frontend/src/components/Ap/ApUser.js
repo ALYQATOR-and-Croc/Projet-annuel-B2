@@ -86,6 +86,7 @@ const ApUser = () => {
         <FormControl fullWidth style={{ marginBottom: '20px' }}>
           <InputLabel>Classe</InputLabel>
           <Select
+            label="Classe"
             name="idClasse"
             value={formData.idClasse}
             onChange={handleChange}
@@ -113,6 +114,7 @@ const ApUser = () => {
       <FormControl fullWidth style={{ marginBottom: '20px' }}>
         <InputLabel>Fonction</InputLabel>
         <Select
+          label='Fonction'
           name="idRole"
           value={formData.idRole}
           onChange={handleChange}
