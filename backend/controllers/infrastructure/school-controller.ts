@@ -153,10 +153,16 @@ const deleteSchoolDELETE = (
             DELETE FROM ${SchoolEnum.NOM_TABLE}
             WHERE ${SchoolEnum.PK} = ${idSchool}
             `;
-        return pool.request().query(query);
-      })
-      .then(() => {
-        return response.status(200).send("School successfully deleted !");
+        return pool
+          .request()
+          .query(query)
+          .then(() => {
+            return response.status(200).send("School successfully deleted !");
+          })
+          .catch((error) => {
+            console.log(error.message);
+            return response.status(405).send("Unacceptable operation.");
+          });
       })
       .catch((error) => {
         console.log(error.message);
