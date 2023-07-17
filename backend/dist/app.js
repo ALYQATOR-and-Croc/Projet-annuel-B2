@@ -46,12 +46,18 @@ const app = (0, express_1.default)();
 const portHost = config.HOST;
 const API_URL = config.API;
 app.use(body_parser_1.default.json());
+///// 1
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', API_URL); // update to match the domain you will make the request from
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header("Access-Control-Allow-Origin", API_URL); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+///// 2
 app.use((0, cors_1.default)());
+///// 3
+app.use((0, cors_1.default)({
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+}));
 app.use(slq_test_middleware_1.sqlServerTest);
 // app.use(tokenGenerator);
 app.use(auth_route_1.default);
@@ -64,7 +70,7 @@ app.use(room_route_1.default);
 app.use(matiere_route_1.default);
 app.use(course_route_1.default);
 app.use(presence_route_1.default);
-app.get('/', (request, response) => {
+app.get("/", (request, response) => {
     response.send(request.body);
 });
 app.listen(portHost);
