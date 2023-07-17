@@ -11,8 +11,8 @@ import {
   coursesStudentGET,
   deleteCourseDELETE,
   newCoursePOST,
+  patchCoursePATCH,
 } from '../../controllers/education/course-controller';
-
 const router = express.Router();
 
 router.post(
@@ -48,6 +48,13 @@ router.delete(
   isAuthenticated,
   isEducationManager,
   deleteCourseDELETE
+);
+
+router.patch(
+  '/courses/course/:idCourse/',
+  isAuthenticated,
+  isCourseManager,
+  patchCoursePATCH
 );
 
 export = router;

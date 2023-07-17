@@ -1,16 +1,16 @@
-import express from 'express';
-import { CoursEnum, CoursePOST } from '../../models/education/course-model';
-import isId from '../../models/integer-model';
-import { onlyLowercaseRegExp } from '../../Regex/string-regex';
-import * as config from '../../config.json';
-import sql from 'mssql';
+import express from "express";
+import { CoursEnum, CourseEnum } from "../../models/education/course-model";
+import isId from "../../models/integer-model";
+import { onlyLowercaseRegExp } from "../../Regex/string-regex";
+import * as config from "../../config.json";
+import sql from "mssql";
 import {
   StudClassEnum,
   StudClassPOST,
   queryGetOneClassGET,
-} from '../../models/education/student-class-model';
-import { request } from 'http';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
+} from "../../models/education/student-class-model";
+import { request } from "http";
+import { EtudiantEnum } from "../../models/users/etudiant-model";
 
 const newClassPOST = (req: express.Request, res: express.Response) => {
   try {
@@ -32,10 +32,10 @@ const newClassPOST = (req: express.Request, res: express.Response) => {
         return pool.request().query(query);
       })
       .then(() => {
-        res.status(201).send('Class successfully created !');
+        res.status(201).send("Class successfully created !");
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 
@@ -58,10 +58,10 @@ const patchClassPOST = (req: express.Request, res: express.Response) => {
         return pool.request().query(query);
       })
       .then(() => {
-        res.status(201).send('Class successfully updated !');
+        res.status(201).send("Class successfully updated !");
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 
@@ -84,10 +84,10 @@ const deleteClassPOST = (req: express.Request, res: express.Response) => {
         return pool.request().query(query);
       })
       .then(() => {
-        res.status(201).send('Class successfully deleted !');
+        res.status(201).send("Class successfully deleted !");
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 
@@ -105,7 +105,7 @@ const getAllClassGET = (req: express.Request, res: express.Response) => {
         res.status(200).send(result.recordset);
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 
@@ -121,7 +121,7 @@ const getOneClassGET = (req: express.Request, res: express.Response) => {
         res.status(200).send(result.recordset);
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 
@@ -141,7 +141,7 @@ const getOneClassByPromoGET = (req: express.Request, res: express.Response) => {
         res.status(200).send(result.recordset);
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 
@@ -164,7 +164,7 @@ const getOneClassByCampusGET = (
         res.status(200).send(result.recordset);
       });
   } catch (error) {
-    res.status(400).send('Bad Request');
+    res.status(400).send("Bad Request");
   }
 };
 

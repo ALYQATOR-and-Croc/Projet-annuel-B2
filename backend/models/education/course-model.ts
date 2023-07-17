@@ -1,15 +1,15 @@
-import { RoomEnum } from '../infrastructure/room-model';
-import { PresenceEnum } from '../presence-model';
-import { EtudiantEnum } from '../users/etudiant-model';
-import { IntervenantEnum } from '../users/intervenant';
-import { RolesEnum } from '../users/roles-model';
-import { UtilisateurEnum } from '../users/user-model';
-import { MatiereEnum } from './matiere-model';
-import { PresenceModel } from './presence-model';
-import { PromotionEnum } from './promotion-model';
-import { StudClassEnum } from './student-class-model';
+import { RoomEnum } from "../infrastructure/room-model";
+import { PresenceEnum } from "../presence-model";
+import { EtudiantEnum } from "../users/etudiant-model";
+import { IntervenantEnum } from "../users/intervenant";
+import { RolesEnum } from "../users/roles-model";
+import { UtilisateurEnum } from "../users/user-model";
+import { MatiereEnum } from "./matiere-model";
+import { PresenceModel } from "./presence-model";
+import { PromotionEnum } from "./promotion-model";
+import { StudClassEnum } from "./student-class-model";
 
-export interface CoursePOST {
+export interface CourseEnum {
   courseLabel: string;
   courseDate: string;
   startCourse: string;
@@ -24,19 +24,19 @@ export interface CoursePOST {
 }
 
 export enum CoursEnum {
-  NOM_TABLE = 'Cours',
-  PK = 'id_cours',
-  LIBELLE = 'libelle_cours',
-  DATE = 'date_cours',
-  DEBUT = 'heure_debut_cours',
-  FIN = 'heure_fin_cours',
-  FK_INTERVENANT = 'id_intervenant',
-  FK_RESP_PEDAGO = 'id_responsable_pedagogique',
-  FK_ATTACH_PROMO = 'id_attache_de_promotion',
-  FK_REPROGRAPHE = 'id_reprographe',
-  FK_SALLE = 'id_salle',
-  FK_MATIERE = 'id_matiere',
-  FK_CLASSE = 'id_classe',
+  NOM_TABLE = "Cours",
+  PK = "id_cours",
+  LIBELLE = "libelle_cours",
+  DATE = "date_cours",
+  DEBUT = "heure_debut_cours",
+  FIN = "heure_fin_cours",
+  FK_INTERVENANT = "id_intervenant",
+  FK_RESP_PEDAGO = "id_responsable_pedagogique",
+  FK_ATTACH_PROMO = "id_attache_de_promotion",
+  FK_REPROGRAPHE = "id_reprographe",
+  FK_SALLE = "id_salle",
+  FK_MATIERE = "id_matiere",
+  FK_CLASSE = "id_classe",
 }
 
 export interface CoursePageGET {
@@ -140,7 +140,7 @@ export const allStudentsOfACourseGETQuery = (idCourse: number): string => {
   return query;
 };
 
-export const queryNewCoursesPOST = (sqlQueryBodyData: CoursePOST): string => {
+export const queryNewCoursesPOST = (sqlQueryBodyData: CourseEnum): string => {
   const query = `
   INSERT INTO ${CoursEnum.NOM_TABLE} 
         (${CoursEnum.LIBELLE}, 
@@ -210,5 +210,27 @@ export const queryDeleteCourseAndPresencesDELETE = (
   DELETE FROM ${CoursEnum.NOM_TABLE}
   WHERE ${CoursEnum.PK} = ${idCourse};
   `;
+  return query;
+};
+
+export const queryPatchCoursePATCH = (
+  idCourse: number,
+  sqlQueryBodyData: CourseEnum
+): string => {
+  const query = `
+  UPDATE ${CoursEnum.NOM_TABLE}
+  SET ${CoursEnum.LIBELLE} = '${sqlQueryBodyData.courseLabel}',
+  ${CoursEnum.DATE} = '${sqlQueryBodyData.courseDate}',
+  ${CoursEnum.DEBUT} = '${sqlQueryBodyData.startCourse}',
+  ${CoursEnum.FIN} = '${sqlQueryBodyData.endCourse}',
+  ${CoursEnum.FK_INTERVENANT} = ${sqlQueryBodyData.idTeacher},
+  ${CoursEnum.FK_RESP_PEDAGO} = ${sqlQueryBodyData.idRespPedago},
+  ${CoursEnum.FK_ATTACH_PROMO} = ${sqlQueryBodyData.idAttachePromotion},
+  ${CoursEnum.FK_REPROGRAPHE} = ${sqlQueryBodyData.idReprographe},
+  ${CoursEnum.FK_SALLE} = ${sqlQueryBodyData.idClassRoom},
+  ${CoursEnum.FK_MATIERE} = ${sqlQueryBodyData.idCourseSubject},
+  WHERE ${CoursEnum.PK} = ${idCourse}
+  `;
+  //  ${CoursEnum.FK_CLASSE} = ${sqlQueryBodyData.idClass}
   return query;
 };

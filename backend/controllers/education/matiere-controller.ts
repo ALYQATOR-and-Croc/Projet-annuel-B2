@@ -1,17 +1,17 @@
-import express from 'express';
-import { CoursEnum, CoursePOST } from '../../models/education/course-model';
-import isId from '../../models/integer-model';
-import { onlyLowercaseRegExp } from '../../Regex/string-regex';
-import * as config from '../../config.json';
-import sql from 'mssql';
+import express from "express";
+import { CoursEnum, CourseEnum } from "../../models/education/course-model";
+import isId from "../../models/integer-model";
+import { onlyLowercaseRegExp } from "../../Regex/string-regex";
+import * as config from "../../config.json";
+import sql from "mssql";
 import {
   MatiereColumns,
   MatiereEnum,
   MatiereType,
   matiereColumns,
-} from '../../models/education/matiere-model';
-import { UtilisateurEnum } from '../../models/users/user-model';
-import { SchoolEnum } from '../../models/infrastructure/school-model';
+} from "../../models/education/matiere-model";
+import { UtilisateurEnum } from "../../models/users/user-model";
+import { SchoolEnum } from "../../models/infrastructure/school-model";
 
 const newMatierePOST = (
   request: express.Request,
@@ -36,10 +36,10 @@ const newMatierePOST = (
         return pool.request().query(query);
       })
       .then(() => {
-        response.status(201).send('Matiere successfully created !');
+        response.status(201).send("Matiere successfully created !");
       });
   } catch (error) {
-    response.status(400).send('Bad Request');
+    response.status(400).send("Bad Request");
   }
 };
 
@@ -50,7 +50,7 @@ const getMatiereByIdGET = (
   try {
     const idMatiere = Number(request.params.idMatiere);
     if (!isId([idMatiere])) {
-      throw new Error('Bad Request');
+      throw new Error("Bad Request");
     }
     sql
       .connect(config)
@@ -64,20 +64,20 @@ const getMatiereByIdGET = (
           .request()
           .query(query)
           .catch((error) => {
-            throw new Error('Bad Request');
+            throw new Error("Bad Request");
           })
           .then((result) => {
             return response.status(200).json(result.recordset);
           })
           .catch((error) => {
-            return response.status(400).send('Bad Request');
+            return response.status(400).send("Bad Request");
           });
       })
       .catch((error) => {
-        return response.status(400).send('Bad Request');
+        return response.status(400).send("Bad Request");
       });
   } catch (error) {
-    return response.status(400).send('Bad Request');
+    return response.status(400).send("Bad Request");
   }
 };
 
@@ -89,7 +89,7 @@ const patchMatierePATCH = (
     const body = request.body;
     const idMatiere = Number(request.params.idMatiere);
     if (!isId([idMatiere])) {
-      throw new Error('Bad Request');
+      throw new Error("Bad Request");
     }
     const sqlQueryBody: MatiereType = {
       libelleMatiere: body.libelleMatiere,
@@ -110,17 +110,17 @@ const patchMatierePATCH = (
           .request()
           .query(query)
           .catch((error) => {
-            throw new Error('Bad Request');
+            throw new Error("Bad Request");
           });
       })
       .then(() => {
-        response.status(200).send('Matiere successfully updated !');
+        response.status(200).send("Matiere successfully updated !");
       })
       .catch((error) => {
-        return response.status(400).send('Bad Request');
+        return response.status(400).send("Bad Request");
       });
   } catch (error) {
-    return response.status(400).send('Bad Request');
+    return response.status(400).send("Bad Request");
   }
 };
 
@@ -134,7 +134,7 @@ const getMatierePaginatedGET = (
     const rowsNumber: number = Number(params.rowsNumber);
     const orderBy: MatiereColumns = params.orderBy;
     if (!isId([page, rowsNumber])) {
-      throw new Error('Bad Request');
+      throw new Error("Bad Request");
     }
     sql
       .connect(config)
@@ -165,17 +165,17 @@ const getMatierePaginatedGET = (
           .request()
           .query(query)
           .catch((error) => {
-            throw new Error('Bad Request');
+            throw new Error("Bad Request");
           });
       })
       .then((result) => {
         return response.status(200).json(result.recordset);
       })
       .catch((error) => {
-        return response.status(400).send('Bad Request');
+        return response.status(400).send("Bad Request");
       });
   } catch (error) {
-    return response.status(400).send('Bad Request');
+    return response.status(400).send("Bad Request");
   }
 };
 
