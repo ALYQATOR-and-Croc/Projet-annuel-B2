@@ -13,8 +13,8 @@ const ApInfraChange = () => {
   });
   const [idCampus, setIdCampus] = useState('');
   const [formDataCampus, setFormDataCampus] = useState({
-    libelle_campus : '',
-    adresse_campus : '',
+    libelleCampus : '',
+    adresseCampus : '',
     codePostalCampus : 69003
   });
   const [idRoom, setIdRoom] = useState('');
@@ -133,8 +133,8 @@ const ApInfraChange = () => {
     setIdCampus(e.target.value);
     let selectedCampus = campusList.find(campus=>campus.id_campus === e.target.value);
     setFormDataCampus({
-        libelle_campus : selectedCampus.libelle_campus,
-        adresse_campus : selectedCampus.adresse_campus,
+        libelleCampus : selectedCampus.libelle_campus,
+        adresseCampus : selectedCampus.adresse_campus,
         codePostalCampus : selectedCampus.codepostal_campus
     });
   };
@@ -151,6 +151,7 @@ const ApInfraChange = () => {
           .catch(error => {
               console.log(error);
           })
+          requestSchools();
           break;
         case 'Campus':
           console.log(idCampus, formDataCampus);
@@ -161,6 +162,7 @@ const ApInfraChange = () => {
           .catch(error => {
               console.log(error);
           })
+          requestCampus();
           break;
         case 'Salle':
           console.log(idRoom, formDataRoom);
@@ -171,6 +173,7 @@ const ApInfraChange = () => {
           .catch(error => {
               console.log(error);
           })
+          requestRooms();
           break;
         default:
           break;
@@ -189,6 +192,11 @@ const ApInfraChange = () => {
           .catch(error => {
               console.log(error);
           })
+          requestSchools();
+          setFormDataSchool({
+            libelleEcole: '',
+            domaineEcole: ''
+          });
           break;
         case 'Campus':
           console.log(idCampus);
@@ -199,6 +207,12 @@ const ApInfraChange = () => {
           .catch(error => {
               console.log(error);
           })
+          requestCampus();
+          setFormDataCampus({
+            libelleCampus : '',
+            adresseCampus : '',
+            codePostalCampus : 69003
+          });
           break;
         case 'Salle':
           console.log(idRoom);
@@ -209,6 +223,13 @@ const ApInfraChange = () => {
           .catch(error => {
               console.log(error);
           })
+          requestRooms();
+          setFormDataRoom({
+            libelleRoom : '',
+            floor :  0,
+            roomCapacity : 30,
+            idCampus : ''
+          });
           break;
         default:
           break;
@@ -278,18 +299,18 @@ const Ecole = () => {
           </Select>
         </FormControl>      
         <TextField
-          name="libelle_campus"
+          name="libelleCampus"
           label="Libellé du campus"
-          value={formDataCampus.libelle_campus}
+          value={formDataCampus.libelleCampus}
           onChange={handleChange}
           fullWidth
           style={{ marginBottom: '20px', backgroundColor: 'white' }}
           required
         />
         <TextField
-          name="adresse_campus"
+          name="adresseCampus"
           label="Adresse du campus"
-          value={formDataCampus.adresse_campus}
+          value={formDataCampus.adresseCampus}
           onChange={handleChange}
           fullWidth
           style={{ marginBottom: '20px', backgroundColor: 'white' }}
