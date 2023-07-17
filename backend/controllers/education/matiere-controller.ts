@@ -81,6 +81,65 @@ const getMatiereByIdGET = (
   }
 };
 
+
+const getMatierePaginatedGET = (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const params: any = request.params;
+    const page: number = Number(params.pageNumber);
+    const rowsNumber: number = Number(params.rowsNumber);
+    const orderBy: MatiereColumns = params.orderBy;
+    if (!isId([page, rowsNumber])) {
+      throw new Error("Bad Request");
+    }
+    sql
+      .connect(config)
+      .then((pool) => {
+        const query = `
+
+        DECLARE @PageNumber AS INT
+        DECLARE @PageSize AS INT
+        SET @PageNumber=${page}
+        SET @PageSize=${rowsNumber}
+
+        SELECT
+        M.${MatiereEnum.PK},
+        M.${MatiereEnum.LIBELLE},
+        M.${MatiereEnum.FK_ECOLE},
+        M.${MatiereEnum.FK_INTERVENANT},
+        E.${SchoolEnum.LIBELLE},
+        U.${UtilisateurEnum.NOM},
+        U.${UtilisateurEnum.PRENOM}
+        FROM ${MatiereEnum.NOM_TABLE} M
+        LEFT JOIN ${SchoolEnum.NOM_TABLE} E ON M.${MatiereEnum.FK_ECOLE} = E.${SchoolEnum.PK}
+        LEFT JOIN ${UtilisateurEnum.NOM_TABLE} U ON M.${MatiereEnum.FK_INTERVENANT} = U.${UtilisateurEnum.PK}
+        ORDER BY M.${matiereColumns[orderBy]} ASC
+        OFFSET (@PageNumber - 1) * @PageSize ROWS
+        FETCH NEXT @PageSize ROWS ONLY;
+        ;`;
+        console.log(query);
+        return pool
+          .request()
+          .query(query)
+          .catch((error) => {
+            throw new Error(error);
+          });
+      })
+      .then((result) => {
+        return response.status(200).json(result.recordset);
+      })
+      .catch((error) => {
+        console.log(error);
+        return response.status(400).send("Bad Request");
+      });
+  } catch (error) {
+    return response.status(400).send("Bad Request");
+  }
+};
+
+
 const patchMatierePATCH = (
   request: express.Request,
   response: express.Response
@@ -124,60 +183,6 @@ const patchMatierePATCH = (
   }
 };
 
-const getMatierePaginatedGET = (
-  request: express.Request,
-  response: express.Response
-) => {
-  try {
-    const params: any = request.params;
-    const page: number = Number(params.page);
-    const rowsNumber: number = Number(params.rowsNumber);
-    const orderBy: MatiereColumns = params.orderBy;
-    if (!isId([page, rowsNumber])) {
-      throw new Error("Bad Request");
-    }
-    sql
-      .connect(config)
-      .then((pool) => {
-        const query = `
-
-        DECLARE @PageNumber AS INT
-        DECLARE @PageSize AS INT
-        SET @PageNumber=${page}
-        SET @PageSize=${rowsNumber}
-
-        SELECT
-        M.${MatiereEnum.PK},
-        M.${MatiereEnum.LIBELLE},
-        M.${MatiereEnum.FK_ECOLE},
-        M.${MatiereEnum.FK_INTERVENANT},
-        E.${SchoolEnum.LIBELLE},
-        U.${UtilisateurEnum.NOM},
-        U.${UtilisateurEnum.PRENOM}
-        FROM ${MatiereEnum.NOM_TABLE} M
-        LEFT JOIN ${SchoolEnum.NOM_TABLE} E ON M.${MatiereEnum.FK_ECOLE} = E.${SchoolEnum.PK}
-        LEFT JOIN ${UtilisateurEnum.NOM_TABLE} U ON M.${MatiereEnum.FK_INTERVENANT} = U.${UtilisateurEnum.PK}
-        ORDER BY M.${matiereColumns[orderBy]} ASC
-        OFFSET (@PageNumber - 1) * @PageSize ROWS
-        FETCH NEXT @PageSize ROWS ONLY;
-        ;`;
-        return pool
-          .request()
-          .query(query)
-          .catch((error) => {
-            throw new Error("Bad Request");
-          });
-      })
-      .then((result) => {
-        return response.status(200).json(result.recordset);
-      })
-      .catch((error) => {
-        return response.status(400).send("Bad Request");
-      });
-  } catch (error) {
-    return response.status(400).send("Bad Request");
-  }
-};
 
 export {
   newMatierePOST,

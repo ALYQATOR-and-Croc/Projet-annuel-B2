@@ -1,12 +1,12 @@
-import express from 'express';
+import express from "express";
 import {
   CampusEnum,
   CampusPOST,
-} from '../../models/infrastructure/campus-model';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import { RoomEnum, RoomPOST } from '../../models/infrastructure/room-model';
-import isId from '../../models/integer-model';
+} from "../../models/infrastructure/campus-model";
+import * as config from "../../config.json";
+import sql from "mssql";
+import { RoomEnum, RoomPOST } from "../../models/infrastructure/room-model";
+import isId from "../../models/integer-model";
 
 const newRoomPOST = (
   request: express.Request,
@@ -32,10 +32,10 @@ const newRoomPOST = (
         return pool.request().query(query);
       })
       .then(() => {
-        response.status(201).send('Promotion Successfully created');
+        response.status(201).send("Room Successfully created");
       });
   } catch (error) {
-    response.status(400).send('Bad request');
+    response.status(400).send("Bad request");
   }
 };
 
@@ -56,21 +56,21 @@ const getRoomsGET = (
         return pool.request().query(query);
       })
       .catch((error) => {
-        response.status(405).send('Unacceptable operation.');
+        response.status(405).send("Unacceptable operation.");
       })
       .then((result) => {
         if (result) {
           response.status(200).send(result.recordset);
         } else {
-          throw new Error('Unacceptable operation.');
+          throw new Error("Unacceptable operation.");
         }
       })
       .catch((error) => {
         console.log(error);
-        response.status(405).send('Unacceptable operation.');
+        response.status(405).send("Unacceptable operation.");
       });
   } catch (error) {
-    return response.status(400).send('Bad request');
+    return response.status(400).send("Bad request");
   }
 };
 
@@ -106,16 +106,16 @@ const getRoomsByCampusGET = (
           if (result) {
             return response.status(200).send(result.recordset);
           } else {
-            throw new Error('Bad request');
+            throw new Error("Bad request");
           }
         })
         .catch((error) => {
           console.log(error);
-          return response.status(400).send('Bad request');
+          return response.status(400).send("Bad request");
         });
     });
   } catch (error) {
-    return response.status(400).send('Bad request');
+    return response.status(400).send("Bad request");
   }
 };
 
@@ -129,7 +129,7 @@ const patchRoomPATCH = (
     const params = request.params;
     const idRoom = Number(params.idRoom);
     if (!isId([idRoom])) {
-      throw new Error('Bad Request');
+      throw new Error("Bad Request");
     }
     const sqlQueryData: RoomPOST = {
       libelleRoom: body.libelleRoom,
@@ -149,15 +149,15 @@ const patchRoomPATCH = (
           .request()
           .query(query)
           .then(() => {
-            return response.status(200).send('Room Successfully updated');
+            return response.status(200).send("Room Successfully updated");
           });
       })
       .catch((error) => {
         console.log(error);
-        return response.status(400).send('Bad request');
+        return response.status(400).send("Bad request");
       });
   } catch (error) {
-    return response.status(400).send('Bad request');
+    return response.status(400).send("Bad request");
   }
 };
 

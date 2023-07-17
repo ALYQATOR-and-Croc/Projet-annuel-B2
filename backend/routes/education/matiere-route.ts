@@ -31,7 +31,7 @@ router.get(
 );
 
 router.get(
-  '/matiere/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
+  '/matieres/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
   isAuthenticated,
   isEducationManager,
   getMatierePaginatedGET
