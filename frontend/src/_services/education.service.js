@@ -37,6 +37,12 @@ let classesList = () => {
     );
 }
 
+let studentsFromClassList = () => {
+    return Axios.get(`/classes/`, 
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 let matieresList = () => {
     return Axios.get(`/matieres/page/1/rows/1000/order/LIBELLE/`, 
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
@@ -62,5 +68,5 @@ let matieresList = () => {
 // }
 
 export const educationService = {
-    teachersList, matieresList, promotionsList, reproList, apList, rpList, classesList
+    teachersList, matieresList, promotionsList, reproList, apList, rpList, classesList, studentsFromClassList
 }
