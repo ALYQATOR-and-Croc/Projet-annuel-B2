@@ -4,50 +4,30 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import frLocale from '@fullcalendar/core/locales/fr';
-
 import '../styles/ColorCalendar.css';
-
-const events = [
-  {
-    id: 1,
-    title: 'Mathématique',
-    prof:'Mr DUMONT',
-    classe:'B2 ESGI',
-    salle: 'SALLE 515',
-    start: '2023-07-03T09:45:00',
-    end: '2023-07-03T11:15:00',
-  },
-  {
-    id: 2,
-    title: 'Mathématique',
-    prof:'Mr DUMONT',
-    classe:'B2 ESGI',
-    salle: 'SALLE 515',
-    start: '2023-07-03T11:30:00',
-    end: '2023-07-03T13:00:00',
-  },
-  {
-    id: 3,
-    title: 'Mathématique',
-    prof:'Mr DUMONT',
-    classe:'B1 ESGI',
-    salle: 'SALLE 515',
-    start: '2023-07-04T14:00:00',
-    end: '2023-07-04T15:30:00',
-  },
-  {
-    id: 4,
-    title: 'Mathématique',
-    prof:'Mr DUMONT',
-    classe:'B1 ESGI',
-    salle: 'SALLE 515',
-    start: '2023-07-03T15:45:00',
-    end: '2023-07-03T17:15:00',
-  },
-];
 
 function CalendarWeek(props) {
   const calendarRef = React.createRef();
+  let courses = [];
+
+  const ApiPlanning = props.courses;
+  if (ApiPlanning !== undefined) {
+    courses = ApiPlanning.map((course)=>{
+      let heure_debut = new Date(course.heure_debut_cours);
+      heure_debut.setHours(heure_debut.getHours() - 2);
+      let heure_fin = new Date(course.heure_fin_cours);
+      heure_fin.setHours(heure_fin.getHours() - 2);
+      return {
+        id: course.id_cours,
+        title: course.libelle_matiere.toUpperCase(),
+        prof: course.prenom_intervenant[0].toUpperCase() + ". " + course.nom_intervenant.toUpperCase(),
+        classe: course.libelle_classe.toUpperCase(),
+        salle: course.libelle_salle,
+        start: heure_debut,
+        end: heure_fin,
+      }
+    })
+  }
 
   // Si date selectionnée dans le mois, affichage de la date choisie
   useEffect(() => {
@@ -66,24 +46,23 @@ function CalendarWeek(props) {
     height: 'auto',
     locales: [frLocale],
     locale: 'fr',
-    events: events,
+    events: courses,
     eventColor: '#239489',
     nowIndicator: true,
     allDaySlot: false,
-    eventClick: (info) => console.log(info.event.id),
     eventContent: function (arg) {
       return (
-        <div>
+        <div style={{overflow: "hidden"}}>
           <b style={{fontSize: 'xx-small'}}>{arg.timeText}</b>
           <br></br>
           <b style={{fontSize: 'x-small'}}>{arg.event.title}</b>
           <br></br>
           {
-            (props.variant === 'teacher') ? <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.classe}</b> :
-            <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.prof}</b>
+            (props.variant === 'teacher') ? <b style={{fontSize: 'xx-small'}}>{arg.event.extendedProps.classe}</b> :
+            <b style={{fontSize: 'xx-small'}}>{arg.event.extendedProps.prof}</b>
           }
           <br></br>
-          <b style={{fontSize: 'x-small'}}>{arg.event.extendedProps.salle}</b>
+          <b style={{fontSize: 'xx-small'}}>Salle {arg.event.extendedProps.salle}</b>
         </div>
       );
     },

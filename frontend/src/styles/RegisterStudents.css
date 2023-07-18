@@ -14,8 +14,16 @@
     margin-right: 2%;
 }
 
-.btnEmargement {
+
+.btnsEmargement {
+    display: inline-flex;
     margin-bottom: 2em;
+}
+.btnConfirm {
+    margin-right: 10px;
+}
+.btnCancel {
+    margin-left: 10px;
 }
 
 .titreEmargement, .soustitreEmargementDay, .titreNotEmargement {

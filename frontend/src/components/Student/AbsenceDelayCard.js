@@ -5,48 +5,28 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import '../../styles/AbsenceDelayCard.css';
 import AttachEmailIcon from '@mui/icons-material/AttachEmail';
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { Divider } from '@mui/material';
+import { courseService } from '../../_services/course.service';
 
 export default function AbsenceDelayCard(props) {
 
+    const id = props.infos.id;
     const date = props.infos.date;
     const matiere = props.infos.matiere;
     const heure = props.infos.heure;
     const prof = props.infos.prof;
-    const justified = props.infos.justified;
+    const mailap = props.infos.mailap;
+    const type = props.infos.type;
 
-    const justifyStatusRender = (status) => {
-        if (status === true) {
-            return (
-                <div className='absenceDelayJustified'>
-                    <div className='justifyStatus'>
-                        <CheckCircleIcon className='justifyStatusIcon'/>
-                        <Typography variant="h6">
-                            Justifié 
-                        </Typography>
-                    </div>
-                </div>
-            )
-        } else {
-            return (
-                <div className='absenceDelayJustify'>
-                    <div className='justifyStatus'>
-                        <CancelIcon className='justifyStatusIcon'/>
-                        <Typography variant="h6">
-                            Non justifié 
-                        </Typography>
-                    </div>
-                    <Button 
-                    href={`mailto:${props.mailap}?subject=Justificatif ${props.type} du ${props.infos.date}`} 
-                    target='_blank' 
-                    size="small" 
-                    variant="contained" 
-                    startIcon={<AttachEmailIcon/>}>Justifier</Button>
-                </div>
-            )
-        }
+    const removeAbsenceDelay = () => {
+        courseService.setPresence(id, {"isAbsent" : false,"isLate" : false,"hasSigned": true})
+        .then(res => {
+            window.location.reload(false);
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
 
     return (
@@ -69,7 +49,23 @@ export default function AbsenceDelayCard(props) {
                             </Typography>
                         </div>
                         <Divider orientation="vertical" flexItem></Divider>
-                        {justifyStatusRender(justified)}
+                        <div className='absenceDelayJustify'>
+                            <Typography variant="body1" component="div">{type.toUpperCase()}</Typography>
+                            {props.auth === "admin" ? <Button 
+                            onClick={removeAbsenceDelay} 
+                            size="large" 
+                            variant="contained" 
+                            startIcon={<EventAvailableIcon/>}>
+                                Retirer
+                            </Button> : <Button 
+                            href={`mailto:${mailap}?subject=Justificatif ${type} du ${date}`} 
+                            target='_blank' 
+                            size="large" 
+                            variant="contained" 
+                            startIcon={<AttachEmailIcon/>}>
+                                Justifier
+                            </Button>}
+                        </div>
                     </div>
                 </CardContent>
             </Card>

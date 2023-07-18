@@ -1,22 +1,28 @@
-import express, { query } from 'express';
+import express from "express";
 import {
   CoursEnum,
-  CoursePOST,
+  CourseEnum,
   CoursePageGET,
   coursesUserFunctionIdGETQuery,
   coursesUserGETQuery,
-} from '../../models/education/course-model';
-import isId from '../../models/integer-model';
-import { onlyLowercaseRegExp } from '../../Regex/string-regex';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import { FonctionEnum, FonctionType } from '../../models/users/user-model';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
-import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
-import { ReprographeEnum } from '../../models/users/reprographe-model';
-import { IntervenantEnum } from '../../models/users/intervenant';
-import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
-import { RolesEnum } from '../../models/users/roles-model';
+  queryDeleteCourseAndPresencesDELETE,
+  queryGetCourseAndStudentsGET,
+  queryNewCoursesPOST,
+  queryPatchCoursePATCH,
+} from "../../models/education/course-model";
+import isId from "../../models/integer-model";
+import { onlyLowercaseRegExp } from "../../Regex/string-regex";
+import * as config from "../../config.json";
+import sql from "mssql";
+import { FonctionEnum, FonctionType } from "../../models/users/user-model";
+import { EtudiantEnum } from "../../models/users/etudiant-model";
+import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
+import { ReprographeEnum } from "../../models/users/reprographe-model";
+import { IntervenantEnum } from "../../models/users/intervenant";
+import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
+import { RolesEnum } from "../../models/users/roles-model";
+import { allStudentsOfACourseGETQuery } from "../../models/education/course-model";
+import { queryNewPresencePOST } from "../../models/education/presence-model";
 
 const newCoursePOST = (
   request: express.Request,
@@ -37,7 +43,7 @@ const newCoursePOST = (
     body.idClass,
   ];
   if (isId(allIdsToTest) && onlyLowercaseRegExp([body.courseLabel])) {
-    const sqlQueryBodyData: CoursePOST = {
+    const sqlQueryBodyData: CourseEnum = {
       courseLabel: body.courseLabel,
       courseDate,
       startCourse,
@@ -52,51 +58,51 @@ const newCoursePOST = (
     };
 
     try {
-      const queryPOSTCourses = `
-        INSERT INTO ${CoursEnum.NOM_TABLE} 
-        (${CoursEnum.LIBELLE}, 
-            ${CoursEnum.DATE}, 
-            ${CoursEnum.DEBUT}, 
-            ${CoursEnum.FIN}, 
-            ${CoursEnum.FK_INTERVENANT}, 
-            ${CoursEnum.FK_RESP_PEDAGO}, 
-            ${CoursEnum.FK_ATTACH_PROMO}, 
-            ${CoursEnum.FK_REPROGRAPHE},
-            ${CoursEnum.FK_SALLE}, 
-            ${CoursEnum.FK_MATIERE}, 
-            ${CoursEnum.FK_CLASSE})
-        VALUES
-        ('${sqlQueryBodyData.courseLabel}', 
-        '${sqlQueryBodyData.courseDate}', 
-        '${sqlQueryBodyData.startCourse}', 
-        '${sqlQueryBodyData.endCourse}', 
-        ${sqlQueryBodyData.idTeacher}, 
-        ${sqlQueryBodyData.idRespPedago}, 
-        ${sqlQueryBodyData.idAttachePromotion}, 
-        ${sqlQueryBodyData.idReprographe}, 
-        ${sqlQueryBodyData.idClassRoom}, 
-        ${sqlQueryBodyData.idCourseSubject}, 
-        ${sqlQueryBodyData.idClass})
-        `;
+      const queryPOSTCourses = queryNewCoursesPOST(sqlQueryBodyData);
       sql
         .connect(config)
         .then((pool) => {
-          return pool.request().query(queryPOSTCourses);
+          return {
+            result: pool.request().query(queryPOSTCourses),
+            poolValue: pool,
+          };
         })
-        .then((result) => {
-          if (result) {
-            response.status(201).send('New course was successfully created !');
+        .then(async (returnedValueWhenInserted) => {
+          if ((await returnedValueWhenInserted.result).rowsAffected[0] === 1) {
+            returnedValueWhenInserted.poolValue
+              .request()
+              .query(
+                queryGetCourseAndStudentsGET(
+                  (await returnedValueWhenInserted.result).recordset[0].id_cours
+                )
+              )
+              .then((result) => {
+                result.recordset.forEach((element) => {
+                  returnedValueWhenInserted.poolValue
+                    .request()
+                    .query(
+                      queryNewPresencePOST(element.idCours, element.idEtudiant)
+                    );
+                });
+              })
+              .then(() => {
+                response
+                  .status(201)
+                  .send({ message: "New course was successfully created !" });
+              });
           } else {
-            throw new Error('Unacceptable operation.');
+            throw new Error("Unacceptable operation.");
           }
         });
     } catch (error) {
       response.status(405).send(error);
     }
   } else {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
   }
 };
+
+
 
 const coursesPagesGET = (
   request: express.Request,
@@ -142,6 +148,37 @@ const coursesPagesGET = (
       });
   } catch (error) {
     response.status(400).send(error);
+  }
+};
+
+const courseByIdGET = (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = req.params;
+    sql.connect(config).then((pool) => {
+      const query = `
+      SELECT * FROM ${CoursEnum.NOM_TABLE}
+      WHERE ${CoursEnum.PK} = ${params.idCourse}
+      `;
+      pool
+        .request()
+        .query(query)
+        .then((result) => {
+          if (result) {
+            return res.status(200).send(result.recordset);
+          } else {
+            return res.status(405).send("Unacceptable operation.");
+          }
+        })
+        .catch((error) => {
+          return res.status(405).send("Unacceptable operation.");
+        });
+    });
+  } catch (error) {
+    return res.status(400).send("Bad Request");
   }
 };
 
@@ -199,9 +236,121 @@ const userFonctionTable = (
       );
     // case ADMIN
     default:
-      throw new Error('');
+      throw new Error("");
       break;
   }
 };
 
-export { newCoursePOST, coursesPagesGET };
+// get all students that asisted to a course
+const coursesStudentGET = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = request.params;
+    sql
+      .connect(config)
+      .then((pool) => {
+        const sqlQueryBodyData = allStudentsOfACourseGETQuery(
+          Number(params.idCourse)
+        );
+        return { sqlQueryBodyData, pool };
+      })
+      .then((courseStudentsGETQueryResult) => {
+        courseStudentsGETQueryResult.pool
+          .request()
+          .query(courseStudentsGETQueryResult.sqlQueryBodyData)
+          .then((result) => {
+            return result.recordset;
+          })
+          .then((resultList) => {
+            return response.status(200).send(resultList);
+          });
+      });
+  } catch (error) {
+    response.status(400).send(error);
+  }
+};
+
+const deleteCourseDELETE = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = request.params;
+    sql
+      .connect(config)
+      .then((pool) => {
+        const sqlDeleteQueryBodyData = queryDeleteCourseAndPresencesDELETE(
+          Number(params.idCourse)
+        );
+        return { sqlDeleteQueryBodyData, pool };
+      })
+      .then((courseStudentsGETQueryResult) => {
+        courseStudentsGETQueryResult.pool
+          .request()
+          .query(courseStudentsGETQueryResult.sqlDeleteQueryBodyData)
+          .then((result) => {
+            return response.status(200).send(result.recordset);
+          })
+          .catch((error) => {
+            return response.status(400).send("Bad request");
+          });
+      })
+      .catch((error) => {
+        return response.status(400).send("Bad request");
+      });
+  } catch (error) {
+    return response.status(400).send("Bad request");
+  }
+};
+
+const patchCoursePATCH = (
+  request: express.Request,
+  response: express.Response,
+  next: express.NextFunction
+) => {
+  try {
+    const params = request.params;
+    const body = request.body;
+    sql
+      .connect(config)
+      .then((pool) => {
+        const sqlDeleteQuery = queryPatchCoursePATCH(
+          Number(params.idCourse),
+          body
+        );
+        console.log(sqlDeleteQuery);
+        return { sqlDeleteQuery, pool };
+      })
+      .then((courseStudentsGETQueryResult) => {
+        courseStudentsGETQueryResult.pool
+          .request()
+          .query(courseStudentsGETQueryResult.sqlDeleteQuery)
+          .then((result) => {
+            return response.status(200).send(result.recordset);
+          })
+          .catch((error) => {
+            console.log(error.message);
+            return response.status(400).send("Bad request");
+          });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return response.status(400).send("Bad request");
+      });
+  } catch (error) {
+    return response.status(400).send("Bad request");
+  }
+};
+
+export {
+  newCoursePOST,
+  coursesPagesGET,
+  coursesStudentGET,
+  deleteCourseDELETE,
+  courseByIdGET,
+  patchCoursePATCH,
+};

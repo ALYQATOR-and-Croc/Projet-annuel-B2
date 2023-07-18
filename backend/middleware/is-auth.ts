@@ -10,7 +10,7 @@ const isAuthenticated = (
   try {
     const authHeader = request.get('Authorization');
     if (!authHeader) {
-      throw new Error('Not authenticated.');
+      response.status(401).send('Error unauthorized');
     }
     const token = authHeader!.replace('Bearer ', '');
     let decodedToken;
@@ -18,7 +18,7 @@ const isAuthenticated = (
       decodedToken = jwt.verify(token, secretPass.passwordToken);
       next();
     } catch (error: any) {
-      response.status(401).send(error?.name);
+      response.status(401).send('Error unauthorized');
     }
   } catch (error) {
     response.status(401).send('Error unauthorized');
