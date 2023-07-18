@@ -84,6 +84,7 @@ const ApInfraAdd = () => {
         infraService.saveSchool(formDataSchool)
         .then(res => {
             console.log(res);  
+            window.location.reload(false); // changer ?
         })
         .catch(error => {
             console.log(error);
@@ -94,6 +95,7 @@ const ApInfraAdd = () => {
         infraService.saveCampus(formDataCampus)
         .then(res => {
             console.log(res);  
+            window.location.reload(false); // changer ?
         })
         .catch(error => {
             console.log(error);
@@ -104,6 +106,7 @@ const ApInfraAdd = () => {
         infraService.saveRoom(formDataRoom)
         .then(res => {
             console.log(res);  
+            window.location.reload(false); // changer ?
         })
         .catch(error => {
             console.log(error);

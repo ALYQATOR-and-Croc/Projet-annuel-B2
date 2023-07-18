@@ -17,6 +17,11 @@ let day = (idUser) => {
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }
+let all = () => {
+    return Axios.get(`/courses/`, 
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
 // let specificCourse = (idCourse) => {
 //     return Axios.get(`/course/${idCourse}/`, 
 //     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
@@ -24,5 +29,5 @@ let day = (idUser) => {
 // }
 
 export const calendarService = {
-    month, day
+    month, day, all
 }
