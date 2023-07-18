@@ -23,6 +23,14 @@ router.post(
 );
 
 router.get(
+  '/courses/page/start-date/:startDate/number-of-days/:numberOfDays/',
+  isAuthenticated,
+  isEducationManager,
+  coursesPagesGET
+);
+
+
+router.get(
   '/courses/page/user/:idUser/start-date/:startDate/number-of-days/:numberOfDays/',
   isAuthenticated,
   isConcernedByStudentCourse,

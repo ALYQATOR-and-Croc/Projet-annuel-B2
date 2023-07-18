@@ -234,3 +234,4 @@ export const queryPatchCoursePATCH = (
   //  ${CoursEnum.FK_CLASSE} = ${sqlQueryBodyData.idClass}
   return query;
 };
+

@@ -47,11 +47,16 @@ const portHost = config.HOST;
 const API_URL = config.API;
 app.use(body_parser_1.default.json());
 ///// 1
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", API_URL); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use(
+//   (req: express.Request, res: express.Response, next: express.NextFunction) => {
+//     res.header("Access-Control-Allow-Origin", API_URL); // update to match the domain you will make the request from
+//     res.header(
+//       "Access-Control-Allow-Headers",
+//       "Origin, X-Requested-With, Content-Type, Accept"
+//     );
+//     next();
+//   }
+// );
 ///// 2
 app.use((0, cors_1.default)());
 app.use(slq_test_middleware_1.sqlServerTest);

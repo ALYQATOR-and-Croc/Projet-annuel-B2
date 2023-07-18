@@ -81,7 +81,6 @@ const getMatiereByIdGET = (
   }
 };
 
-
 const getMatierePaginatedGET = (
   request: express.Request,
   response: express.Response
@@ -139,7 +138,6 @@ const getMatierePaginatedGET = (
   }
 };
 
-
 const patchMatierePATCH = (
   request: express.Request,
   response: express.Response
@@ -183,10 +181,44 @@ const patchMatierePATCH = (
   }
 };
 
+const deleteMatiereDELETE = (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const idMatiere = Number(request.params.idMatiere);
+    if (!isId([idMatiere])) {
+      throw new Error("Bad Request");
+    }
+    sql
+      .connect(config)
+      .then((pool) => {
+        const query = `
+        DELETE FROM ${MatiereEnum.NOM_TABLE}
+        WHERE ${MatiereEnum.PK} = ${idMatiere}
+        `;
+        return pool
+          .request()
+          .query(query)
+          .catch((error) => {
+            throw new Error("Bad Request");
+          });
+      })
+      .then(() => {
+        response.status(200).send("Matiere successfully deleted !");
+      })
+      .catch((error) => {
+        return response.status(405).send("Unacceptable operation.");
+      });
+  } catch (error) {
+    return response.status(400).send("Bad Request");
+  }
+};
 
 export {
   newMatierePOST,
   patchMatierePATCH,
   getMatiereByIdGET,
   getMatierePaginatedGET,
+  deleteMatiereDELETE
 };

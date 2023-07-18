@@ -1,20 +1,23 @@
-import * as config from '../../config.json';
-import sql from 'mssql';
-import express from 'express';
+import * as config from "../../config.json";
+import sql from "mssql";
+import express from "express";
 import {
   RolesTypePOST,
   RolesEnum,
   UtilisateurPagination,
   RolePagination,
-} from '../../models/users/roles-model';
+} from "../../models/users/roles-model";
 import {
   queryPaginatedIntervenantPromoGET,
   queryPaginatedAttachePromoGET,
   queryPaginatedEtudiantGET,
   queryPaginatedReprographeGET,
   queryPaginatedResponsablePedagogiqueGET,
-} from '../../models/users/user-model';
-import { queryRoleGET } from '../../models/users/roles-model';
+  FonctionType,
+  queryDeleteUserDELETE,
+} from "../../models/users/user-model";
+import { queryRoleGET } from "../../models/users/roles-model";
+import isId from "../../models/integer-model";
 
 const newRolePOST = (request: express.Request, response: express.Response) => {
   const body = request.body;
@@ -31,9 +34,9 @@ const newRolePOST = (request: express.Request, response: express.Response) => {
       })
       .then((result) => {
         if (result) {
-          response.status(201).send('New role was successfully created !');
+          response.status(201).send("New role was successfully created !");
         } else {
-          throw new Error('Unacceptable operation.');
+          throw new Error("Unacceptable operation.");
         }
       });
   } catch (error) {
@@ -51,11 +54,11 @@ const paginatedRoleGET = (req: express.Request, res: express.Response) => {
         if (result) {
           res.status(200).send(result.recordset);
         } else {
-          res.status(405).send('Unacceptable operation.');
+          res.status(405).send("Unacceptable operation.");
         }
       })
       .catch((error) => {
-        res.status(405).send('Unacceptable operation.');
+        res.status(405).send("Unacceptable operation.");
       });
   });
 };
@@ -79,12 +82,12 @@ const reprographeGETList = (
           if (result) {
             response.status(200).send(result.recordset);
           } else {
-            response.status(405).send('Unacceptable operation.');
+            response.status(405).send("Unacceptable operation.");
           }
         });
     });
   } catch (error) {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
   }
 };
 
@@ -111,12 +114,12 @@ const etudiantGETList = (
           if (result) {
             response.status(200).send(result.recordset);
           } else {
-            response.status(405).send('Unacceptable operation.');
+            response.status(405).send("Unacceptable operation.");
           }
         });
     });
   } catch (error) {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
   }
 };
 
@@ -139,12 +142,12 @@ const attachePromoGETList = (
           if (result) {
             response.status(200).send(result.recordset);
           } else {
-            response.status(405).send('Unacceptable operation.');
+            response.status(405).send("Unacceptable operation.");
           }
         });
     });
   } catch (error) {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
   }
 };
 
@@ -170,12 +173,12 @@ const intervenantGETList = (
           if (result) {
             response.status(200).send(result.recordset);
           } else {
-            response.status(405).send('Unacceptable operation.');
+            response.status(405).send("Unacceptable operation.");
           }
         });
     });
   } catch (error) {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
   }
 };
 
@@ -201,12 +204,37 @@ const responsablePedagogiqueGETList = (
           if (result) {
             response.status(200).send(result.recordset);
           } else {
-            response.status(405).send('Unacceptable operation.');
+            response.status(405).send("Unacceptable operation.");
           }
         });
     });
   } catch (error) {
-    response.status(405).send('Unacceptable operation.');
+    response.status(405).send("Unacceptable operation.");
+  }
+};
+
+const deleteUserDELETE = (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const params: any = request.params;
+    const idUser: number = Number(params.idUser);
+    const fonctionUser: FonctionType = params.fonctionUser;
+    if (!isId([idUser])) {
+      throw new Error("Bad Request");
+    }
+    sql
+      .connect(config)
+      .then((pool) => {
+        const query = queryDeleteUserDELETE(idUser, fonctionUser);
+        return pool.request().query(query);
+      })
+      .then(() => {
+        response.status(201).send("User successfully deleted !");
+      });
+  } catch (error) {
+    response.status(400).send("Bad Request");
   }
 };
 
@@ -218,4 +246,5 @@ export {
   intervenantGETList,
   responsablePedagogiqueGETList,
   paginatedRoleGET,
+  deleteUserDELETE
 };

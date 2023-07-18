@@ -5,8 +5,6 @@
 // Compare this snippet from backend\routes\education\student-class-route.ts:
 import express from 'express';
 import sql from 'mssql';
-import isAuthenticated from '../../middleware/is-auth';
-import { isAdmin } from '../../middleware/roles-middleware';
 import * as config from '../../config.json';
 import {
   PresencesBodyRequest,
@@ -26,7 +24,6 @@ import { EtudiantEnum } from '../../models/users/etudiant-model';
 const updatePresencesPUT = (
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
 ) => {
   // A function that get value from the request body, create an sql query and create a new row in the presence table
   try {
@@ -68,28 +65,49 @@ const updatePresencesPUT = (
   }
 };
 
-const updatePresencePUT = (
+const updatePresencesPatch = (
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
 ) => {
   // A function that get value from the request body, create an sql query and update a row in the presence table
   try {
     const body = req.body;
-    const presencesToPUT: PresencesBodyRequest = {
+    const presencesToPatch: PresencesBodyRequest = {
       idCourse: body.idCourse,
       listStudents: body.listStudents,
     };
     // Create a new row in the presence table
-    // sql
-    //   .connect(config)
+    sql
+    .connect(config)
+    .then((pool) => {
+      presencesToPatch.listStudents.forEach(
+        (studentPresence: StudentPresence) => {
+          if (!!isPresenceDataCoherent(studentPresence)) {
+            pool
+              .request()
+              .query(
+                queryUpdatePresencePUT(
+                  presencesToPatch.idCourse,
+                  studentPresence
+                )
+              );
+          }
+        }
+      );
+    })
+    .then(() => {
+      res.status(200).json({ message: 'Presence(s) successfully updated !' });
+    })
+    .catch((error: any) => {
+      console.log(error.message);
+      res.status(400).json({ message: error.message });
+    });
   } catch (error) {}
 };
 
 const getPresencesByStudentGET = (
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
 ) => {
   try {
     const params = req.params;
@@ -174,7 +192,6 @@ const getPresencesByStudentGET = (
 const getPresencesByCourseGET = (
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
 ) => {
   try {
     const params = req.params;
@@ -201,8 +218,41 @@ const getPresencesByCourseGET = (
   }
 };
 
+const deletePresenceDELETE = (
+  req: express.Request,
+  res: express.Response,
+) => {
+  try {
+
+    const params = req.params;
+    const idPresence: number = Number(params.idPresence);
+    const queryDELETE = `DELETE FROM ${PresenceEnum.NOM_TABLE} WHERE ${PresenceEnum.PK} = ${idPresence}`;
+    sql.connect(config).then((pool) => {
+      pool
+        .request()
+        .query(queryDELETE)
+        .then((result) => {
+          if (result) {
+            res.status(200).send('Presence successfully deleted !');
+          } else {
+            res.status(405).send('Unacceptable operation.');
+          }
+        })
+        .catch((error) => {
+          console.log(error.message)
+          res.status(405).send('Unacceptable operation.');
+        });
+    });
+  } catch (error) {
+    res.status(405).send('Unacceptable operation.');
+  }
+};
+
+
 export {
   updatePresencesPUT,
   getPresencesByStudentGET,
   getPresencesByCourseGET,
+  updatePresencesPatch,
+  deletePresenceDELETE
 };

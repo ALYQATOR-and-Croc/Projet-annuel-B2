@@ -23,6 +23,15 @@ export interface PromotionType {
   idEcole: number;
 }
 
+export interface PromotionTypePatch {
+  libellePromotion: string;
+  anneePromotion: string;
+  domainePromotion: string;
+  specialitePromotion: string;
+  diplomePromotion: string;
+  niveauEtude: string;
+}
+
 export const promotionColumns = {
   LIBELLE: "libelle_promotion",
   ANNEE: "annee_promotion",
@@ -33,12 +42,12 @@ export const promotionColumns = {
 };
 
 export type PromotionColumns =
-  | "LIBELLE"
-  | "ANNEE"
-  | "DOMAINE"
-  | "SPECIALITE_PROMOTION"
-  | "DIPLOME"
-  | "NIVEAU_ETUDE";
+  | 'LIBELLE'
+  | 'ANNEE'
+  | 'DOMAINE'
+  | 'SPECIALITE_PROMOTION'
+  | 'DIPLOME'
+  | 'NIVEAU_ETUDE';
 
 export const queryPromotionByIdGET = (idPromotion: number) => {
   const query = `
@@ -133,7 +142,7 @@ export const queryDeletePromotionDELETE = (idPromotion: number): string => {
 
 export const queryPatchPromotionPATCH = (
   idPromotion: number,
-  sqlQueryBodyData: PromotionType
+  sqlQueryBodyData: PromotionTypePatch
 ): string => {
   const query = `
   UPDATE ${PromotionEnum.NOM_TABLE}
@@ -142,8 +151,7 @@ export const queryPatchPromotionPATCH = (
   ${PromotionEnum.DOMAINE} = '${sqlQueryBodyData.domainePromotion}',
   ${PromotionEnum.SPECIALITE_PROMOTION} = '${sqlQueryBodyData.specialitePromotion}',
   ${PromotionEnum.DIPLOME} = '${sqlQueryBodyData.diplomePromotion}',
-  ${PromotionEnum.NIVEAU_ETUDE} = '${sqlQueryBodyData.niveauEtude}',
-  ${PromotionEnum.FK_ECOLE} = '${sqlQueryBodyData.idEcole}'
+  ${PromotionEnum.NIVEAU_ETUDE} = '${sqlQueryBodyData.niveauEtude}'
   WHERE ${PromotionEnum.PK} = ${idPromotion}
   `;
   return query;

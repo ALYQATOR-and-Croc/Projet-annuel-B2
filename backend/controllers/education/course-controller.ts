@@ -102,6 +102,8 @@ const newCoursePOST = (
   }
 };
 
+
+
 const coursesPagesGET = (
   request: express.Request,
   response: express.Response,

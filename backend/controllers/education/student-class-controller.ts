@@ -42,6 +42,7 @@ const newClassPOST = (req: express.Request, res: express.Response) => {
 const patchClassPOST = (req: express.Request, res: express.Response) => {
   try {
     const body = req.body;
+    const idClass = req.params.idClass;
     const sqlQueryBody: StudClassPOST = {
       libelleClasse: body.libelleClasse,
       idPromotion: body.idPromotion,
@@ -51,35 +52,38 @@ const patchClassPOST = (req: express.Request, res: express.Response) => {
       .connect(config)
       .then((pool) => {
         const query = `
-            PATCH ${StudClassEnum.NOM_TABLE}
-            SET ${StudClassEnum.LIBELLE} = '${sqlQueryBody.libelleClasse}', ${StudClassEnum.FK_CAMPUS} = '${sqlQueryBody.idCampus}', ${StudClassEnum.FK_PROMOTION} = '${sqlQueryBody.idPromotion}'
-            WHERE ${StudClassEnum.PK} = '${req.params.id}'
+            UPDATE ${StudClassEnum.NOM_TABLE}
+            SET ${StudClassEnum.LIBELLE} = '${sqlQueryBody.libelleClasse}', 
+            ${StudClassEnum.FK_CAMPUS} = ${sqlQueryBody.idCampus}, 
+            ${StudClassEnum.FK_PROMOTION} = ${sqlQueryBody.idPromotion}
+            WHERE ${StudClassEnum.PK} = ${idClass}
             `;
-        return pool.request().query(query);
-      })
+            console.log(query);
+      pool.request().query(query)
       .then(() => {
-        res.status(201).send("Class successfully updated !");
-      });
+        return res.status(201).send("Class successfully updated !");
+      }).catch((err) => {
+        console.log(err.message);
+        return res.status(400).send("Bad Request");
+      })}).catch((err) => {
+        console.log(err.message);
+        return res.status(400).send("Bad Request");
+      })
   } catch (error) {
     res.status(400).send("Bad Request");
   }
 };
 
-const deleteClassPOST = (req: express.Request, res: express.Response) => {
+const deleteClassDELETE = (req: express.Request, res: express.Response) => {
   try {
     const body = req.body;
-    const sqlQueryBody: StudClassPOST = {
-      libelleClasse: body.libelleClasse,
-
-      idPromotion: body.idPromotion,
-      idCampus: body.idCampus,
-    };
+    const idClass = req.params.idClass;
     sql
       .connect(config)
       .then((pool) => {
         const query = `
             DELETE FROM ${StudClassEnum.NOM_TABLE}
-            WHERE ${StudClassEnum.PK} = '${req.params.id}'
+            WHERE ${StudClassEnum.PK} = '${idClass}'
             `;
         return pool.request().query(query);
       })
@@ -171,7 +175,7 @@ const getOneClassByCampusGET = (
 export {
   newClassPOST,
   patchClassPOST,
-  deleteClassPOST,
+  deleteClassDELETE,
   getAllClassGET,
   getOneClassGET,
   getOneClassByPromoGET,

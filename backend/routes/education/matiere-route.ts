@@ -5,6 +5,7 @@ import {
   patchMatierePATCH,
   getMatiereByIdGET,
   getMatierePaginatedGET,
+  deleteMatiereDELETE,
 } from '../../controllers/education/matiere-controller';
 import { isEducationManager } from '../../middleware/roles-middleware';
 
@@ -37,4 +38,10 @@ router.get(
   getMatierePaginatedGET
 );
 
+router.delete(
+  '/matiere/:idMatiere/',
+  isAuthenticated,
+  isEducationManager,
+  deleteMatiereDELETE
+);
 export = router;
