@@ -60,13 +60,13 @@ const Dashboard = () => {
       <DashboardItem to="/ap/user">
         <PersonIcon></PersonIcon><Title>
             Utilisateur</Title>
-             <Text>Permet d'ajouter des administrateur, des étudiants, des attaché de promotion
-                des responsables pédagogiques, des reprographes et des intervenant
+             <Text>Permet d'ajouter des administrateurs, des étudiants, des attachés de promotion,
+                 des responsables pédagogiques, des reprographes et des intervenants.
              </Text>
       </DashboardItem>
       <DashboardItem to="/ap/infra">
       <ApartmentIcon></ApartmentIcon><Title>
-            infrastructure</Title>
+            Infrastructure</Title>
              <Text>Permet d'ajouter ou modifier une salle, un campus ou une école. 
              </Text>
       </DashboardItem>
@@ -79,7 +79,7 @@ const Dashboard = () => {
       <DashboardItem to="/ap/absence">
       <AccessTimeIcon></AccessTimeIcon><Title>
             Absences/Retard</Title>
-             <Text>Permet de validé ou non, un justificatif envoyé pour une absence.
+             <Text>Permet de valider ou non, un justificatif envoyé pour une absence.
              </Text>
       </DashboardItem>
     </DashboardContainer>
