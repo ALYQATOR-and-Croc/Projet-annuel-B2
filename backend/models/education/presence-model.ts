@@ -1,8 +1,8 @@
-import { booleanToSqlBit } from '../../utils/conversion-utils';
-import { EtudiantEnum } from '../users/etudiant-model';
-import { UtilisateurEnum } from '../users/user-model';
-import { CoursEnum } from './course-model';
-import { StudClassEnum } from './student-class-model';
+import { booleanToSqlBit } from "../../utils/conversion-utils";
+import { EtudiantEnum } from "../users/etudiant-model";
+import { UtilisateurEnum } from "../users/user-model";
+import { CoursEnum } from "./course-model";
+import { StudClassEnum } from "./student-class-model";
 
 export interface PresenceModel {
   id_presence: number;
@@ -13,13 +13,13 @@ export interface PresenceModel {
 }
 
 export enum PresenceEnum {
-  NOM_TABLE = 'Presence',
-  PK = 'id_presence',
-  RETARD = 'en_retard',
-  ABSENT = 'est_absent',
-  FK_COURS = 'id_cours',
-  FK_ETUDIANT = 'id_etudiant',
-  SIGNE = 'a_signe',
+  NOM_TABLE = "Presence",
+  PK = "id_presence",
+  RETARD = "en_retard",
+  ABSENT = "est_absent",
+  FK_COURS = "id_cours",
+  FK_ETUDIANT = "id_etudiant",
+  SIGNE = "a_signe",
 }
 
 export interface PresencesBodyRequest {
@@ -60,6 +60,23 @@ export const queryUpdatePresencePUT = (
   ${PresenceEnum.RETARD} = ${isLate}, 
   ${PresenceEnum.SIGNE} = ${hasSigned}
   WHERE ${PresenceEnum.NOM_TABLE}.${PresenceEnum.FK_COURS} = ${idCourse} AND ${PresenceEnum.NOM_TABLE}.${PresenceEnum.FK_ETUDIANT} = ${studentPresence.idStudent}`;
+  return query;
+};
+
+export const queryUpdatePresencePATCH = (
+  idPresence: number,
+  studentPresence: StudentPresence
+) => {
+  const isLate = booleanToSqlBit(studentPresence.isLate);
+  const isAbsent = booleanToSqlBit(studentPresence.isAbsent);
+  const hasSigned = booleanToSqlBit(studentPresence.hasSigned);
+  const query = `
+  UPDATE Presence 
+  SET
+  ${PresenceEnum.ABSENT} = ${isAbsent}, 
+  ${PresenceEnum.RETARD} = ${isLate}, 
+  ${PresenceEnum.SIGNE} = ${hasSigned}
+  WHERE ${PresenceEnum.NOM_TABLE}.${PresenceEnum.PK} = ${idPresence}`;
   return query;
 };
 

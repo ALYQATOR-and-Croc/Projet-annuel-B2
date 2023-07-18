@@ -43,7 +43,7 @@ router.delete(
 );
 
 router.patch(
-  '/course/presences/',
+  '/course/presence/:idPresence/',
   isAuthenticated,
   isCourseManager,
   updatePresencesPatch
