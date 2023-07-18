@@ -32,8 +32,7 @@ const ApInfraChange = () => {
 
   const requestCampus = () => {
     infraService.campusList()
-        .then(res => {
-            console.log(res);  
+        .then(res => {  
             setCampusList(res.data);
         })
         .catch(error => {
@@ -46,7 +45,6 @@ const ApInfraChange = () => {
   const requestSchools = () => {
     infraService.schoolsList()
         .then(res => {
-            console.log(res);  
             setSchoolsList(res.data);
         })
         .catch(error => {
@@ -59,7 +57,6 @@ const ApInfraChange = () => {
   const requestRooms = () => {
     infraService.roomsList()
         .then(res => {
-            console.log(res);  
             setRoomsList(res.data);
         })
         .catch(error => {
