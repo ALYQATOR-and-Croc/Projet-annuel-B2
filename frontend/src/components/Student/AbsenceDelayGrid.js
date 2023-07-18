@@ -18,7 +18,7 @@ export default function AbsenceDelayGrid(props) {
             spacing={4}>
                 {(data.length > 0) ? data.map((absenceDelay)=>(
                   <Grid item key={absenceDelay.id} style={{height:200}}>
-                    <AbsenceDelayCard infos={absenceDelay} type={props.type}/>
+                    <AbsenceDelayCard infos={absenceDelay} type={props.type} auth={props.auth}/>
                   </Grid>
                 )) : 
                 <div><h3 className='noAbsenceDelay'>Aucun(e) {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelayIcon'/></div> 

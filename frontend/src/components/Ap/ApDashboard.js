@@ -60,8 +60,8 @@ const Dashboard = () => {
       <DashboardItem to="/ap/user">
         <PersonIcon></PersonIcon><Title>
             Utilisateur</Title>
-             <Text>Permet d'ajouter des administrateurs, des étudiants, des attachés de promotion,
-                 des responsables pédagogiques, des reprographes et des intervenants.
+             <Text>Permet d'ajouter ou modifier des administrateurs, étudiants, attachés de promotion,
+                   responsables pédagogiques, reprographes et intervenants.
              </Text>
       </DashboardItem>
       <DashboardItem to="/ap/infra">
@@ -73,13 +73,13 @@ const Dashboard = () => {
       <DashboardItem to="/ap/educ">
       <SchoolRoundedIcon></SchoolRoundedIcon><Title>
             Éducation</Title>
-             <Text> Permet d'ajouter une promotion, une matière, une classe ou un cours.
+             <Text> Permet d'ajouter ou modifier une promotion, une matière, une classe ou un cours.
              </Text>
       </DashboardItem>
       <DashboardItem to="/ap/absence">
       <AccessTimeIcon></AccessTimeIcon><Title>
             Absences/Retard</Title>
-             <Text>Permet de valider ou non, un justificatif envoyé pour une absence.
+             <Text>Permet de retirer les absences ou retards d'un élève lorsqu'ils l'ont justifié.
              </Text>
       </DashboardItem>
     </DashboardContainer>
