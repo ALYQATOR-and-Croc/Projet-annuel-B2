@@ -18,11 +18,11 @@ export default function AbsenceDelayGrid(props) {
             spacing={4}>
                 {(data.length > 0) ? data.map((absenceDelay)=>(
                   <Grid item key={absenceDelay.id} style={{height:200}}>
-                    <AbsenceDelayCard infos={absenceDelay} mailap={props.mailap} type={props.type}/>
+                    <AbsenceDelayCard infos={absenceDelay} type={props.type} auth={props.auth}/>
                   </Grid>
                 )) : 
-                ((props.type === 'retard') ? <div><h3 className='noAbsenceDelay'>Aucun {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelay'/></div> 
-                : <div><h3 className='noAbsenceDelay'>Aucune {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelayIcon'/></div>) }
+                <div><h3 className='noAbsenceDelay'>Aucun(e) {props.type}</h3><HowToRegIcon fontSize='large' className='noAbsenceDelayIcon'/></div> 
+                }
             </Grid>
         </Box>
     </div>

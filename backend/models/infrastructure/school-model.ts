@@ -5,7 +5,7 @@ export enum SchoolEnum {
   DOMAINE = 'domaine_ecole',
 }
 
-export interface SchoolPOST {
+export interface SchoolType {
   libelleEcole: string;
   domaineEcole: string;
 }

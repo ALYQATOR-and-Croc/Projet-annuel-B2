@@ -15,7 +15,6 @@ import { useNavigate } from 'react-router-dom';
 import { accountService } from '../_services/account.service';
 import { Alert } from '@mui/material';
 
-
 function Login() {
 
     const navigate = useNavigate();
@@ -40,7 +39,31 @@ function Login() {
         accountService.login(credentials)
             .then(res => {
                 accountService.saveToken(res.data.token);
-                navigate('/student');  
+                let redirect = '';
+                switch (accountService.getUserRole()) {
+                    case 'ETUDIANT':
+                        redirect = '/student';
+                        break;
+                    case 'INTERVENANT':
+                        redirect = '/teacher';
+                        break;
+                    case 'RESPONSABLE_PEDA':
+                        redirect = '/rp';
+                        break;
+                    case 'ATTACHE_PROMO':
+                        redirect = '/ap';
+                        break;
+                    case 'ADMINISTRATEUR':
+                        redirect = '/admin';
+                        break;
+                    case 'REPROGRAPHE':
+                        redirect = '/repro';
+                        break;
+                    default:
+                        redirect ='/login'
+                        break;
+                }
+                navigate(redirect);  
             })
             .catch(error => {
                 setIdInvalides(true);

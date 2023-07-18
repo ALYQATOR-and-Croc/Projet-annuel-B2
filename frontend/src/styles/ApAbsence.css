@@ -1,0 +1,15 @@
+.ApAbsence{
+    width: 100%;
+    display: flex;
+    margin-top: 2%;
+}
+.ApAbsenceStudent{
+    margin-left: 4%;
+    margin-right: 4%;
+    width: 28%;
+}
+.ApAbsences, .ApDelays{
+    margin-left: 4%;
+    margin-right: 4%;
+    width: 28%;
+}

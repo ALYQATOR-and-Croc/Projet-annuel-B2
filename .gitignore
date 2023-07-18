@@ -9,6 +9,13 @@ backend/dist/controllers/token-generator-dev.js.map
 # Build
 backend/dist/config.json
 backend/dist/CONFIG-FILES
+backend/dist/controllers
+backend/dist/middleware
+backend/dist/Regex
+backend/dist/models
+backend/dist/routes
+backend/dist/bin
+backend/dist/utils
 
 # FRONTEND
 frontend/node_modules/

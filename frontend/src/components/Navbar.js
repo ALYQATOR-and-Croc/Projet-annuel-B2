@@ -29,17 +29,17 @@ function ResponsiveAppBar(props) {
       pages = [{title:'Dashboard', path:'/teacher/dashboard'}, {title:'Planning', path:'/teacher/planning'}, {title:'Emarger', path:'/teacher/register-students'}];
       break;
     case 'ap':
-      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+      pages = [{title:'Dashboard', path:'/ap/dashboard'}, {title:'Utilisateur', path:'/ap/user'}, {title:'Infrastructure', path:'/ap/infra'}, {title:'Education', path:'/ap/educ'}, {title:'Absences/Retards', path:'/ap/absence'}];
       break;
-    case 'rp':
-      pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
+    case 'repro':
+      pages = [{title:'Dashboard', path:'/repro/dashboard'}, {title:'Appels', path:'/repro/appel'}];
       break;
     default:
       pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
       break;
   }
 
-const fullname = "Luigi AUBRY-POUGET"; // a remplacer par un appel API
+  const fullname = accountService.getUserFirstname() + ' ' + accountService.getUserLastname().toUpperCase();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 

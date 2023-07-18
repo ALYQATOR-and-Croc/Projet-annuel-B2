@@ -1,3 +1,11 @@
+import { query } from 'express';
+import { AttachePromotionEnum } from './attache-promotion-model';
+import { EtudiantEnum } from './etudiant-model';
+import { IntervenantEnum } from './intervenant';
+import { ReprographeEnum } from './reprographe-model';
+import { ResponsablePedagogiqueEnum } from './resp-pedago-model';
+import { UtilisateurPagination } from './roles-model';
+
 export enum UtilisateurEnum {
   NOM_TABLE = 'Utilisateur',
   PK = 'id_utilisateur',
@@ -7,6 +15,13 @@ export enum UtilisateurEnum {
   MDP = 'motdepasse',
   FK_ROLE_UTILISATEUR = 'id_role_utilisateur',
 }
+
+export const utilisateurColumns = {
+  NOM: 'nom',
+  PRENOM: 'prenom',
+  EMAIL: 'adresse_email',
+  PK: 'id_utilisateur',
+};
 
 export interface UtilisateurPOST {
   nomUtilisateur: string;
@@ -23,7 +38,7 @@ export type FonctionType =
   | 'ATTACHE_PROMO'
   | 'RESPONSABLE_PEDA'
   | 'REPROGRAPHE'
-  | 'ADMIN';
+  | 'ADMINISTRATEUR';
 
 export enum FonctionEnum {
   ETUDIANT = 'ETUDIANT',
@@ -31,5 +46,235 @@ export enum FonctionEnum {
   ATTACHE_PROMO = 'ATTACHE_PROMO',
   RESPONSABLE_PEDA = 'RESPONSABLE_PEDA',
   REPROGRAPHE = 'REPROGRAPHE',
-  ADMIN = 'ADMIN',
+  ADMIN = 'ADMINISTRATEUR',
+}
+
+export const queryPaginatedEtudiantGET = (
+  page: number,
+  rowsNumber: number,
+  orderBy: UtilisateurPagination
+) => {
+  const query = `
+        DECLARE @PageNumber AS INT
+        DECLARE @PageSize AS INT
+        SET @PageNumber=${page}
+        SET @PageSize=${rowsNumber}
+        
+        SELECT
+        E.${EtudiantEnum.PK},
+        U.${UtilisateurEnum.PK},
+        U.${UtilisateurEnum.PRENOM},
+        U.${UtilisateurEnum.NOM},
+        U.${UtilisateurEnum.EMAIL}
+        FROM ${EtudiantEnum.NOM_TABLE} E
+        LEFT JOIN ${UtilisateurEnum.NOM_TABLE} AS U ON E.${EtudiantEnum.FK_UTILISATEUR} = U.${UtilisateurEnum.PK}
+        ORDER BY U.${utilisateurColumns[orderBy]} ASC
+        OFFSET (@PageNumber - 1) * @PageSize ROWS
+        FETCH NEXT @PageSize ROWS ONLY;
+        ;`;
+  return query;
+};
+
+export const queryPaginatedReprographeGET = (
+  page: number,
+  rowsNumber: number,
+  orderBy: UtilisateurPagination
+) => {
+  const query = `
+
+  DECLARE @PageNumber AS INT
+  DECLARE @PageSize AS INT
+  SET @PageNumber=${page}
+  SET @PageSize=${rowsNumber}
+  
+  SELECT 
+  R.${ReprographeEnum.PK},
+  U.${UtilisateurEnum.PK},
+  U.${UtilisateurEnum.PRENOM},
+  U.${UtilisateurEnum.NOM},
+  U.${UtilisateurEnum.EMAIL}
+  FROM ${ReprographeEnum.NOM_TABLE} R
+  LEFT JOIN ${UtilisateurEnum.NOM_TABLE} AS U ON R.${ReprographeEnum.FK_UTILISATEUR} = U.${UtilisateurEnum.PK}
+  ORDER BY U.${utilisateurColumns[orderBy]} ASC
+  OFFSET (@PageNumber - 1) * @PageSize ROWS
+  FETCH NEXT @PageSize ROWS ONLY;
+  ;`;
+  return query;
+};
+
+export const queryPaginatedAttachePromoGET = (
+  page: number,
+  rowsNumber: number,
+  orderBy: UtilisateurPagination
+) => {
+  const query = `
+
+  DECLARE @PageNumber AS INT
+  DECLARE @PageSize AS INT
+  SET @PageNumber=${page}
+  SET @PageSize=${rowsNumber}
+  
+  SELECT 
+  AP.${AttachePromotionEnum.PK},
+  U.${UtilisateurEnum.PK},
+  U.${UtilisateurEnum.PRENOM},
+  U.${UtilisateurEnum.NOM},
+  U.${UtilisateurEnum.EMAIL}
+  FROM ${AttachePromotionEnum.NOM_TABLE} AP
+  LEFT JOIN ${UtilisateurEnum.NOM_TABLE} AS U ON AP.${AttachePromotionEnum.FK_UTILISATEUR} = U.${UtilisateurEnum.PK}
+  ORDER BY U.${utilisateurColumns[orderBy]} ASC
+  OFFSET (@PageNumber - 1) * @PageSize ROWS
+  FETCH NEXT @PageSize ROWS ONLY;
+  ;`;
+  return query;
+};
+
+export const queryPaginatedIntervenantPromoGET = (
+  page: number,
+  rowsNumber: number,
+  orderBy: UtilisateurPagination
+) => {
+  const query = `
+
+  DECLARE @PageNumber AS INT
+  DECLARE @PageSize AS INT
+  SET @PageNumber=${page}
+  SET @PageSize=${rowsNumber}
+  
+  SELECT 
+  I.${IntervenantEnum.PK},
+  U.${UtilisateurEnum.PK},
+  U.${UtilisateurEnum.PRENOM},
+  U.${UtilisateurEnum.NOM},
+  U.${UtilisateurEnum.EMAIL}
+  FROM ${IntervenantEnum.NOM_TABLE} I
+  LEFT JOIN ${UtilisateurEnum.NOM_TABLE} AS U ON I.${IntervenantEnum.FK_UTILISATEUR} = U.${UtilisateurEnum.PK}
+  ORDER BY U.${utilisateurColumns[orderBy]} ASC
+  OFFSET (@PageNumber - 1) * @PageSize ROWS
+  FETCH NEXT @PageSize ROWS ONLY;
+  `;
+  return query;
+};
+
+export const queryPaginatedResponsablePedagogiqueGET = (
+  page: number,
+  rowsNumber: number,
+  orderBy: UtilisateurPagination
+) => {
+  const query = `
+  DECLARE @PageNumber AS INT
+  DECLARE @PageSize AS INT
+  SET @PageNumber=${page}
+  SET @PageSize=${rowsNumber}
+  
+  SELECT 
+  RP.${ResponsablePedagogiqueEnum.PK},
+  U.${UtilisateurEnum.PK},
+  U.${UtilisateurEnum.PRENOM},
+  U.${UtilisateurEnum.NOM},
+  U.${UtilisateurEnum.EMAIL}
+  FROM ${ResponsablePedagogiqueEnum.NOM_TABLE} RP
+  LEFT JOIN ${UtilisateurEnum.NOM_TABLE} AS U ON RP.${ResponsablePedagogiqueEnum.FK_UTILISATEUR} = U.${UtilisateurEnum.PK}
+  ORDER BY U.${utilisateurColumns[orderBy]} ASC
+  OFFSET (@PageNumber - 1) * @PageSize ROWS
+  FETCH NEXT @PageSize ROWS ONLY;
+  `;
+  return query;
+};
+
+export const queryDeleteUserDELETE = (idUser: number, fonction : FonctionType) => {
+  
+  const query = `
+  DELETE FROM ${UtilisateurEnum.NOM_TABLE}
+  WHERE ${UtilisateurEnum.PK} = ${idUser};
+  ${queryDeleteFonctionUserDELETE(idUser, fonction)}
+  `;
+  return query;
+}
+
+const queryDeleteFonctionUserDELETE = (idUser: number, fonction: FonctionType) => {
+  switch (fonction) {
+    case FonctionEnum.ETUDIANT:
+      return `
+      DELETE FROM ${EtudiantEnum.NOM_TABLE}
+      WHERE ${EtudiantEnum.FK_UTILISATEUR} = ${idUser}
+      `;
+    case FonctionEnum.INTERVENANT:
+      return `
+      DELETE FROM ${IntervenantEnum.NOM_TABLE}
+      WHERE ${IntervenantEnum.FK_UTILISATEUR} = ${idUser}
+      `;
+    case FonctionEnum.ATTACHE_PROMO:
+      return `
+      DELETE FROM ${AttachePromotionEnum.NOM_TABLE}
+      WHERE ${AttachePromotionEnum.FK_UTILISATEUR} = ${idUser}
+      `;
+    case FonctionEnum.RESPONSABLE_PEDA:
+      return `
+      DELETE FROM ${ResponsablePedagogiqueEnum.NOM_TABLE}
+      WHERE ${ResponsablePedagogiqueEnum.FK_UTILISATEUR} = ${idUser}
+      `;
+    case FonctionEnum.REPROGRAPHE:
+      return `
+      DELETE FROM ${ReprographeEnum.NOM_TABLE}
+      WHERE ${ReprographeEnum.FK_UTILISATEUR} = ${idUser}
+      `;
+    default:
+      return '';
+  }
+}
+
+const queryPatchUserPATCH = (
+  idUser: number,
+  nomUtilisateur: string,
+  prenomUtilisateur: string,
+  emailUtilisateur: string,
+  mdp: string,
+  idRole: string,
+  fonction: FonctionType,
+  currentFonction: FonctionType
+) => {
+  const query = `
+  UPDATE ${UtilisateurEnum.NOM_TABLE}
+  SET ${UtilisateurEnum.NOM} = '${nomUtilisateur}',
+  ${UtilisateurEnum.PRENOM} = '${prenomUtilisateur}',
+  ${UtilisateurEnum.EMAIL} = '${emailUtilisateur}',
+  ${UtilisateurEnum.MDP} = '${mdp}',
+  ${UtilisateurEnum.FK_ROLE_UTILISATEUR} = ${idRole}
+  WHERE ${UtilisateurEnum.PK} = ${idUser};
+  ${queryPatchFonctionUserCREATE(idUser, fonction)}
+  `;
+  return query;
+}
+
+const queryPatchFonctionUserCREATE = (idUser: number, fonction: FonctionType) => {
+  switch (fonction) {
+    case FonctionEnum.ETUDIANT:
+      return `
+      INSERT INTO ${EtudiantEnum.NOM_TABLE} (${EtudiantEnum.FK_UTILISATEUR})
+      VALUES (${idUser})
+      `;
+    case FonctionEnum.INTERVENANT:
+      return `
+      INSERT INTO ${IntervenantEnum.NOM_TABLE} (${IntervenantEnum.FK_UTILISATEUR})
+      VALUES (${idUser})
+      `;
+    case FonctionEnum.ATTACHE_PROMO:
+      return `
+      INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR})
+      VALUES (${idUser})
+      `;
+    case FonctionEnum.RESPONSABLE_PEDA:
+      return `
+      INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR})
+      VALUES (${idUser})
+      `;
+    case FonctionEnum.REPROGRAPHE:
+      return `
+      INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR})
+      VALUES (${idUser})
+      `;
+    default:
+      return '';
+  }
 }
