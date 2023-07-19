@@ -12,6 +12,7 @@ const ApUserAdd = () => {
     idRole: '',
     fonction: '',
     idClasse: '',
+    libelleSpecialite: ''
   });
   const [getClassesAndRoles, setGetClassesAndRoles] = useState(false);
   const [classes, setClasses] = useState([]);
@@ -74,9 +75,11 @@ const ApUserAdd = () => {
       console.log(formData);
       saveUser(formData);
       setFormData({ ...formData, idClasse: ""});
+      window.location.reload(false); // changer ?
     } else {
       console.log(formData);
       saveUser(formData);
+      window.location.reload(false); // changer ?
     }
   };
 
