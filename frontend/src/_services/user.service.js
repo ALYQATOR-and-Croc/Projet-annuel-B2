@@ -7,6 +7,18 @@ let rolesList = () => {
     );
 }
 
+let studentsList = () => {
+    return Axios.get(`/roles/etudiants/page/1/rows/10000/order/NOM/`, 
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+// let adminsList = () => {
+//     return Axios.get(`/roles/etudiants/page/1/rows/10000/order/NOM/`, 
+//     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+//     );
+// }
+
 let classesList = () => {
     return Axios.get(`/classes/`, 
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
@@ -20,5 +32,5 @@ let saveUser = (userData) => {
 }
 
 export const userService = {
-    rolesList, classesList, saveUser
+    rolesList, classesList, saveUser, studentsList
 }

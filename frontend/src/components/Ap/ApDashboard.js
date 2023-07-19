@@ -12,8 +12,8 @@ const DashboardContainer = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  height: 85vh; /* Occupe la hauteur complète de la fenêtre */
-  width: 95vw; /* Occupe la largeur complète de la fenêtre */
+  height: 80vh; 
+  width: inherit;
   padding: 30px;
 `;
 
@@ -60,8 +60,7 @@ const Dashboard = () => {
       <DashboardItem to="/ap/user">
         <PersonIcon></PersonIcon><Title>
             Utilisateur</Title>
-             <Text>Permet d'ajouter ou modifier des administrateurs, étudiants, attachés de promotion,
-                   responsables pédagogiques, reprographes et intervenants.
+             <Text>Permet d'ajouter ou modifier des utilisateurs (étudiants, intervenants...)
              </Text>
       </DashboardItem>
       <DashboardItem to="/ap/infra">
