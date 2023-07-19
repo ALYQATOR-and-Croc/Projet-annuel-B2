@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { MenuItem, Select, TextField, Button, InputLabel, FormControl } from '@mui/material';
-import { educationService } from '../../_services/education.service';
-import { infraService } from '../../_services/infra.service';
+import { calendarService } from '../_services/calendar.service';
+import { educationService } from '../_services/education.service';
+import { infraService } from '../_services/infra.service';
 
-const ApEduc = () => {
+const AdminEducChange = () => {
     const formObjects = [{ id: 1, nom: 'Cours' },{ id: 2, nom: 'Promotion' },{ id: 3 , nom: 'Matière' },{ id: 4, nom: 'Classe' }];
   
     const [selectedFormObject, setSelectedFormObject] = useState('');
@@ -101,6 +102,7 @@ const ApEduc = () => {
             })
     };
 
+    const [idPromo, setIdPromo] = useState('');
     const [promotionsList, setPromotionsList] = useState([]);
     const requestPromotions = () => {
         educationService.promotionsList()
@@ -112,6 +114,7 @@ const ApEduc = () => {
             })
     };
 
+    const [idMatiere, setIdMatiere] = useState('');
     const [matieresList, setMatieresList] = useState([]);
     const requestMatieres = () => {
         educationService.matieresList()
@@ -123,6 +126,7 @@ const ApEduc = () => {
             })
     };
 
+    const [idClasse, setIdClasse] = useState('');
     const [classesList, setClassesList] = useState([]);
     const requestClasses = () => {
         educationService.classesList()
@@ -145,6 +149,18 @@ const ApEduc = () => {
           })
     };
 
+    const [idCourse, setIdCourse] = useState('');
+    const [coursesList, setCoursesList] = useState([]);
+    const requestCourses = () => {
+        calendarService.all()
+            .then(res => {
+                setCoursesList(res.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    };
+
     const [campusList, setCampusList] = useState([]);
     const requestCampus = () => {
         infraService.campusList()
@@ -165,6 +181,7 @@ const ApEduc = () => {
         requestPromotions();
         requestMatieres();
         requestTeachers();
+        requestCourses();
         requestRooms();
         requestClasses();
         setGetLists(true);
@@ -173,6 +190,63 @@ const ApEduc = () => {
     const handleChangeObject = (e) => {
         setSelectedFormObject(e.target.value)
     };
+
+    const handleChangeMatiereId = (e) => {
+        setIdMatiere(e.target.value);
+        let selectedMatiere = matieresList.find(matiere=>matiere.id_matiere === e.target.value);
+        setFormDataMatiere({
+            libelleMatiere : selectedMatiere.libelle_matiere,
+            idEcole : selectedMatiere.id_ecole,
+            idIntervenant : selectedMatiere.id_intervenant 
+        });
+      };
+    
+      const handleChangeClasseId = (e) => {
+        setIdClasse(e.target.value);
+        let selectedClasse = classesList.find(classe=>classe.id_classe === e.target.value);
+        setFormDataClasse({
+            libelleClasse : selectedClasse.libelle_classe,
+            idPromotion : selectedClasse.id_promotion,
+            idCampus : selectedClasse.id_campus
+        });
+      };
+    
+      const handleChangePromoId = (e) => {
+        setIdPromo(e.target.value);
+        let selectedPromo = promotionsList.find(promo=>promo.id_promotion === e.target.value);
+        setFormDataPromo({
+            libellePromotion : selectedPromo.libelle_promotion,
+            anneePromotion : selectedPromo.annee_promotion,
+            anneePromotiontemp : selectedPromo.annee_promotion.substring(0, 10),
+            domainePromotion : selectedPromo.domaine_promotion,
+            specialitePromotion : selectedPromo.specialite_promotion,
+            diplomePromotion : selectedPromo.diplome_promotion,
+            niveauEtude : selectedPromo.niveau_etude,
+            idEcole : selectedPromo.id_ecole
+        });
+      };
+
+      const handleChangeCourseId = (e) => {
+        setIdCourse(e.target.value);
+        let selectedCourse = coursesList.find(course=>course.id_cours === e.target.value);
+        console.log(selectedCourse);
+        setFormDataCourse({
+            courseLabel: selectedCourse.libelle_cours,
+            courseDate: selectedCourse.date_cours,
+            courseDatetemp: selectedCourse.date_cours.substring(0, 10),
+            startCourse: selectedCourse.heure_debut_cours,
+            startCoursetemp: selectedCourse.heure_debut_cours.substring(11, 16),
+            endCourse: selectedCourse.heure_fin_cours,
+            endCoursetemp: selectedCourse.heure_fin_cours.substring(11, 16),
+            idTeacher: selectedCourse.id_intervenant,
+            idRespPedago: selectedCourse.id_responsable_pedagogique,
+            idAttachePromotion: selectedCourse.id_attache_de_promotion,
+            idReprographe: selectedCourse.id_reprographe,
+            idClassRoom: selectedCourse.id_salle,
+            idCourseSubject: selectedCourse.id_matiere,
+            idClass: selectedCourse.id_classe
+        });
+      };
 
   const handleChange = (e) => {
     let newValue = '';
@@ -234,58 +308,170 @@ const ApEduc = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmitChange = (e) => {
     e.preventDefault();
     switch (selectedFormObject) {
-      case 'Classe':
-        console.log(formDataClasse);
-        educationService.saveClasse(formDataClasse)
-        .then(res => {
-            window.location.reload(false); 
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        break;
-      case 'Matière':
-        console.log(formDataMatiere);
-        educationService.saveMatiere(formDataMatiere)
-        .then(res => {
-            window.location.reload(false); 
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        break;
-      case 'Promotion':
-        educationService.savePromo(formDataPromo)
-        .then(res => {
-            window.location.reload(false); 
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        break;
-      case 'Cours':
-        console.log(formDataCourse);
-        educationService.saveCourse(formDataCourse)
-        .then(res => {
-            console.log(res);  
-            window.location.reload(false); 
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        break;
-      default:
-        break;
-    }
-  };
+        case 'Classe':
+          console.log(idClasse, formDataClasse);
+          educationService.changeClasse(idClasse, formDataClasse)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestClasses();
+          break;
+        case 'Cours':
+          console.log(idCourse, formDataCourse);
+          educationService.changeCourse(idCourse, formDataCourse)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestCourses();
+          break;
+        case 'Matière':
+          console.log(idMatiere, formDataMatiere);
+          educationService.changeMatiere(idMatiere, formDataMatiere)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestMatieres();
+          break;
+        case 'Promotion':
+            console.log(idPromo, formDataPromo);
+            educationService.changePromo(idPromo, formDataPromo)
+            .then(res => {
+                console.log(res);  
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            requestPromotions();
+            break;
+        default:
+          break;
+      }
+  }
+
+  const handleSubmitDelete = (e) => {
+    e.preventDefault();
+    switch (selectedFormObject) {
+        case 'Classe':
+          console.log(idClasse);
+          educationService.removeClasse(idClasse)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestClasses();
+          setFormDataClasse({
+            libelleClasse : '',
+            idPromotion : '',
+            idCampus : ''
+          });
+          setIdClasse('');
+          break;
+        case 'Cours':
+          console.log(idCourse);
+          educationService.removeCourse(idCourse)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestCourses();
+          setFormDataCourse({
+            courseLabel: '',
+            courseDate: '',
+            courseDatetemp: '',
+            startCourse: '',
+            startCoursetemp: '',
+            endCourse: '',
+            endCoursetemp: '',
+            idTeacher: '',
+            idRespPedago: '',
+            idAttachePromotion: '',
+            idReprographe: '',
+            idClassRoom: '',
+            idCourseSubject: '',
+            idClass: ''
+          });
+          setIdCourse('');
+          break;
+        case 'Matière':
+          console.log(idMatiere);
+          educationService.removeMatiere(idMatiere)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestMatieres();
+          setFormDataMatiere({
+            libelleMatiere : '',
+            idEcole : '',
+            idIntervenant : ''
+          });
+          setIdMatiere('');
+          break;
+        case 'Promotion':
+            console.log(idPromo);
+            educationService.removePromo(idPromo)
+            .then(res => {
+                console.log(res);  
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            requestPromotions();
+            setFormDataPromo({
+                libellePromotion : '',
+                anneePromotion : '',
+                anneePromotiontemp : '',
+                domainePromotion : '',
+                specialitePromotion : '',
+                diplomePromotion : '',
+                niveauEtude : '',
+                idEcole : ''
+            });
+            setIdPromo('');
+            break;
+        default:
+          break;
+      }
+  }
+
 
 const Classe = () => {
   if (selectedFormObject === 'Classe') {
     return (
       <div>
+         <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Choisissez une classe</InputLabel>
+          <Select
+            label="Choisissez une classe"
+            name="idClasse"
+            value={idClasse}
+            onChange={handleChangeClasseId}
+          >
+            {classesList.map((items) => (
+              <MenuItem key={items.id_classe} value={items.id_classe}>
+                {items.libelle_classe}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl> 
         <TextField
           label="Libellé Classe"
           name="libelleClasse"
@@ -339,6 +525,21 @@ const Classe = () => {
       if (selectedFormObject === 'Matière') {
         return (
           <div>
+            <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Choisissez une matière</InputLabel>
+          <Select
+            label="Choisissez une matière"
+            name="idMatiere"
+            value={idMatiere}
+            onChange={handleChangeMatiereId}
+          >
+            {matieresList.map((items) => (
+              <MenuItem key={items.id_matiere} value={items.id_matiere}>
+                {items.libelle_matiere}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>   
             <TextField
           label="Libellé Matière"
           name="libelleMatiere"
@@ -392,6 +593,21 @@ const Classe = () => {
     if (selectedFormObject === 'Promotion') {
       return (
         <div>
+        <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Choisissez une promotion</InputLabel>
+          <Select
+            label="Choisissez une promotion"
+            name="idPromo"
+            value={idPromo}
+            onChange={handleChangePromoId}
+          >
+            {promotionsList.map((items) => (
+              <MenuItem key={items.id_promotion} value={items.id_promotion}>
+                {items.libelle_promotion}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>   
             <TextField
           label="Libellé Promotion"
           name="libellePromotion"
@@ -482,6 +698,21 @@ const Cours = () => {
     if (selectedFormObject === 'Cours') {
       return (
         <div>
+            <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Choisissez un cours</InputLabel>
+          <Select
+            label="Choisissez un cours"
+            name="idCourse"
+            value={idCourse}
+            onChange={handleChangeCourseId}
+          >
+            {coursesList.map((items) => (
+              <MenuItem key={items.id_cours} value={items.id_cours}>
+                {items.id_cours} {items.libelle_matiere} ({items.libelle_classe}) - {new Date(items.heure_debut_cours).toLocaleString("fr-Fr", { timeZone: 'UTC' })}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl> 
             <TextField
           label="Libellé du cours"
           name="courseLabel"
@@ -668,12 +899,12 @@ const Cours = () => {
   return (
     <div className='formEntier'>
      <div className='formCase'></div>
-    <form onSubmit={handleSubmit} style={{ marginRight: '60px', marginLeft: '60px', marginTop:'40px'}}>
+    <form style={{ marginRight: '60px', marginLeft: '60px', marginTop:'40px'}}>
      
         <FormControl fullWidth style={{ marginBottom: '20px' }}>
-          <InputLabel>Création</InputLabel>
+          <InputLabel>Modification</InputLabel>
           <Select
-            label="Création"
+            label="Modification"
             name="libelleCreation"
             value={selectedFormObject}
             onChange={handleChangeObject}
@@ -687,19 +918,16 @@ const Cours = () => {
           </Select>
         </FormControl>
       
-        {/* {Ecole()}
-        {Campus()} */}
         {Matiere()}
         {Classe()}
         {Promotion()}
         {Cours()}
-      {(selectedFormObject !== '')  ?           
-      <Button type="submit" variant="contained" color="primary" style={{ marginBottom: '20px' }}>
-        Ajouter
-      </Button> : null}
+        {(selectedFormObject !== '') && (idClasse !== '' || idCourse !== '' || idMatiere !== '' || idPromo !== '') ? 
+        <div><Button type="button" variant="contained" color="primary" style={{marginRight:50}} onClick={handleSubmitChange}>Enregistrer</Button>
+        <Button type="button" variant="contained" color="error" style={{marginLeft:50}} onClick={handleSubmitDelete}>Supprimer</Button></div> : null}
     </form>
     </div>
   );
 };
 
-export default ApEduc;
+export default AdminEducChange;

@@ -4,13 +4,12 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
-import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';
 
 const DashboardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   height: 80vh; 
   width: inherit;
@@ -18,9 +17,11 @@ const DashboardContainer = styled.div`
 `;
 
 const DashboardItem = styled(Link)`
-  flex-basis: calc(50% - 20px);
+  flex-basis: calc(40% - 20px);
+  margin-left:20px;
+  margin-right:20px;
   color: white;
-  height: calc(50% - 20px);
+  height: calc(40% - 20px);
   display: flex;
   flex-direction: column; 
   justify-content: center;
@@ -61,12 +62,6 @@ const Dashboard = () => {
         <PersonIcon></PersonIcon><Title>
             Utilisateur</Title>
              <Text>Permet d'ajouter ou modifier des utilisateurs (étudiants, intervenants...)
-             </Text>
-      </DashboardItem>
-      <DashboardItem to="/ap/infra">
-      <ApartmentIcon></ApartmentIcon><Title>
-            Infrastructure</Title>
-             <Text>Permet d'ajouter ou modifier une salle, un campus ou une école. 
              </Text>
       </DashboardItem>
       <DashboardItem to="/ap/educ">

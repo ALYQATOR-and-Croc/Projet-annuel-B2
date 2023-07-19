@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import '../../styles/ApAbsence.css';
-import AbsenceDelayGrid from '../Student/AbsenceDelayGrid';
+import '../styles/ApAbsence.css';
+import AbsenceDelayGrid from './Student/AbsenceDelayGrid';
 import { Divider } from '@mui/material';
 import AccessAlarmIcon from '@mui/icons-material/AccessAlarm';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import { educationService } from '../../_services/education.service';
-import { courseService } from '../../_services/course.service';
+import { educationService } from '../_services/education.service';
+import { courseService } from '../_services/course.service';
 import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 
-export default function ApAbsence(props) {
+export default function AdminAbsence(props) {
     const [absences, setAbsences] = useState([]);
     const [delays, setDelays] = useState([]);
     const [getAbsenceDelays, setGetAbsenceDelays] = useState(true);

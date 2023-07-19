@@ -5,13 +5,14 @@ import '../styles/ChangeMdp.css'
 
 export default function ChangePassword(props) {
   const [success, setSuccess] = useState(false);
-  const [newPassword, setNewPassword] = useState({
-    newPassword: '',
-    newPasswordConfirm: ''
+  const [pswdData, setPswdData] = useState({
+    idUser: props.idUser,
+    formerPswd: '',
+    newPswd: ''
   });
 
   const handleChange = (e) => {
-    setNewPassword((prevData) => ({
+    setPswdData((prevData) => ({
       ...prevData,
       [e.target.name]: e.target.value
     }));
@@ -19,16 +20,14 @@ export default function ChangePassword(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // accountService.changePassword(props.idUser, newPassword)
-    //     .then(res => {
-    //         console.log(res);
-    //     })
-    //     .catch(error => {
-    //         console.log(error);
-    //     })
-    
-    //temp
-    if (newPassword.newPassword !== '' && newPassword.newPasswordConfirm !== '') {
+    accountService.changePassword(pswdData)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    if (pswdData.formerPswd !== '' && pswdData.newPswd !== '') {
       setSuccess(true); 
     }
   }
@@ -41,19 +40,19 @@ export default function ChangePassword(props) {
       <h1 className='absencesTitle'>Saisissez un nouveau mot de passe</h1><br></br>
       <form onSubmit={handleSubmit}>
       <TextField
-          name="newPassword"
-          label="Nouveau mot de passe"
+          name="formerPswd"
+          label="Mot de passe actuel"
           type="password"
-          value={newPassword.newPassword}
+          value={pswdData.formerPswd}
           onChange={handleChange}
           style={{ marginRight: '20px', backgroundColor: 'white' }}
           required
         />
       <TextField
-          name="newPasswordConfirm"
-          label="Confirmation"
+          name="newPswd"
+          label="Nouveau mot de passe"
           type="password"
-          value={newPassword.newPasswordConfirm}
+          value={pswdData.newPswd}
           onChange={handleChange}
           style={{ marginRight: '20px', backgroundColor: 'white' }}
           required

@@ -9,6 +9,8 @@ import AuthGuard from './Auth/AuthGuard';
 import RouteurStudent from './Student/RouteurStudent';
 import RouteurTeacher from './Teacher/RouteurTeacher';
 import RouteurAp from './Ap/RouteurAp';
+import RouteurRp from './Rp/RouteurRp';
+import RouteurAdmin from './Admin/RouteurAdmin';
 import RouteurRepro from './Repro/RouteurRepro'
 
 
@@ -35,9 +37,19 @@ function App() {
                 <RouteurAp/>
               </AuthGuard>
             }/>
+            <Route path="/rp/*" element={
+              <AuthGuard guardType='RESPONSABLE_PEDA'>
+                <RouteurRp/>
+              </AuthGuard>
+            }/>
             <Route path="/repro/*" element={
               <AuthGuard guardType='REPROGRAPHE'>
                 <RouteurRepro/>
+              </AuthGuard>
+            }/>
+            <Route path="/admin/*" element={
+              <AuthGuard guardType='ADMINISTRATEUR'>
+                <RouteurAdmin/>
               </AuthGuard>
             }/>
             <Route path="*" element={<Notfound/>} />

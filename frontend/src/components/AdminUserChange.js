@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { userService } from '../../_services/user.service';
-import { educationService } from '../../_services/education.service';
-import { accountService } from '../../_services/account.service';
-import '../../styles/ApForm.css';
+import { userService } from '../_services/user.service';
+import { educationService } from '../_services/education.service';
+import { accountService } from '../_services/account.service';
+import '../styles/ApForm.css';
 
-const ApUserChange = () => {
+const AdminUserChange = () => {
   const isAdmin = accountService.getUserRole() === "ADMINISTRATEUR"; 
+  const isRp = accountService.getUserRole() === "RESPONSABLE_PEDA"; 
   const [selectedFormObject, setSelectedFormObject] = useState('');
   const [idUser, setIdUser] = useState('');
   const [formData, setFormData] = useState({
@@ -28,8 +29,11 @@ const ApUserChange = () => {
 
   const noAdmin = () => {
     if (!isAdmin) {
-        console.log('ici');
-        setRoles(roles.filter(role=>role.id_role_utilisateur===1));
+      if (!isRp) {
+        setRoles(roles.filter(role=>role.id_role_utilisateur==2));
+      } else {
+        setRoles(roles.filter(role=>role.id_role_utilisateur!==1));
+      }
     }
   }
 
@@ -135,7 +139,7 @@ const ApUserChange = () => {
     setGetLists(true);
   }
 
-  if (getLists && !adminCheck) {
+  if (getLists && !adminCheck && roles.length > 0) {
     noAdmin();
     setAdminCheck(true);
   }
@@ -423,4 +427,4 @@ const handleChangeUserId = (e) => {
   );
 };
 
-export default ApUserChange;
+export default AdminUserChange;
