@@ -493,7 +493,7 @@ const Classe = () => {
           >
             {promotionsList.map((item) => (
               <MenuItem key={item.id_promotion} value={item.id_promotion}>
-                {items.libelle_ecole} - {item.libelle_promotion}
+                {item.libelle_ecole} - {item.libelle_promotion}
               </MenuItem>
             ))}
           </Select>
