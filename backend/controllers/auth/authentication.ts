@@ -225,4 +225,46 @@ const getIdFunctionQuery = (
   }
 };
 
-export { login, signup };
+const updatePasswordPATCH = (
+  request: express.Request,
+  response: express.Response
+) => {
+  const body = request.body;
+  const userNewPswd: string = body.newPswd;
+  const idUser: number = Number(body.idUser);
+  console.log(secretPass.passwordHashSalt);
+  bcrypt
+    .hash(userNewPswd, secretPass.passwordHashSalt)
+    .then((hash) => {
+      sql
+        .connect(config)
+        .then((pool) => {
+          const queryPatchMdp = `
+      UPDATE ${UtilisateurEnum.NOM_TABLE}
+      SET 
+        ${UtilisateurEnum.MDP} = '${hash}'
+      WHERE ${UtilisateurEnum.PK} = ${idUser}
+      `;
+          pool
+            .request()
+            .query(queryPatchMdp)
+            .then((result) => {
+              response.status(201).send("User was updated.");
+            })
+            .catch((error) => {
+              console.log(error.message);
+              response.status(401).send("Unauthorized request.");
+            });
+        })
+        .catch((error) => {
+          console.log(error.message);
+          response.status(401).send("Unauthorized request.");
+        });
+    })
+    .catch((error) => {
+      console.log(error.message);
+      response.status(401).send("Unauthorized request.");
+    });
+};
+
+export { login, signup, updatePasswordPATCH };

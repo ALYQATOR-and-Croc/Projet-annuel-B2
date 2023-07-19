@@ -5,7 +5,7 @@ import {
   updatePresencesPatch,
   deletePresenceDELETE
 } from '../../controllers/education/presence-controller';
-import isAuthenticated from '../../middleware/is-auth';
+import {isAuthenticated} from '../../middleware/is-auth';
 import {
   isConcernedByStudentCourse,
   isCourseManager,
