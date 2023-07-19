@@ -4,6 +4,8 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import PersonIcon from '@mui/icons-material/Person';
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -57,13 +59,19 @@ const Dashboard = () => {
 
   return (
     <DashboardContainer>
-      <DashboardItem to="/repro/educ">
+      <DashboardItem to="/rp/user">
+        <PersonIcon></PersonIcon><Title>
+            Utilisateur</Title>
+             <Text>Permet d'ajouter ou modifier des utilisateurs (étudiants, intervenants...)
+             </Text>
+      </DashboardItem>
+      <DashboardItem to="/rp/educ">
       <SchoolRoundedIcon></SchoolRoundedIcon><Title>
             Éducation</Title>
              <Text> Permet d'ajouter ou modifier une promotion, une matière, une classe ou un cours.
              </Text>
       </DashboardItem>
-      <DashboardItem to="/repro/absence">
+      <DashboardItem to="/rp/absence">
       <AccessTimeIcon></AccessTimeIcon><Title>
             Absences/Retard</Title>
              <Text>Permet de retirer les absences ou retards d'un élève lorsqu'ils l'ont justifié.

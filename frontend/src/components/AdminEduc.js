@@ -1,11 +1,11 @@
 import React from 'react';
-import ApEducAdd from './ApEducAdd';
-import ApEducChange from './ApEducChange';
+import ApEducAdd from './AdminEducAdd';
+import ApEducChange from './AdminEducChange';
 import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
 
-const ApEduc = () => {
+const AdminEduc = () => {
   
   return (
     <div className="AbsenceDelayStudent">
@@ -30,4 +30,4 @@ const ApEduc = () => {
   );
 };
 
-export default ApEduc;
+export default AdminEduc;

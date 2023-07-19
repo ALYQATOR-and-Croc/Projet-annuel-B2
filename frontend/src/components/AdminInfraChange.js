@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { MenuItem, Select, TextField, Button, InputLabel, FormControl } from '@mui/material';
-import { infraService } from '../../_services/infra.service';
+import { infraService } from '../_services/infra.service';
 
-const ApInfraChange = () => {
+const AdminInfraChange = () => {
   const formObjects = [{ id: 1, nom: 'École' },{ id: 2, nom: 'Campus' },{ id: 3, nom: 'Salle' }];
   
   const [selectedFormObject, setSelectedFormObject] = useState('');
@@ -436,4 +436,4 @@ const Ecole = () => {
   );
 };
 
-export default ApInfraChange;
+export default AdminInfraChange;

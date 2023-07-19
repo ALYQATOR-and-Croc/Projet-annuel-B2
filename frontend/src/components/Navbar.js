@@ -29,10 +29,16 @@ function ResponsiveAppBar(props) {
       pages = [{title:'Dashboard', path:'/teacher/dashboard'}, {title:'Planning', path:'/teacher/planning'}, {title:'Emarger', path:'/teacher/register-students'}];
       break;
     case 'ap':
-      pages = [{title:'Dashboard', path:'/ap/dashboard'}, {title:'Utilisateur', path:'/ap/user'}, {title:'Infrastructure', path:'/ap/infra'}, {title:'Education', path:'/ap/educ'}, {title:'Absences/Retards', path:'/ap/absence'}];
+      pages = [{title:'Dashboard', path:'/ap/dashboard'}, {title:'Utilisateur', path:'/ap/user'}, {title:'Education', path:'/ap/educ'}, {title:'Absences/Retards', path:'/ap/absence'}];
+      break;
+    case 'rp':
+      pages = [{title:'Dashboard', path:'/rp/dashboard'}, {title:'Utilisateur', path:'/rp/user'}, {title:'Education', path:'/rp/educ'}, {title:'Absences/Retards', path:'/rp/absence'}];
       break;
     case 'repro':
-      pages = [{title:'Dashboard', path:'/repro/dashboard'}, {title:'Appels', path:'/repro/appel'}];
+      pages = [{title:'Dashboard', path:'/repro/dashboard'}, {title:'Education', path:'/repro/educ'}, {title:'Absences/Retards', path:'/repro/absence'}];
+      break;
+    case 'admin':
+      pages = [{title:'Dashboard', path:'/admin/dashboard'}, {title:'Utilisateur', path:'/admin/user'}, {title:'Education', path:'/admin/educ'}, {title:'Infrastructure', path:'/admin/infra'}, {title:'Absences/Retards', path:'/admin/absence'}];
       break;
     default:
       pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
