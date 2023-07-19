@@ -322,7 +322,6 @@ const patchCoursePATCH = (
           Number(params.idCourse),
           body
         );
-        console.log(sqlDeleteQuery);
         return { sqlDeleteQuery, pool };
       })
       .then((courseStudentsGETQueryResult) => {
