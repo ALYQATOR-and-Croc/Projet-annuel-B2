@@ -211,8 +211,8 @@ const handleChangeUserId = (e) => {
                 prenom: selectedUser.prenom,
                 email: selectedUser.adresse_email,
                 idRole: idRoleTemp,
-                ancienneFonction: {selectedFormObject},
-                fonction:{selectedFormObject},
+                ancienneFonction: selectedFormObject,
+                fonction:selectedFormObject,
                 fonctionParameters: {
                     idClasse: '',
                     libelleSpecialite: ''
@@ -247,7 +247,9 @@ const handleChangeUserId = (e) => {
         })
         requestStudents();
         requestRepro();
-        // requestAdmins();
+        if (isAdmin) {
+          requestAdmins();
+        }
         requestAp();
         requestRp();
         requestTeachers();
