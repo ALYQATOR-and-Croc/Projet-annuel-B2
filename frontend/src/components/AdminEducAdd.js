@@ -506,6 +506,8 @@ const Cours = () => {
           }}
         />
 
+        { formDataCourse.courseDate !== '' ?
+        <div>
         <TextField
           label="Heure de début du cours"
           name="startCoursetemp"
@@ -538,7 +540,8 @@ const Cours = () => {
           inputProps={{
             step: 300, // intervalles de 5 minutes
           }}
-        />
+        /></div> : null}
+        
 
           <FormControl fullWidth style={{ marginBottom: '20px' }}>
           <InputLabel>Intervenant</InputLabel>
