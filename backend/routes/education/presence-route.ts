@@ -5,7 +5,7 @@ import {
   updatePresencesPatch,
   deletePresenceDELETE
 } from '../../controllers/education/presence-controller';
-import isAuthenticated from '../../middleware/is-auth';
+import {isAuthenticated} from '../../middleware/is-auth';
 import {
   isConcernedByStudentCourse,
   isCourseManager,
@@ -48,13 +48,5 @@ router.patch(
   isCourseManager,
   updatePresencesPatch
 );
-
-// router.put('/course/presence/', isAuthenticated, isAdmin, updatePresencePUT);
-
-// router.get('/course/presence/:idcourse/', isAuthenticated, isAdmin, coursePresenceGET);
-
-// router.get('/course/presence/:idcourse/student/:idstudent', isAuthenticated, isAdmin, studentCoursePresenceGET);
-
-// router.get('/course/presence/classe/:idclasse', isAuthenticated, isAdmin, classePrescenceGET);
 
 export = router;

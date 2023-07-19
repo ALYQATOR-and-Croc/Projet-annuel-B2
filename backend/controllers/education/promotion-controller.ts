@@ -125,12 +125,10 @@ const patchPromotionPATCH = (
       diplomePromotion: body.diplomePromotion,
       niveauEtude: body.niveauEtude,
     };
-    console.log(sqlQueryData);
     sql
       .connect(config)
       .then((pool) => {
         const query = queryPatchPromotionPATCH(idPromotion, sqlQueryData);
-        console.log('\n\n', query, '\n\n');
         return pool.request().query(query);
       })
       .then(() => {

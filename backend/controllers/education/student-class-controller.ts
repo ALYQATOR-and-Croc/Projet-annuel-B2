@@ -58,7 +58,6 @@ const patchClassPOST = (req: express.Request, res: express.Response) => {
             ${StudClassEnum.FK_PROMOTION} = ${sqlQueryBody.idPromotion}
             WHERE ${StudClassEnum.PK} = ${idClass}
             `;
-            console.log(query);
       pool.request().query(query)
       .then(() => {
         return res.status(201).send("Class successfully updated !");

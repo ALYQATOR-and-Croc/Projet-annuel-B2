@@ -118,7 +118,6 @@ const getMatierePaginatedGET = (
         OFFSET (@PageNumber - 1) * @PageSize ROWS
         FETCH NEXT @PageSize ROWS ONLY;
         ;`;
-        console.log(query);
         return pool
           .request()
           .query(query)

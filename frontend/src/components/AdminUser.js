@@ -1,11 +1,11 @@
 import React from 'react';
-import ApEducAdd from './ApEducAdd';
-// import ApEducChange from './ApEducChange';
+import ApUserAdd from './AdminUserAdd';
+import ApUserChange from './AdminUserChange';
 import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
 
-const ApEduc = () => {
+const AdminUser = () => {
   
   return (
     <div className="AbsenceDelayStudent">
@@ -13,21 +13,21 @@ const ApEduc = () => {
           <div className='absences'>
             <h1 className='absencesTitle'>
               <AddIcon className='delaysTitleLogo' fontSize='large'/>
-              Ajout du système éducatif
+              Ajout d'un utilisateur
             </h1>
-            <ApEducAdd/>
+            <ApUserAdd/>
           </div>
           <Divider orientation="vertical" flexItem></Divider>
           <div className='delays'>
           <h1 className='delaysTitle'>
             <SettingsIcon className='delaysTitleLogo' fontSize='large'/>
-            Modification du système éducatif
+            Modification d'un utilisateur
           </h1>
-            {/* <ApEducChange/> */}
+            <ApUserChange/>
           </div>
         </div>
     </div>
   );
 };
 
-export default ApEduc;
+export default AdminUser;
