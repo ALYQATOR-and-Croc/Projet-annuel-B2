@@ -1,3 +1,4 @@
+import { response } from "express";
 import { RoomEnum } from "../infrastructure/room-model";
 import { PresenceEnum } from "../presence-model";
 import { EtudiantEnum } from "../users/etudiant-model";
@@ -84,8 +85,11 @@ export const coursesUserFunctionIdGETQuery = (
   U4.${UtilisateurEnum.NOM} AS nom_responsable_pedagogique,
   U4.${UtilisateurEnum.PRENOM} AS prenom_responsable_pedagogique,
   Cl.${StudClassEnum.LIBELLE},
+  Cl.${StudClassEnum.PK},
   S.${RoomEnum.LIBELLE},
-  M.${MatiereEnum.LIBELLE}
+  S.${RoomEnum.PK},
+  M.${MatiereEnum.LIBELLE},
+  M.${MatiereEnum.PK}
   FROM ${CoursEnum.NOM_TABLE} AS C
   LEFT JOIN Reprographe R ON C.id_reprographe = R.id_reprographe
   LEFT JOIN Intervenant I ON C.id_intervenant = I.id_intervenant
@@ -138,8 +142,11 @@ export const queryCoursesGET = (
   U4.${UtilisateurEnum.NOM} AS nom_responsable_pedagogique,
   U4.${UtilisateurEnum.PRENOM} AS prenom_responsable_pedagogique,
   Cl.${StudClassEnum.LIBELLE},
+  Cl.${StudClassEnum.PK},
   S.${RoomEnum.LIBELLE},
-  M.${MatiereEnum.LIBELLE}
+  S.${RoomEnum.PK},
+  M.${MatiereEnum.LIBELLE},
+  M.${MatiereEnum.PK}
   FROM ${CoursEnum.NOM_TABLE} AS C
   LEFT JOIN Reprographe R ON C.id_reprographe = R.id_reprographe
   LEFT JOIN Intervenant I ON C.id_intervenant = I.id_intervenant

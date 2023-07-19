@@ -132,7 +132,6 @@ const coursesPagesGET = (
               sqlQueryBodyData.startDate,
               sqlQueryBodyData.numberOfDays
             );
-
             return userConcernedCourses;
           })
           .then((userConcernedCoursesQuery) => {
