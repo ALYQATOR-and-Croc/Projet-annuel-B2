@@ -493,7 +493,7 @@ const Classe = () => {
           >
             {promotionsList.map((item) => (
               <MenuItem key={item.id_promotion} value={item.id_promotion}>
-                {item.libelle_promotion}
+                {item.libelle_ecole} - {item.libelle_promotion}
               </MenuItem>
             ))}
           </Select>
@@ -603,7 +603,7 @@ const Classe = () => {
           >
             {promotionsList.map((items) => (
               <MenuItem key={items.id_promotion} value={items.id_promotion}>
-                {items.libelle_promotion}
+                {items.libelle_ecole} - {items.libelle_promotion}
               </MenuItem>
             ))}
           </Select>
@@ -708,7 +708,7 @@ const Cours = () => {
           >
             {coursesList.map((items) => (
               <MenuItem key={items.id_cours} value={items.id_cours}>
-                {items.id_cours} {items.libelle_matiere} ({items.libelle_classe}) - {new Date(items.heure_debut_cours).toLocaleString("fr-Fr", { timeZone: 'UTC' })}
+                {items.libelle_matiere} ({items.libelle_classe}) - {new Date(items.heure_debut_cours).toLocaleString("fr-Fr", { timeZone: 'UTC' })}
               </MenuItem>
             ))}
           </Select>
