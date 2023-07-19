@@ -13,6 +13,12 @@ let studentsList = () => {
     );
 }
 
+let allUsersList = () => {
+    return Axios.get(`/users/`, 
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 let adminsList = () => {
     return Axios.get(`/roles/admin/page/1/rows/1000/order/NOM/`, 
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
@@ -44,5 +50,5 @@ let removeUser = (idUser) => {
 }
 
 export const userService = {
-    rolesList, classesList, saveUser, studentsList, adminsList, changeUser, removeUser
+    rolesList, classesList, saveUser, studentsList, adminsList, changeUser, removeUser, allUsersList
 }

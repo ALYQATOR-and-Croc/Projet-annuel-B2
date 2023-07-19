@@ -4,3 +4,15 @@
     margin-left: 33%;
     margin-top: 20px;
 }
+
+.successAlertAdmin .MuiAlert-filled{
+    background-color: #08948c;
+    width: 20%;
+    margin-left: 39%;
+    margin-top: 20px;
+}
+
+.chooseUser {
+    width: 20%;
+    margin-left: 40%;
+}

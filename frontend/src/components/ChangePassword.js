@@ -23,13 +23,11 @@ export default function ChangePassword(props) {
     accountService.changePassword(pswdData)
         .then(res => {
             console.log(res);
+            setSuccess(true); 
         })
         .catch(error => {
             console.log(error);
         })
-    if (pswdData.formerPswd !== '' && pswdData.newPswd !== '') {
-      setSuccess(true); 
-    }
   }
 
   const successAlert = success ? <div className='successAlert'><Alert className="alertLogin" variant="filled" severity="success" onClose={() => {setSuccess(false)}}>

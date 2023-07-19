@@ -38,7 +38,7 @@ function ResponsiveAppBar(props) {
       pages = [{title:'Dashboard', path:'/repro/dashboard'}, {title:'Education', path:'/repro/educ'}, {title:'Absences/Retards', path:'/repro/absence'}];
       break;
     case 'admin':
-      pages = [{title:'Dashboard', path:'/admin/dashboard'}, {title:'Utilisateur', path:'/admin/user'}, {title:'Education', path:'/admin/educ'}, {title:'Infrastructure', path:'/admin/infra'}, {title:'Absences/Retards', path:'/admin/absence'}];
+      pages = [{title:'Dashboard', path:'/admin/dashboard'}, {title:'Utilisateur', path:'/admin/user'}, {title:'Education', path:'/admin/educ'}, {title:'Infrastructure', path:'/admin/infra'}, {title:'Absences/Retards', path:'/admin/absence'}, {title:'Mots de passe', path:'/admin/change-user-password'}];
       break;
     default:
       pages = [{title:'Planning', path:'/planning'}, {title:'Emarger', path:'/emager'}];
