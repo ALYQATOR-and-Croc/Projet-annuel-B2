@@ -193,44 +193,29 @@ export const queryDeleteUserDELETE = (
   return query;
 };
 
-export const queryDeleteFonctionUserDELETE = (
-  idUser: number,
-  fonction: FonctionType
-) => {
-  switch (fonction) {
-    case FonctionEnum.ETUDIANT:
-      return `
+export const queryDeleteFonctionUserDELETE = (idUser: number) => {
+  const query = `
       DELETE FROM ${EtudiantEnum.NOM_TABLE}
-      WHERE ${EtudiantEnum.FK_UTILISATEUR} = ${idUser}
-      `;
-    case FonctionEnum.INTERVENANT:
-      return `
+      WHERE ${EtudiantEnum.FK_UTILISATEUR} = ${idUser};
+
       DELETE FROM ${IntervenantEnum.NOM_TABLE}
-      WHERE ${IntervenantEnum.FK_UTILISATEUR} = ${idUser}
-      `;
-    case FonctionEnum.ATTACHE_PROMO:
-      return `
+      WHERE ${IntervenantEnum.FK_UTILISATEUR} = ${idUser};
+
       DELETE FROM ${AttachePromotionEnum.NOM_TABLE}
-      WHERE ${AttachePromotionEnum.FK_UTILISATEUR} = ${idUser}
-      `;
-    case FonctionEnum.RESPONSABLE_PEDA:
-      return `
+      WHERE ${AttachePromotionEnum.FK_UTILISATEUR} = ${idUser};
+
       DELETE FROM ${ResponsablePedagogiqueEnum.NOM_TABLE}
-      WHERE ${ResponsablePedagogiqueEnum.FK_UTILISATEUR} = ${idUser}
-      `;
-    case FonctionEnum.REPROGRAPHE:
-      return `
+      WHERE ${ResponsablePedagogiqueEnum.FK_UTILISATEUR} = ${idUser};
+
       DELETE FROM ${ReprographeEnum.NOM_TABLE}
-      WHERE ${ReprographeEnum.FK_UTILISATEUR} = ${idUser}
+      WHERE ${ReprographeEnum.FK_UTILISATEUR} = ${idUser};
       `;
-    default:
-      return "";
-  }
+  return query;
 };
 
 export const queryPatchUserPATCH = (
   idUser: number,
-  bodyQuery : UtilisateurType,
+  bodyQuery: UtilisateurType
 ) => {
   const query = `
   UPDATE ${UtilisateurEnum.NOM_TABLE}

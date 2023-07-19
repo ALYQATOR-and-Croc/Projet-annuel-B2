@@ -54,7 +54,7 @@ router.get(
 
 router.patch('/user/:idUser/', isAuthenticated, isEducationManager, patchUserPATCH);
 
-router.delete('/user/:idUser/function/:functionUser/', isAuthenticated, isEducationManager, deleteUserDELETE);
+router.delete('/user/:idUser/', isAuthenticated, isEducationManager, deleteUserDELETE);
 
 router.get('/roles/', isAuthenticated, isEducationManager, paginatedRoleGET);
 export = router;

@@ -229,28 +229,25 @@ const deleteUserDELETE = (
     if (!isId([idUser])) {
       throw new Error("Bad Request");
     }
+    console.log(queryDeleteFonctionUserDELETE(idUser), "\n\n\n");
     sql.connect(config).then((pool) => {
       pool
         .request()
-        .query(queryDeleteFonctionUserDELETE(idUser, fonctionUser))
-        .catch((error) => {
-          console.log(error);
-          return response.status(405).send("Can't delete user");
-        })
+        .query(queryDeleteFonctionUserDELETE(idUser))
         .then(() => {
           const query = queryDeleteUserDELETE(idUser, fonctionUser);
           return pool.request().query(query);
         })
         .then(() => {
-          response.status(201).send("User successfully deleted !");
+          return response.status(201).send("User successfully deleted !");
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.message);
           return response.status(405).send("Can't delete user");
         });
     });
   } catch (error) {
-    response.status(400).send("Bad Request");
+    return response.status(400).send("Bad Request");
   }
 };
 
@@ -275,51 +272,70 @@ const patchUserPATCH = (
     if (!isId([idUser, bodyQuery.idRole])) {
       throw new Error("Bad Request");
     }
-    sql.connect(config).then((pool) => {
-      const queryDELETE = queryDeleteFonctionUserDELETE(
-        idUser,
-        ancienneFonction
-      );
-      pool
-        .request()
-        .query(queryDELETE)
-        .catch((error) => {
-          console.log(error);
-          return response.status(405).send("Can't delete user");
-        })
-        .then(() => {
-          const queryPATCH = queryPatchUserPATCH(idUser, bodyQuery);
-          pool
-            .request()
-            .query(queryPATCH)
-            .catch((error) => {
-              console.log(error);
-              return response.status(405).send("Error while updating user");
-            })
-            .then(() => {
-              const queryNewFunction = newFunctionQuery(
-                bodyQuery.fonction,
-                idUser,
-                fonctionParameters
-              );
-              if (queryNewFunction !== null) {
-                pool
-                  .request()
-                  .query(queryNewFunction)
-                  .catch((error) => {
-                    console.log(error);
-                    return response
-                      .status(405)
-                      .send("Error while updating user");
-                  })
-                  .then(() => {
-                    response.status(201).send("User successfully updated !");
-                  });
-              }
-            });
-        });
-    });
-  } catch (error) {}
+    console.log(bodyQuery);
+    if (ancienneFonction !== bodyQuery.fonction) {
+      sql.connect(config).then((pool) => {
+        const queryDELETE = queryDeleteFonctionUserDELETE(idUser);
+        pool
+          .request()
+          .query(queryDELETE)
+
+          .then(() => {
+            const queryPATCH = queryPatchUserPATCH(idUser, bodyQuery);
+            pool
+              .request()
+              .query(queryPATCH)
+              .catch((error) => {
+                console.log(error.message);
+                return response.status(405).send("Error while updating user");
+              })
+              .then(() => {
+                const queryNewFunction = newFunctionQuery(
+                  bodyQuery.fonction,
+                  idUser,
+                  fonctionParameters
+                );
+                if (queryNewFunction !== null) {
+                  pool
+                    .request()
+                    .query(queryNewFunction)
+                    .then(() => {
+                      return response
+                        .status(201)
+                        .send("User successfully updated !");
+                    })
+                    .catch((error) => {
+                      console.log(error.message);
+                      return response
+                        .status(405)
+                        .send("Error while updating user");
+                    });
+                }
+              });
+          })
+          .catch((error) => {
+            console.log(error.message);
+            return response.status(405).send("Can't delete user");
+          });
+      });
+    } else {
+      const queryPATCH = queryPatchUserPATCH(idUser, bodyQuery);
+      sql.connect(config).then((pool) => {
+        pool
+          .request()
+          .query(queryPATCH)
+          .then(() => {
+            return response.status(201).send("User successfully updated !");
+          })
+          .catch((error) => {
+            console.log(error.message);
+            return response.status(405).send("Error while updating user");
+          });
+      });
+    }
+  } catch (error) {
+    return response.status(400).send("Bad Request");
+  }
 };
 
 export {
