@@ -194,6 +194,7 @@ const ApInfraChange = () => {
             libelleEcole: '',
             domaineEcole: ''
           });
+          setIdSchool('');
           break;
         case 'Campus':
           console.log(idCampus);
@@ -210,6 +211,7 @@ const ApInfraChange = () => {
             adresseCampus : '',
             codePostalCampus : 69003
           });
+          setIdCampus('');
           break;
         case 'Salle':
           console.log(idRoom);
@@ -227,6 +229,7 @@ const ApInfraChange = () => {
             roomCapacity : 30,
             idCampus : ''
           });
+          setIdRoom('');
           break;
         default:
           break;
@@ -283,7 +286,7 @@ const Ecole = () => {
         <FormControl fullWidth style={{ marginBottom: '20px' }}>
           <InputLabel>Choisissez un campus</InputLabel>
           <Select
-            label="Choisissez une école"
+            label="Choisissez un campus"
             name="idCampus"
             value={idCampus}
             onChange={handleChangeCampusId}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import '../../styles/ApAbsence.css';
 import AbsenceDelayGrid from '../Student/AbsenceDelayGrid';
 import { Divider } from '@mui/material';

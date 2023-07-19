@@ -1,6 +1,6 @@
 import React from 'react';
 import ApEducAdd from './ApEducAdd';
-// import ApEducChange from './ApEducChange';
+import ApEducChange from './ApEducChange';
 import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
@@ -23,7 +23,7 @@ const ApEduc = () => {
             <SettingsIcon className='delaysTitleLogo' fontSize='large'/>
             Modification du système éducatif
           </h1>
-            {/* <ApEducChange/> */}
+            <ApEducChange/>
           </div>
         </div>
     </div>
