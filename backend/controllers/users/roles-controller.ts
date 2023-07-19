@@ -15,6 +15,10 @@ import {
   queryPaginatedResponsablePedagogiqueGET,
   FonctionType,
   queryDeleteUserDELETE,
+  UtilisateurType,
+  queryDeleteFonctionUserDELETE,
+  queryPatchUserPATCH,
+  newFunctionQuery,
 } from "../../models/users/user-model";
 import { queryRoleGET } from "../../models/users/roles-model";
 import isId from "../../models/integer-model";
@@ -220,23 +224,150 @@ const deleteUserDELETE = (
   try {
     const params: any = request.params;
     const idUser: number = Number(params.idUser);
-    const fonctionUser: FonctionType = params.fonctionUser;
+    const fonctionUser: FonctionType = params.functionUser;
     if (!isId([idUser])) {
       throw new Error("Bad Request");
     }
-    sql
-      .connect(config)
-      .then((pool) => {
-        const query = queryDeleteUserDELETE(idUser, fonctionUser);
-        return pool.request().query(query);
-      })
-      .then(() => {
-        response.status(201).send("User successfully deleted !");
-      });
+    sql.connect(config).then((pool) => {
+      pool
+        .request()
+        .query(queryDeleteFonctionUserDELETE(idUser, fonctionUser))
+        .catch((error) => {
+          console.log(error);
+          return response.status(405).send("Can't delete user");
+        })
+        .then(() => {
+          const query = queryDeleteUserDELETE(idUser, fonctionUser);
+          return pool.request().query(query);
+        })
+        .then(() => {
+          response.status(201).send("User successfully deleted !");
+        })
+        .catch((error) => {
+          console.log(error);
+          return response.status(405).send("Can't delete user");
+        });
+    });
   } catch (error) {
     response.status(400).send("Bad Request");
   }
 };
+
+const patchUserPATCH = async (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const params: any = request.params;
+    const body: any = request.body;
+    const idUser: number = Number(params.idUser);
+    const fonctionParameters: any = body.fonctionParameters;
+    const ancienneFonction: FonctionType = body.ancienneFonction;
+    const bodyQuery: UtilisateurType = {
+      nomUtilisateur: body.nom,
+      prenomUtilisateur: body.prenom,
+      emailUtilisateur: body.email,
+      mdp: "",
+      idRole: body.idRole,
+      fonction: body.fonction,
+    };
+    if (!isId([idUser, bodyQuery.idRole])) {
+      throw new Error("Bad Request");
+    }
+    sql.connect(config).then((pool) => {
+
+
+        replacingFunction(pool, idUser, bodyQuery, fonctionParameters, ancienneFonction).then((result) => {
+          if (result){
+            const queryPATCH = queryPatchUserPATCH(idUser, bodyQuery);
+            pool
+              .request()
+              .query(queryPATCH)
+              .catch((error) => {
+                console.log(error);
+                return response.status(405).send("Error while updating user");
+              }).then(() => {
+                response.status(201).send("User successfully updated !");
+              })
+          }else{
+            return response.status(405).send("Error while updating user");
+          }
+        })
+            
+
+        // const queryDELETE = queryDeleteFonctionUserDELETE(
+        //   idUser,
+        //   ancienneFonction
+        // );
+        // pool
+        // .request()
+        // .query(queryDELETE)
+        // .catch((error) => {
+        //   console.log(error);
+        //   return response.status(405).send("Can't delete user");
+        // })            .then(() => {
+        //   const queryNewFunction = newFunctionQuery(
+        //     bodyQuery.fonction,
+        //     idUser,
+        //     fonctionParameters
+        //   );
+        //   if (queryNewFunction !== null) {
+        //     pool
+        //       .request()
+        //       .query(queryNewFunction)
+        //       .catch((error) => {
+        //         console.log(error);
+        //         return response
+        //           .status(405)
+        //           .send("Error while updating user");
+        //       })
+        //       .then(() => {
+        //         response.status(201).send("User successfully updated !");
+        //       });
+        //   }
+        // })
+
+;
+    });
+  } catch (error) {}
+};
+
+const replacingFunction = async(pool : sql.ConnectionPool , idUser : number, bodyQuery : UtilisateurType, fonctionParameters : any, ancienneFonction : FonctionType ) : Promise<any> => {
+  if (bodyQuery.fonction !== ancienneFonction){
+    const queryDELETE = queryDeleteFonctionUserDELETE(
+      idUser,
+      ancienneFonction
+    );
+    pool
+    .request()
+    .query(queryDELETE)
+    .catch((error) => {
+      console.log(error);
+      return false
+    }).then(() => {
+      const queryNewFunction = newFunctionQuery(
+        bodyQuery.fonction,
+        idUser,
+        fonctionParameters
+      );
+      if (queryNewFunction !== null) {
+        pool
+          .request()
+          .query(queryNewFunction)
+          .catch((error) => {
+            console.log(error);
+            return false;
+          })
+          .then(() => {
+            return true
+          });
+      }
+    })
+  }else{
+    return true
+  }
+  
+}
 
 export {
   newRolePOST,
@@ -246,5 +377,6 @@ export {
   intervenantGETList,
   responsablePedagogiqueGETList,
   paginatedRoleGET,
-  deleteUserDELETE
+  deleteUserDELETE,
+  patchUserPATCH,
 };

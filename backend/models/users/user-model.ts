@@ -1,52 +1,52 @@
-import { query } from 'express';
-import { AttachePromotionEnum } from './attache-promotion-model';
-import { EtudiantEnum } from './etudiant-model';
-import { IntervenantEnum } from './intervenant';
-import { ReprographeEnum } from './reprographe-model';
-import { ResponsablePedagogiqueEnum } from './resp-pedago-model';
-import { UtilisateurPagination } from './roles-model';
+import { query } from "express";
+import { AttachePromotionEnum } from "./attache-promotion-model";
+import { EtudiantEnum } from "./etudiant-model";
+import { IntervenantEnum } from "./intervenant";
+import { ReprographeEnum } from "./reprographe-model";
+import { ResponsablePedagogiqueEnum } from "./resp-pedago-model";
+import { UtilisateurPagination } from "./roles-model";
 
 export enum UtilisateurEnum {
-  NOM_TABLE = 'Utilisateur',
-  PK = 'id_utilisateur',
-  NOM = 'nom',
-  PRENOM = 'prenom',
-  EMAIL = 'adresse_email',
-  MDP = 'motdepasse',
-  FK_ROLE_UTILISATEUR = 'id_role_utilisateur',
+  NOM_TABLE = "Utilisateur",
+  PK = "id_utilisateur",
+  NOM = "nom",
+  PRENOM = "prenom",
+  EMAIL = "adresse_email",
+  MDP = "motdepasse",
+  FK_ROLE_UTILISATEUR = "id_role_utilisateur",
 }
 
 export const utilisateurColumns = {
-  NOM: 'nom',
-  PRENOM: 'prenom',
-  EMAIL: 'adresse_email',
-  PK: 'id_utilisateur',
+  NOM: "nom",
+  PRENOM: "prenom",
+  EMAIL: "adresse_email",
+  PK: "id_utilisateur",
 };
 
-export interface UtilisateurPOST {
+export interface UtilisateurType {
   nomUtilisateur: string;
   prenomUtilisateur: string;
   emailUtilisateur: string;
   mdp: string;
-  idRole: string;
+  idRole: number;
   fonction: FonctionType;
 }
 
 export type FonctionType =
-  | 'ETUDIANT'
-  | 'INTERVENANT'
-  | 'ATTACHE_PROMO'
-  | 'RESPONSABLE_PEDA'
-  | 'REPROGRAPHE'
-  | 'ADMINISTRATEUR';
+  | "ETUDIANT"
+  | "INTERVENANT"
+  | "ATTACHE_PROMO"
+  | "RESPONSABLE_PEDA"
+  | "REPROGRAPHE"
+  | "ADMINISTRATEUR";
 
 export enum FonctionEnum {
-  ETUDIANT = 'ETUDIANT',
-  INTERVENANT = 'INTERVENANT',
-  ATTACHE_PROMO = 'ATTACHE_PROMO',
-  RESPONSABLE_PEDA = 'RESPONSABLE_PEDA',
-  REPROGRAPHE = 'REPROGRAPHE',
-  ADMIN = 'ADMINISTRATEUR',
+  ETUDIANT = "ETUDIANT",
+  INTERVENANT = "INTERVENANT",
+  ATTACHE_PROMO = "ATTACHE_PROMO",
+  RESPONSABLE_PEDA = "RESPONSABLE_PEDA",
+  REPROGRAPHE = "REPROGRAPHE",
+  ADMIN = "ADMINISTRATEUR",
 }
 
 export const queryPaginatedEtudiantGET = (
@@ -182,17 +182,21 @@ export const queryPaginatedResponsablePedagogiqueGET = (
   return query;
 };
 
-export const queryDeleteUserDELETE = (idUser: number, fonction : FonctionType) => {
-  
+export const queryDeleteUserDELETE = (
+  idUser: number,
+  fonction: FonctionType
+) => {
   const query = `
   DELETE FROM ${UtilisateurEnum.NOM_TABLE}
   WHERE ${UtilisateurEnum.PK} = ${idUser};
-  ${queryDeleteFonctionUserDELETE(idUser, fonction)}
   `;
   return query;
-}
+};
 
-const queryDeleteFonctionUserDELETE = (idUser: number, fonction: FonctionType) => {
+export const queryDeleteFonctionUserDELETE = (
+  idUser: number,
+  fonction: FonctionType
+) => {
   switch (fonction) {
     case FonctionEnum.ETUDIANT:
       return `
@@ -220,61 +224,115 @@ const queryDeleteFonctionUserDELETE = (idUser: number, fonction: FonctionType) =
       WHERE ${ReprographeEnum.FK_UTILISATEUR} = ${idUser}
       `;
     default:
-      return '';
+      return "";
   }
-}
+};
 
-const queryPatchUserPATCH = (
+export const queryPatchUserPATCH = (
   idUser: number,
-  nomUtilisateur: string,
-  prenomUtilisateur: string,
-  emailUtilisateur: string,
-  mdp: string,
-  idRole: string,
-  fonction: FonctionType,
-  currentFonction: FonctionType
+  bodyQuery : UtilisateurType,
 ) => {
   const query = `
   UPDATE ${UtilisateurEnum.NOM_TABLE}
-  SET ${UtilisateurEnum.NOM} = '${nomUtilisateur}',
-  ${UtilisateurEnum.PRENOM} = '${prenomUtilisateur}',
-  ${UtilisateurEnum.EMAIL} = '${emailUtilisateur}',
-  ${UtilisateurEnum.MDP} = '${mdp}',
-  ${UtilisateurEnum.FK_ROLE_UTILISATEUR} = ${idRole}
+  SET ${UtilisateurEnum.NOM} = '${bodyQuery.nomUtilisateur}',
+  ${UtilisateurEnum.PRENOM} = '${bodyQuery.prenomUtilisateur}',
+  ${UtilisateurEnum.EMAIL} = '${bodyQuery.emailUtilisateur}',
+  ${UtilisateurEnum.FK_ROLE_UTILISATEUR} = ${bodyQuery.idRole}
   WHERE ${UtilisateurEnum.PK} = ${idUser};
-  ${queryPatchFonctionUserCREATE(idUser, fonction)}
   `;
   return query;
-}
+};
 
-const queryPatchFonctionUserCREATE = (idUser: number, fonction: FonctionType) => {
-  switch (fonction) {
-    case FonctionEnum.ETUDIANT:
-      return `
-      INSERT INTO ${EtudiantEnum.NOM_TABLE} (${EtudiantEnum.FK_UTILISATEUR})
-      VALUES (${idUser})
+// export const queryPatchFonctionUserCREATE = (
+//   idUser: number,
+//   fonction: FonctionType
+// ) => {
+//   switch (fonction) {
+//     case FonctionEnum.ETUDIANT:
+//       return `
+//       INSERT INTO ${EtudiantEnum.NOM_TABLE} (${EtudiantEnum.FK_UTILISATEUR})
+//       VALUES (${idUser})
+//       `;
+//     case FonctionEnum.INTERVENANT:
+//       return `
+//       INSERT INTO ${IntervenantEnum.NOM_TABLE} (${IntervenantEnum.FK_UTILISATEUR})
+//       VALUES (${idUser})
+//       `;
+//     case FonctionEnum.ATTACHE_PROMO:
+//       return `
+//       INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR})
+//       VALUES (${idUser})
+//       `;
+//     case FonctionEnum.RESPONSABLE_PEDA:
+//       return `
+//       INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR})
+//       VALUES (${idUser})
+//       `;
+//     case FonctionEnum.REPROGRAPHE:
+//       return `
+//       INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR})
+//       VALUES (${idUser})
+//       `;
+//     default:
+//       return "";
+//   }
+// };
+
+export const newFunctionQuery = (
+  fonctionType: FonctionType,
+  fkUtilisateur: number,
+  body: any
+): string | null => {
+  try {
+    let queryNewFunction: string | null = null;
+    let idSalle: number | null = null;
+    switch (fonctionType) {
+      case FonctionEnum.ETUDIANT:
+        queryNewFunction = `
+      INSERT INTO ${EtudiantEnum.NOM_TABLE} (${EtudiantEnum.FK_UTILISATEUR}, ${EtudiantEnum.FK_CLASSE})
+      VALUES
+      (${fkUtilisateur}, ${body.idClasse})
       `;
-    case FonctionEnum.INTERVENANT:
-      return `
-      INSERT INTO ${IntervenantEnum.NOM_TABLE} (${IntervenantEnum.FK_UTILISATEUR})
-      VALUES (${idUser})
+        break;
+      case FonctionEnum.INTERVENANT:
+        queryNewFunction = `
+      INSERT INTO ${IntervenantEnum.NOM_TABLE} (${IntervenantEnum.FK_UTILISATEUR}, ${IntervenantEnum.LIBELLE})
+      VALUES
+      (${fkUtilisateur}, '${body.libelleSpecialite}')
       `;
-    case FonctionEnum.ATTACHE_PROMO:
-      return `
-      INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR})
-      VALUES (${idUser})
+        break;
+      case FonctionEnum.RESPONSABLE_PEDA:
+        "idSalle" in body ? (idSalle = body.idSalle) : (idSalle = 10);
+        queryNewFunction = `
+      INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR}, ${ResponsablePedagogiqueEnum.FK_SALLE})
+      VALUES
+      (${fkUtilisateur}, ${idSalle})
       `;
-    case FonctionEnum.RESPONSABLE_PEDA:
-      return `
-      INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR})
-      VALUES (${idUser})
+        break;
+      case FonctionEnum.REPROGRAPHE:
+        "idSalle" in body ? (idSalle = body.idSalle) : (idSalle = 10);
+        queryNewFunction = `
+      INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR}, ${ReprographeEnum.FK_SALLE})
+      VALUES
+      (${fkUtilisateur}, ${idSalle})
       `;
-    case FonctionEnum.REPROGRAPHE:
-      return `
-      INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR})
-      VALUES (${idUser})
+        break;
+      case FonctionEnum.ATTACHE_PROMO:
+        "idSalle" in body ? (idSalle = body.idSalle) : (idSalle = 10);
+        queryNewFunction = `
+      INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR}, ${AttachePromotionEnum.FK_SALLE})
+      VALUES
+      (${fkUtilisateur}, ${idSalle})
       `;
-    default:
-      return '';
+        break;
+      case FonctionEnum.ADMIN:
+        break;
+
+      default:
+        throw new Error("");
+    }
+    return queryNewFunction;
+  } catch (error) {
+    throw new Error("Error");
   }
-}
+};

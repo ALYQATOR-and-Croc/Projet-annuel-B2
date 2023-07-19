@@ -1,24 +1,27 @@
-import bcrypt from 'bcryptjs';
-import validationResult from 'express-validator';
-import { LoginBody } from '../../models/auth/auth-model';
-import * as config from '../../config.json';
-import sql from 'mssql';
-import secretPass from '../../CONFIG-FILES/secret-password.json';
-import * as jwt from 'jsonwebtoken';
-import express from 'express';
-import { error } from 'console';
-import { UtilisateurEnum } from '../../models/users/user-model';
+import bcrypt from "bcryptjs";
+import validationResult from "express-validator";
+import { LoginBody } from "../../models/auth/auth-model";
+import * as config from "../../config.json";
+import sql from "mssql";
+import secretPass from "../../CONFIG-FILES/secret-password.json";
+import * as jwt from "jsonwebtoken";
+import express from "express";
+import { error } from "console";
 import {
-  UtilisateurPOST,
+  UtilisateurEnum,
+  newFunctionQuery,
+} from "../../models/users/user-model";
+import {
+  UtilisateurType,
   FonctionEnum,
   FonctionType,
-} from '../../models/users/user-model';
-import { EtudiantEnum } from '../../models/users/etudiant-model';
-import { ReprographeEnum } from '../../models/users/reprographe-model';
-import { IntervenantEnum } from '../../models/users/intervenant';
-import { AttachePromotionEnum } from '../../models/users/attache-promotion-model';
-import { ResponsablePedagogiqueEnum } from '../../models/users/resp-pedago-model';
-import { RolesEnum } from '../../models/users/roles-model';
+} from "../../models/users/user-model";
+import { EtudiantEnum } from "../../models/users/etudiant-model";
+import { ReprographeEnum } from "../../models/users/reprographe-model";
+import { IntervenantEnum } from "../../models/users/intervenant";
+import { AttachePromotionEnum } from "../../models/users/attache-promotion-model";
+import { ResponsablePedagogiqueEnum } from "../../models/users/resp-pedago-model";
+import { RolesEnum } from "../../models/users/roles-model";
 
 /**
  * @param request
@@ -27,7 +30,7 @@ import { RolesEnum } from '../../models/users/roles-model';
 
 const signup = (request: express.Request, response: express.Response) => {
   const body = request.body;
-  const userSqlQuery: UtilisateurPOST = {
+  const userSqlQuery: UtilisateurType = {
     nomUtilisateur: body.nom,
     prenomUtilisateur: body.prenom,
     emailUtilisateur: body.email,
@@ -69,72 +72,14 @@ const signup = (request: express.Request, response: express.Response) => {
               .request()
               .query(queryFonction)
               .then(() => {
-                response.status(201).send('User was successfully created.');
+                response.status(201).send("User was successfully created.");
               });
           } else {
-            response.status(201).send('User was successfully created.');
+            response.status(201).send("User was successfully created.");
           }
         });
     });
   });
-};
-const newFunctionQuery = (
-  fonctionType: FonctionType,
-  fkUtilisateur: number,
-  body: any
-): string | null => {
-  try {
-    let queryNewFunction: string | null = null;
-    let idSalle: number | null = null;
-    switch (fonctionType) {
-      case FonctionEnum.ETUDIANT:
-        queryNewFunction = `
-      INSERT INTO ${EtudiantEnum.NOM_TABLE} (${EtudiantEnum.FK_UTILISATEUR}, ${EtudiantEnum.FK_CLASSE})
-      VALUES
-      (${fkUtilisateur}, ${body.idClasse})
-      `;
-        break;
-      case FonctionEnum.INTERVENANT:
-        queryNewFunction = `
-      INSERT INTO ${IntervenantEnum.NOM_TABLE} (${IntervenantEnum.FK_UTILISATEUR}, ${IntervenantEnum.LIBELLE})
-      VALUES
-      (${fkUtilisateur}, '${body.libelleSpecialite}')
-      `;
-        break;
-      case FonctionEnum.RESPONSABLE_PEDA:
-        'idSalle' in body ? (idSalle = body.idSalle) : (idSalle = 10);
-        queryNewFunction = `
-      INSERT INTO ${ResponsablePedagogiqueEnum.NOM_TABLE} (${ResponsablePedagogiqueEnum.FK_UTILISATEUR}, ${ResponsablePedagogiqueEnum.FK_SALLE})
-      VALUES
-      (${fkUtilisateur}, ${idSalle})
-      `;
-        break;
-      case FonctionEnum.REPROGRAPHE:
-        'idSalle' in body ? (idSalle = body.idSalle) : (idSalle = 10);
-        queryNewFunction = `
-      INSERT INTO ${ReprographeEnum.NOM_TABLE} (${ReprographeEnum.FK_UTILISATEUR}, ${ReprographeEnum.FK_SALLE})
-      VALUES
-      (${fkUtilisateur}, ${idSalle})
-      `;
-        break;
-      case FonctionEnum.ATTACHE_PROMO:
-        'idSalle' in body ? (idSalle = body.idSalle) : (idSalle = 10);
-        queryNewFunction = `
-      INSERT INTO ${AttachePromotionEnum.NOM_TABLE} (${AttachePromotionEnum.FK_UTILISATEUR}, ${AttachePromotionEnum.FK_SALLE})
-      VALUES
-      (${fkUtilisateur}, ${idSalle})
-      `;
-        break;
-      case FonctionEnum.ADMIN:
-        break;
-
-      default:
-        throw new Error('');
-    }
-    return queryNewFunction;
-  } catch (error) {
-    throw new Error('Error');
-  }
 };
 
 const login = (request: express.Request, response: express.Response) => {
@@ -164,7 +109,7 @@ const login = (request: express.Request, response: express.Response) => {
           .query(query)
           .then((reqResult) => {
             if (reqResult.recordset[0] === undefined) {
-              throw new Error('User does not exists');
+              throw new Error("User does not exists");
             }
             bcrypt
               .compare(loginPswd, reqResult.recordset[0][UtilisateurEnum.MDP])
@@ -172,16 +117,16 @@ const login = (request: express.Request, response: express.Response) => {
                 if (isPswdEqual) {
                   return reqResult;
                 } else {
-                  throw new Error('Unauthorized');
+                  throw new Error("Unauthorized");
                 }
               })
               .catch((error1) => {
                 console.log(error1.message);
-                throw new Error('Unauthorized');
+                throw new Error("Unauthorized");
               })
               .then((resultAfterPswdTested) => {
                 if (resultAfterPswdTested === undefined) {
-                  throw new Error('User does not exists');
+                  throw new Error("User does not exists");
                 }
                 const resultFonctionType: FonctionType =
                   resultAfterPswdTested.recordset[0][RolesEnum.LIBELLE];
@@ -215,7 +160,7 @@ const login = (request: express.Request, response: express.Response) => {
                         ],
                     };
                     const claims = {
-                      expiresIn: '12h',
+                      expiresIn: "12h",
                       audience:
                         resultAfterPswdTested.recordset[0][RolesEnum.DROITS],
                     };
@@ -233,23 +178,23 @@ const login = (request: express.Request, response: express.Response) => {
                   })
                   .catch((error2) => {
                     console.log(error2.message);
-                    return response.status(401).send('Unauthorized');
+                    return response.status(401).send("Unauthorized");
                   });
               })
               .catch((error3) => {
                 console.log(error3.message);
-                return response.status(401).send('Unauthorized');
+                return response.status(401).send("Unauthorized");
               });
           })
           .catch((error4) => {
-            return response.status(401).send('Unauthorized');
+            return response.status(401).send("Unauthorized");
           });
       })
       .catch((error5) => {
-        throw new Error('Unauthorized');
+        throw new Error("Unauthorized");
       });
   } catch (error) {
-    return response.status(401).send('Unauthorized');
+    return response.status(401).send("Unauthorized");
   }
 };
 
@@ -270,35 +215,14 @@ const getIdFunctionQuery = (
       case FonctionEnum.ATTACHE_PROMO:
         return `SELECT ${AttachePromotionEnum.PK} AS id_function FROM ${AttachePromotionEnum.NOM_TABLE} WHERE ${AttachePromotionEnum.FK_UTILISATEUR} = ${fkUtilisateur}`;
       case FonctionEnum.ADMIN:
-        return 'SELECT * FROM Utilisateur WHERE id_utilisateur = 0';
+        return "SELECT * FROM Utilisateur WHERE id_utilisateur = 0";
       default:
-        throw new Error('');
+        throw new Error("");
     }
-    throw new Error('Error');
+    throw new Error("Error");
   } catch (error) {
-    throw new Error('Error');
+    throw new Error("Error");
   }
 };
-
-// const updatePasswordPUT = (
-//   request: express.Request,
-//   response: express.Response
-// ) => {
-//   try {
-//     const body = request.body;
-//     const idUser = body.idUser;
-//     const oldPassword = body.oldPassword;
-//     const newPassword = body.newPassword;
-//     sql.connect(config).then((pool) => {
-//       const query = `
-//       SELECT ${UtilisateurEnum.MDP} FROM ${UtilisateurEnum.NOM_TABLE} WHERE ${UtilisateurEnum.PK} = ${idUser}
-//       `;
-//       pool
-//         .request()
-//         .query(query)
-//         .then((result) => {
-//           bcrypt
-//             .compare(oldPassword, result.recordset[0][UtilisateurEnum.MDP])
-//             .then((isPswdEqual) => {
 
 export { login, signup };
