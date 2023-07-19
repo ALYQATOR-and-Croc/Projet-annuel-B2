@@ -1,5 +1,5 @@
 import express from 'express';
-import isAuthenticated from '../../middleware/is-auth';
+import {isAuthenticated} from '../../middleware/is-auth';
 import { isAdmin, isEducationManager } from '../../middleware/roles-middleware';
 import {
   newRolePOST,
@@ -9,11 +9,15 @@ import {
   intervenantGETList,
   responsablePedagogiqueGETList,
   paginatedRoleGET,
+  patchUserPATCH,
+  deleteUserDELETE,
+  adminGETList,
+  getAllUsersGET
 } from '../../controllers/users/roles-controller';
 
 const router = express.Router();
 
-router.post('/roles/', isAuthenticated, isAdmin, newRolePOST);
+router.post('/roles/', isAuthenticated, isEducationManager, newRolePOST);
 
 router.get(
   '/roles/reprographes/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
@@ -50,5 +54,18 @@ router.get(
   responsablePedagogiqueGETList
 );
 
+router.get(
+  '/roles/admin/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
+  isAuthenticated,
+  isAdmin,
+  adminGETList
+)
+
+router.patch('/user/:idUser/', isAuthenticated, isEducationManager, patchUserPATCH);
+
+router.delete('/user/:idUser/', isAuthenticated, isEducationManager, deleteUserDELETE);
+
 router.get('/roles/', isAuthenticated, isEducationManager, paginatedRoleGET);
+
+router.get('/users/', isAuthenticated, isAdmin, getAllUsersGET);
 export = router;

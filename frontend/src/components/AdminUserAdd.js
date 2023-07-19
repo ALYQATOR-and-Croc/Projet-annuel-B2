@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { userService } from '../../_services/user.service';
-import '../../styles/ApForm.css';
+import { userService } from '../_services/user.service';
+import { accountService } from '../_services/account.service';
+import '../styles/ApForm.css';
 
-const ApUser = () => {
+const AdminUserAdd = () => {
+  const isAdmin = accountService.getUserRole() === "ADMINISTRATEUR"; 
+  const isRp = accountService.getUserRole() === "RESPONSABLE_PEDA"; 
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -12,10 +15,22 @@ const ApUser = () => {
     idRole: '',
     fonction: '',
     idClasse: '',
+    libelleSpecialite: ''
   });
   const [getClassesAndRoles, setGetClassesAndRoles] = useState(false);
+  const [adminCheck, setAdminCheck] = useState(false);
   const [classes, setClasses] = useState([]);
   const [roles, setRoles] = useState([]);
+
+  const noAdmin = () => {
+    if (!isAdmin) {
+      if (!isRp) {
+        setRoles(roles.filter(role=>role.id_role_utilisateur===2));
+      } else {
+        setRoles(roles.filter(role=>role.id_role_utilisateur!==1));
+      }
+    }
+  }
 
   const requestRoles = () => {
     userService.rolesList()
@@ -55,6 +70,11 @@ const ApUser = () => {
     setGetClassesAndRoles(true);
   }
 
+  if (getClassesAndRoles && !adminCheck && roles.length > 0) {
+    noAdmin();
+    setAdminCheck(true);
+  }
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -65,7 +85,7 @@ const ApUser = () => {
       const choseRole = roles.find((role) => role.id_role_utilisateur === formData.idRole);
       setFormData({ ...formData, fonction: choseRole.libelle_role});
     }
-  }, [formData.idRole])
+  }, [formData.idRole, formData, roles])
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -74,9 +94,11 @@ const ApUser = () => {
       console.log(formData);
       saveUser(formData);
       setFormData({ ...formData, idClasse: ""});
+      window.location.reload(false); // changer ?
     } else {
       console.log(formData);
       saveUser(formData);
+      window.location.reload(false); // changer ?
     }
   };
 
@@ -106,9 +128,6 @@ const ApUser = () => {
 
   return (
     <div className='formEntier'>
-     <div className='formTitre'>
-         <h1 className='titre'>Formulaire d'ajout d'Utilisateur :</h1>
-     </div>
      <div className='formCase'>
     <form onSubmit={handleSubmit} style={{ marginRight: '60px', marginLeft: '60px', marginTop:'40px'}}>
       <FormControl fullWidth style={{ marginBottom: '20px' }}>
@@ -175,4 +194,4 @@ const ApUser = () => {
   );
 };
 
-export default ApUser;
+export default AdminUserAdd;

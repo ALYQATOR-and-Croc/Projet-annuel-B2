@@ -50,6 +50,12 @@ let getUserLastname = () => {
     return tokenData.nom;
 }
 
+let changePassword = (pswdData) => {
+    return Axios.patch(`/pswd/`, pswdData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 export const accountService = {
-    login, saveToken, logout, isLogged, getToken, getUserId, getUserRole, getUserLastname, getUserFirstname, getUserFunctionId
+    login, saveToken, logout, isLogged, getToken, getUserId, getUserRole, getUserLastname, getUserFirstname, getUserFunctionId, changePassword
 }

@@ -18,7 +18,7 @@ let day = (idUser) => {
     );
 }
 let all = () => {
-    return Axios.get(`/courses/`, 
+    return Axios.get(`/courses/page/start-date/1999-07-01T00:00:01.000Z/number-of-days/600000/`, 
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }

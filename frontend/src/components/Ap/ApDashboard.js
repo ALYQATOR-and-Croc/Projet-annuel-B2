@@ -4,23 +4,24 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
-import ApartmentIcon from '@mui/icons-material/Apartment';
 import PersonIcon from '@mui/icons-material/Person';
 
 const DashboardContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 85vh; /* Occupe la hauteur complète de la fenêtre */
-  width: 95vw; /* Occupe la largeur complète de la fenêtre */
+  height: 80vh; 
+  width: inherit;
   padding: 30px;
 `;
 
 const DashboardItem = styled(Link)`
-  flex-basis: calc(50% - 20px);
+  flex-basis: calc(40% - 20px);
+  margin-left:20px;
+  margin-right:20px;
   color: white;
-  height: calc(50% - 20px);
+  height: calc(40% - 20px);
   display: flex;
   flex-direction: column; 
   justify-content: center;
@@ -60,14 +61,7 @@ const Dashboard = () => {
       <DashboardItem to="/ap/user">
         <PersonIcon></PersonIcon><Title>
             Utilisateur</Title>
-             <Text>Permet d'ajouter ou modifier des administrateurs, étudiants, attachés de promotion,
-                   responsables pédagogiques, reprographes et intervenants.
-             </Text>
-      </DashboardItem>
-      <DashboardItem to="/ap/infra">
-      <ApartmentIcon></ApartmentIcon><Title>
-            Infrastructure</Title>
-             <Text>Permet d'ajouter ou modifier une salle, un campus ou une école. 
+             <Text>Permet d'ajouter ou modifier des utilisateurs (étudiants, intervenants...)
              </Text>
       </DashboardItem>
       <DashboardItem to="/ap/educ">

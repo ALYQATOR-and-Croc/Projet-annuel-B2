@@ -1,11 +1,11 @@
 import React from 'react';
-import ApInfraAdd from './ApInfraAdd';
-import ApInfraChange from './ApInfraChange';
+import ApEducAdd from './AdminEducAdd';
+import ApEducChange from './AdminEducChange';
 import AddIcon from '@mui/icons-material/Add';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
 
-const ApInfra = () => {
+const AdminEduc = () => {
   
   return (
     <div className="AbsenceDelayStudent">
@@ -13,21 +13,21 @@ const ApInfra = () => {
           <div className='absences'>
             <h1 className='absencesTitle'>
               <AddIcon className='delaysTitleLogo' fontSize='large'/>
-              Ajout dans l'infrastructure
+              Ajout du système éducatif
             </h1>
-            <ApInfraAdd/>
+            <ApEducAdd/>
           </div>
           <Divider orientation="vertical" flexItem></Divider>
           <div className='delays'>
           <h1 className='delaysTitle'>
             <SettingsIcon className='delaysTitleLogo' fontSize='large'/>
-            Modification dans l'infrastructure
+            Modification du système éducatif
           </h1>
-            <ApInfraChange/>
+            <ApEducChange/>
           </div>
         </div>
     </div>
   );
 };
 
-export default ApInfra;
+export default AdminEduc;

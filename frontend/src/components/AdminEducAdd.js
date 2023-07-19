@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { MenuItem, Select, TextField, Button, InputLabel, FormControl } from '@mui/material';
-import { calendarService } from '../../_services/calendar.service';
-import { educationService } from '../../_services/education.service';
-import { infraService } from '../../_services/infra.service';
+import { educationService } from '../_services/education.service';
+import { infraService } from '../_services/infra.service';
 
-const ApEduc = () => {
+const AdminEducAdd = () => {
     const formObjects = [{ id: 1, nom: 'Cours' },{ id: 2, nom: 'Promotion' },{ id: 3 , nom: 'Matière' },{ id: 4, nom: 'Classe' }];
   
     const [selectedFormObject, setSelectedFormObject] = useState('');
     const [formDataCourse, setFormDataCourse] = useState({
         courseLabel: '',
         courseDate: '',
+        courseDatetemp: '',
         startCourse: '',
+        startCoursetemp: '',
         endCourse: '',
+        endCoursetemp: '',
         idTeacher: '',
         idRespPedago: '',
         idAttachePromotion: '',
@@ -24,6 +26,7 @@ const ApEduc = () => {
     const [formDataPromo, setFormDataPromo] = useState({
         libellePromotion : '',
         anneePromotion : '',
+        anneePromotiontemp : '',
         domainePromotion : '',
         specialitePromotion : '',
         diplomePromotion : '',
@@ -142,17 +145,6 @@ const ApEduc = () => {
           })
     };
 
-    const [coursesList, setCoursesList] = useState([]);
-    const requestCourses = () => {
-        calendarService.all()
-            .then(res => {
-                setCoursesList(res.data);
-            })
-            .catch(error => {
-                console.log(error);
-            })
-    };
-
     const [campusList, setCampusList] = useState([]);
     const requestCampus = () => {
         infraService.campusList()
@@ -173,7 +165,6 @@ const ApEduc = () => {
         requestPromotions();
         requestMatieres();
         requestTeachers();
-        requestCourses();
         requestRooms();
         requestClasses();
         setGetLists(true);
@@ -185,11 +176,18 @@ const ApEduc = () => {
 
   const handleChange = (e) => {
     let newValue = '';
-        if (e.target.type === 'number') {
-            newValue = e.target.valueAsNumber;
-        } else {
-            newValue = e.target.value;
-        }
+    let newValueTemp = '';
+    if (e.target.type === 'number') {
+        newValue = e.target.valueAsNumber;
+    } else if (e.target.type === 'date') {
+        newValueTemp = e.target.value;
+        newValue = e.target.valueAsDate.toISOString();
+    } else if (e.target.type === 'time') {
+        newValueTemp = e.target.value;
+        newValue = formDataCourse.courseDate.substring(0, 10) + e.target.valueAsDate.toISOString().substring(10, e.target.valueAsDate.toISOString().length);
+    } else {
+        newValue = e.target.value;
+    }
     switch (selectedFormObject) {
       case 'Classe':
         setFormDataClasse((prevData) => ({
@@ -204,16 +202,32 @@ const ApEduc = () => {
         }));
         break;
       case 'Promotion':
-        setFormDataPromo((prevData) => ({
+        if (newValueTemp !== '') {
+          setFormDataPromo((prevData) => ({
+            ...prevData,
+            [e.target.name]: newValueTemp,
+            [`${e.target.name.substring(0, e.target.name.length - 4)}`]: newValue
+          }));
+        } else {
+          setFormDataPromo((prevData) => ({
           ...prevData,
           [e.target.name]: newValue
         }));
+        }
         break;
       case 'Cours':
-        setFormDataCourse((prevData) => ({
+        if (newValueTemp !== '') {
+          setFormDataCourse((prevData) => ({
             ...prevData,
-            [e.target.name]: newValue
+            [e.target.name]: newValueTemp,
+            [`${e.target.name.substring(0, e.target.name.length - 4)}`]: newValue
+          }));
+        } else {
+          setFormDataCourse((prevData) => ({
+          ...prevData,
+          [e.target.name]: newValue
         }));
+        }
         break;
       default:
         break;
@@ -225,23 +239,43 @@ const ApEduc = () => {
     switch (selectedFormObject) {
       case 'Classe':
         console.log(formDataClasse);
+        educationService.saveClasse(formDataClasse)
+        .then(res => {
+            window.location.reload(false); 
+        })
+        .catch(error => {
+            console.log(error);
+        })
         break;
       case 'Matière':
         console.log(formDataMatiere);
+        educationService.saveMatiere(formDataMatiere)
+        .then(res => {
+            window.location.reload(false); 
+        })
+        .catch(error => {
+            console.log(error);
+        })
         break;
       case 'Promotion':
-        console.log(formDataPromo);
-        // infraService.saveCampus(formDataCampus)
-        // .then(res => {
-        //     console.log(res);  
-        //     window.location.reload(false); // changer ?
-        // })
-        // .catch(error => {
-        //     console.log(error);
-        // })
+        educationService.savePromo(formDataPromo)
+        .then(res => {
+            window.location.reload(false); 
+        })
+        .catch(error => {
+            console.log(error);
+        })
         break;
       case 'Cours':
         console.log(formDataCourse);
+        educationService.saveCourse(formDataCourse)
+        .then(res => {
+            console.log(res);  
+            window.location.reload(false); 
+        })
+        .catch(error => {
+            console.log(error);
+        })
         break;
       default:
         break;
@@ -272,8 +306,8 @@ const Classe = () => {
             required
           >
             {promotionsList.map((item) => (
-              <MenuItem key={item.id} value={item.id}>
-                {item.nom}
+              <MenuItem key={item.id_promotion} value={item.id_promotion}>
+                {item.libelle_promotion}
               </MenuItem>
             ))}
           </Select>
@@ -324,9 +358,9 @@ const Classe = () => {
             onChange={handleChange}
             required
           >
-            {matieresList.map((item) => (
-              <MenuItem key={item.id_matiere} value={item.id_matiere}>
-                {item.libelle_matiere}
+            {schoolsList.map((item) => (
+              <MenuItem key={item.id_ecole} value={item.id_ecole}>
+                {item.libelle_ecole}
               </MenuItem>
             ))}
           </Select>
@@ -370,9 +404,9 @@ const Classe = () => {
 
         <TextField
           label="Année Promotion"
-          name="anneePromotion"
+          name="anneePromotiontemp"
           type="date"
-          value={formDataPromo.anneePromotion}
+          value={formDataPromo.anneePromotiontemp}
           onChange={handleChange}
           fullWidth
           required
@@ -460,9 +494,9 @@ const Cours = () => {
 
         <TextField
           label="Date du cours"
-          name="courseDate"
+          name="courseDatetemp"
           type="date"
-          value={formDataCourse.courseDate}
+          value={formDataCourse.courseDatetemp}
           onChange={handleChange}
           fullWidth
           required
@@ -474,9 +508,9 @@ const Cours = () => {
 
         <TextField
           label="Heure de début du cours"
-          name="startCourse"
+          name="startCoursetemp"
           type="time"
-          value={formDataCourse.startCourse}
+          value={formDataCourse.startCoursetemp}
           onChange={handleChange}
           fullWidth
           required
@@ -491,9 +525,9 @@ const Cours = () => {
 
         <TextField
           label="Heure de fin du cours"
-          name="endCourse"
+          name="endCoursetemp"
           type="time"
-          value={formDataCourse.endCourse}
+          value={formDataCourse.endCoursetemp}
           onChange={handleChange}
           fullWidth
           required
@@ -505,6 +539,23 @@ const Cours = () => {
             step: 300, // intervalles de 5 minutes
           }}
         />
+
+          <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Intervenant</InputLabel>
+          <Select
+            label="Intervenant"
+            name="idTeacher"
+            value={formDataCourse.idTeacher}
+            onChange={handleChange}
+            required
+          >
+            {teachersList.map((item) => (
+              <MenuItem key={item.id_intervenant} value={item.id_intervenant}>
+                {item.prenom} {item.nom}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
         <FormControl fullWidth style={{ marginBottom: '20px' }}>
           <InputLabel>Responsable pédagogique</InputLabel>
@@ -642,12 +693,13 @@ const Cours = () => {
         {Classe()}
         {Promotion()}
         {Cours()}
+      {(selectedFormObject !== '')  ?           
       <Button type="submit" variant="contained" color="primary" style={{ marginBottom: '20px' }}>
         Ajouter
-      </Button>
+      </Button> : null}
     </form>
     </div>
   );
 };
 
-export default ApEduc;
+export default AdminEducAdd;
