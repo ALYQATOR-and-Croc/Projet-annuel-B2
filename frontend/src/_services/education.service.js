@@ -73,18 +73,45 @@ let saveMatiere = (matiereData) => {
     );
 }
 
-// let changeCampus = (idCampus, campusData) => {
-//     return Axios.patch(`/campus/${idCampus}/`, campusData,
-//     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
-//     );
-// }
+let changePromo = (idPromo, promoData) => {
+    return Axios.patch(`/promotion/${idPromo}/`, promoData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
 
-// let changeRoom = (idRoom, roomData) => {
-//     return Axios.patch(`/room/${idRoom}/`, roomData,
-//     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
-//     );
-// }
+let removePromo = (idPromo) => {
+    return Axios.delete(`/promotion/${idPromo}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let removeMatiere = (idMatiere) => {
+    return Axios.delete(`/matiere/${idMatiere}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let changeMatiere = (idMatiere, matiereData) => {
+    return Axios.patch(`/matiere/${idMatiere}/`, matiereData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let removeClasse = (idClasse) => {
+    return Axios.delete(`/class/${idClasse}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let changeClasse = (idClasse, classeData) => {
+    return Axios.patch(`/class/update/${idClasse}/`, classeData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
 
 export const educationService = {
-    teachersList, matieresList, promotionsList, reproList, apList, rpList, classesList, studentsFromClassList, savePromo, saveClasse, saveCourse, saveMatiere
+    teachersList, matieresList, promotionsList, reproList, apList, rpList, 
+    classesList, studentsFromClassList, savePromo, saveClasse, saveCourse, 
+    saveMatiere, changePromo, removePromo, changeMatiere, removeMatiere,
+    changeClasse, removeClasse,
 }
