@@ -18,7 +18,11 @@ let getPresence = (idStudent) => {
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }
-
+let setPresence = (idPresence, value) => {
+    return Axios.patch(`/course/presence/${idPresence}/`, value,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
 export const courseService = {
-    studentList, sendPresence, getPresence
+    studentList, sendPresence, getPresence, setPresence
 }

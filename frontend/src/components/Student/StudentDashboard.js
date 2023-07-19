@@ -86,7 +86,7 @@ export default function Dashboard(props) {
             </div>
             <h2 className='absenceDelayDashSubTitle'>Dernières absences et retards</h2>
             {/* prendre les dernières absences/retards si le tri est par date la plus ancienne d'abord. */}
-            <AbsenceDelayGrid data={absenceDelays.slice(0,3)} type="absence ou retard"/>
+            <AbsenceDelayGrid data={absenceDelays.slice(0,3)} type="absence ou retard" auth="student"/>
           </div>
           <Divider orientation="vertical" flexItem></Divider>
           <div className='planningDash'>

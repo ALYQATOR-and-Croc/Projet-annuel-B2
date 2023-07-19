@@ -37,8 +37,8 @@ let classesList = () => {
     );
 }
 
-let studentsFromClassList = () => {
-    return Axios.get(`/classes/`, 
+let studentsFromClassList = (idClasse) => {
+    return Axios.get(`/class/${idClasse}/`, 
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }

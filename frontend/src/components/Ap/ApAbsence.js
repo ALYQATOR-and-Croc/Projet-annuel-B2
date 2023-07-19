@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../styles/ApAbsence.css';
 import AbsenceDelayGrid from '../Student/AbsenceDelayGrid';
 import { Divider } from '@mui/material';
@@ -7,7 +7,7 @@ import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { educationService } from '../../_services/education.service';
 import { courseService } from '../../_services/course.service';
-import { MenuItem, Select, Button, InputLabel, FormControl } from '@mui/material';
+import { MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 
 export default function ApAbsence(props) {
     const [absences, setAbsences] = useState([]);
@@ -16,7 +16,7 @@ export default function ApAbsence(props) {
     const [getClassesList, setGetClassesList] = useState(true);
     const [getStudentsList, setGetStudentsList] = useState(true);
     const [selectedStudent, setSelectedStudent] = useState({
-        idStudent: 6,
+        idStudent: '',
         nom: '',
         prenom: '',
     });
@@ -38,7 +38,7 @@ export default function ApAbsence(props) {
 
     const [studentsList, setStudentsList] = useState([]);
     const requestStudents = () => {
-        educationService.studentsFromClassList()
+        educationService.studentsFromClassList(selectedClass.idClasse)
             .then(res => {
                 setStudentsList(res.data);
             })
@@ -96,8 +96,18 @@ export default function ApAbsence(props) {
         })
   }
 
-  if (getAbsenceDelays) {
-    requestAbsenceDelays(selectedStudent.idStudent)
+  if (getClassesList) {
+    requestClasses();
+    setGetClassesList(false);
+  }
+
+  if (selectedClass.idClasse !== '' && getStudentsList) {
+    requestStudents();
+    setGetStudentsList(false);
+  }
+
+  if (selectedStudent.idStudent !== '' && getAbsenceDelays) {
+    requestAbsenceDelays(selectedStudent.idStudent);
     setGetAbsenceDelays(false);
   }
 
@@ -114,12 +124,14 @@ export default function ApAbsence(props) {
           ...prevData,
           [e.target.name]: newValue
         }));
+        setGetStudentsList(true);
         break;
       case 'idStudent':
         setSelectedStudent((prevData) => ({
           ...prevData,
           [e.target.name]: newValue
         }));
+        setGetAbsenceDelays(true);
         break;
       default:
         break;
@@ -165,8 +177,8 @@ export default function ApAbsence(props) {
                                 required
                             >
                                 {studentsList.map((item) => (
-                                <MenuItem key={item.id_student} value={item.id_student}>
-                                    {item.prenom} {item.nom}
+                                <MenuItem key={item.idEtudiant} value={item.idEtudiant}>
+                                    {item.prenomUtilisateur} {item.nomUtilisateur}
                                 </MenuItem>
                                 ))}
                             </Select>
@@ -181,8 +193,8 @@ export default function ApAbsence(props) {
                             required
                         >
                             {studentsList.map((item) => (
-                            <MenuItem key={item.id_student} value={item.id_student}>
-                                {item.prenom} {item.nom}
+                            <MenuItem key={item.idEtudiant} value={item.idEtudiant}>
+                                {item.prenomUtilisateur} {item.nomUtilisateur}
                             </MenuItem>
                             ))}
                         </Select>
@@ -195,7 +207,7 @@ export default function ApAbsence(props) {
                 <PersonOffIcon className='delaysTitleLogo' fontSize='large'/>
                 Absences
                 </h1>
-                <AbsenceDelayGrid data={absences} type="absence"/>
+                <AbsenceDelayGrid data={absences} type="absence" auth="admin"/>
             </div>
             <Divider orientation="vertical" flexItem></Divider>
             <div className='ApDelays'>
@@ -203,7 +215,7 @@ export default function ApAbsence(props) {
                 <AccessAlarmIcon className='delaysTitleLogo' fontSize='large'/>
                 Retards
             </h1>
-                <AbsenceDelayGrid data={delays} type="retard"/>
+                <AbsenceDelayGrid data={delays} type="retard" auth="admin"/>
             </div>
     </div>
     )

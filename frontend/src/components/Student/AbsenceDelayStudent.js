@@ -76,7 +76,7 @@ export default function RegisterStudents() {
               <PersonOffIcon className='delaysTitleLogo' fontSize='large'/>
               Absences
             </h1>
-            <AbsenceDelayGrid data={absences} type="absence"/>
+            <AbsenceDelayGrid data={absences} type="absence" auth="student"/>
           </div>
           <Divider orientation="vertical" flexItem></Divider>
           <div className='delays'>
@@ -84,7 +84,7 @@ export default function RegisterStudents() {
             <AccessAlarmIcon className='delaysTitleLogo' fontSize='large'/>
             Retards
           </h1>
-            <AbsenceDelayGrid data={delays} type="retard"/>
+            <AbsenceDelayGrid data={delays} type="retard" auth="student"/>
           </div>
         </div>
     </div>
