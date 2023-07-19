@@ -20,6 +20,7 @@ import {
   queryPatchUserPATCH,
   newFunctionQuery,
   queryPaginatedAdminGET,
+  UtilisateurEnum,
 } from "../../models/users/user-model";
 import { queryRoleGET } from "../../models/users/roles-model";
 import isId from "../../models/integer-model";
@@ -218,21 +219,14 @@ const responsablePedagogiqueGETList = (
   }
 };
 
-const adminGETList = (
-  request: express.Request,
-  response: express.Response
-) => {
+const adminGETList = (request: express.Request, response: express.Response) => {
   try {
     const params: any = request.params;
     const page: number = params.pageNumber;
     const rowsNumber: number = params.rowsNumber;
     const orderBy: UtilisateurPagination = params.orderBy;
     sql.connect(config).then((pool) => {
-      const queryGET = queryPaginatedAdminGET(
-        page,
-        rowsNumber,
-        orderBy
-      );
+      const queryGET = queryPaginatedAdminGET(page, rowsNumber, orderBy);
       pool
         .request()
         .query(queryGET)
@@ -248,7 +242,6 @@ const adminGETList = (
     response.status(405).send("Unacceptable operation.");
   }
 };
-
 
 const deleteUserDELETE = (
   request: express.Request,
@@ -371,6 +364,44 @@ const patchUserPATCH = (
   }
 };
 
+const getAllUsersGET = (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    sql
+      .connect(config)
+      .then((pool) => {
+        const queryGET = `SELECT 
+      ${UtilisateurEnum.PK} AS idUser,
+      ${UtilisateurEnum.NOM} AS nomUser,
+      ${UtilisateurEnum.PRENOM} AS prenomUser,
+      ${UtilisateurEnum.EMAIL} AS emailUser
+      FROM ${UtilisateurEnum.NOM_TABLE}`;
+        pool
+          .request()
+          .query(queryGET)
+          .then((result) => {
+            if (result) {
+              return response.status(200).send(result.recordset);
+            } else {
+              return response.status(405).send("Unacceptable operation.");
+            }
+          })
+          .catch((error) => {
+            console.log(error.message);
+            return response.status(405).send("Error while getting users");
+          });
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return response.status(405).send("Error while getting users");
+      });
+  } catch (error) {
+    response.status(405).send("Unacceptable operation.");
+  }
+};
+
 export {
   newRolePOST,
   reprographeGETList,
@@ -381,5 +412,6 @@ export {
   paginatedRoleGET,
   deleteUserDELETE,
   patchUserPATCH,
-  adminGETList
+  adminGETList,
+  getAllUsersGET,
 };

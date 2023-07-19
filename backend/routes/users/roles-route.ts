@@ -11,7 +11,8 @@ import {
   paginatedRoleGET,
   patchUserPATCH,
   deleteUserDELETE,
-  adminGETList
+  adminGETList,
+  getAllUsersGET
 } from '../../controllers/users/roles-controller';
 
 const router = express.Router();
@@ -65,4 +66,6 @@ router.patch('/user/:idUser/', isAuthenticated, isEducationManager, patchUserPAT
 router.delete('/user/:idUser/', isAuthenticated, isEducationManager, deleteUserDELETE);
 
 router.get('/roles/', isAuthenticated, isEducationManager, paginatedRoleGET);
+
+router.get('/users/', isAuthenticated, isAdmin, getAllUsersGET);
 export = router;
