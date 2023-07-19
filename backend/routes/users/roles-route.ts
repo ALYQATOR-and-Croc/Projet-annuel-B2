@@ -10,7 +10,8 @@ import {
   responsablePedagogiqueGETList,
   paginatedRoleGET,
   patchUserPATCH,
-  deleteUserDELETE
+  deleteUserDELETE,
+  adminGETList
 } from '../../controllers/users/roles-controller';
 
 const router = express.Router();
@@ -51,6 +52,13 @@ router.get(
   isEducationManager,
   responsablePedagogiqueGETList
 );
+
+router.get(
+  '/roles/admin/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
+  isAuthenticated,
+  isAdmin,
+  adminGETList
+)
 
 router.patch('/user/:idUser/', isAuthenticated, isEducationManager, patchUserPATCH);
 

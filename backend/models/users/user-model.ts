@@ -4,7 +4,7 @@ import { EtudiantEnum } from "./etudiant-model";
 import { IntervenantEnum } from "./intervenant";
 import { ReprographeEnum } from "./reprographe-model";
 import { ResponsablePedagogiqueEnum } from "./resp-pedago-model";
-import { UtilisateurPagination } from "./roles-model";
+import { RolesEnum, UtilisateurPagination } from "./roles-model";
 
 export enum UtilisateurEnum {
   NOM_TABLE = "Utilisateur",
@@ -178,6 +178,36 @@ export const queryPaginatedResponsablePedagogiqueGET = (
   ORDER BY U.${utilisateurColumns[orderBy]} ASC
   OFFSET (@PageNumber - 1) * @PageSize ROWS
   FETCH NEXT @PageSize ROWS ONLY;
+  `;
+  return query;
+};
+
+export const queryPaginatedAdminGET = (
+  page: number,
+  rowsNumber: number,
+  orderBy: UtilisateurPagination
+) => {
+  const query = `
+  DECLARE @PageNumber AS INT
+  DECLARE @PageSize AS INT
+  SET @PageNumber=${page}
+  SET @PageSize=${rowsNumber}
+  
+  SELECT 
+  U.${UtilisateurEnum.PK},
+  U.${UtilisateurEnum.PRENOM},
+  U.${UtilisateurEnum.NOM},
+  U.${UtilisateurEnum.EMAIL},
+  R.${RolesEnum.LIBELLE},
+  R.${RolesEnum.DROITS},
+  R.${RolesEnum.PK}
+  FROM ${UtilisateurEnum.NOM_TABLE} U
+  LEFT JOIN ${RolesEnum.NOM_TABLE} R ON U.${UtilisateurEnum.FK_ROLE_UTILISATEUR} = R.${RolesEnum.PK}
+  WHERE U.${UtilisateurEnum.FK_ROLE_UTILISATEUR} = 1
+  ORDER BY U.${utilisateurColumns[orderBy]} ASC
+  OFFSET (@PageNumber - 1) * @PageSize ROWS
+  FETCH NEXT @PageSize ROWS ONLY
+;
   `;
   return query;
 };

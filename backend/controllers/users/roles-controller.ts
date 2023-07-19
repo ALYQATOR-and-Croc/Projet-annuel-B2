@@ -19,6 +19,7 @@ import {
   queryDeleteFonctionUserDELETE,
   queryPatchUserPATCH,
   newFunctionQuery,
+  queryPaginatedAdminGET,
 } from "../../models/users/user-model";
 import { queryRoleGET } from "../../models/users/roles-model";
 import isId from "../../models/integer-model";
@@ -217,6 +218,38 @@ const responsablePedagogiqueGETList = (
   }
 };
 
+const adminGETList = (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const params: any = request.params;
+    const page: number = params.pageNumber;
+    const rowsNumber: number = params.rowsNumber;
+    const orderBy: UtilisateurPagination = params.orderBy;
+    sql.connect(config).then((pool) => {
+      const queryGET = queryPaginatedAdminGET(
+        page,
+        rowsNumber,
+        orderBy
+      );
+      pool
+        .request()
+        .query(queryGET)
+        .then((result) => {
+          if (result) {
+            response.status(200).send(result.recordset);
+          } else {
+            response.status(405).send("Unacceptable operation.");
+          }
+        });
+    });
+  } catch (error) {
+    response.status(405).send("Unacceptable operation.");
+  }
+};
+
+
 const deleteUserDELETE = (
   request: express.Request,
   response: express.Response
@@ -348,4 +381,5 @@ export {
   paginatedRoleGET,
   deleteUserDELETE,
   patchUserPATCH,
+  adminGETList
 };
