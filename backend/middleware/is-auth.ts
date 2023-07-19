@@ -44,6 +44,7 @@ const isModifyingUserPswdRight = async (
     await hasTheRightsToModiFyPswd(authHeader, formerPswd, idUser)
       .then((isRightRole) => {
         if (isRightRole ) {
+          // return res.send(isRightRole)
           next();
         } else {
           res.status(401).send('Unauthorized request.');
@@ -65,7 +66,12 @@ const hasTheRightsToModiFyPswd = async (
 ): Promise<boolean> => {
   const token = authHeader!.replace('Bearer ', '');
    return await decodeToken(token).then(async (decodedToken) => {
-    return isUserToUser(decodedToken, formerPswd).then(async (isRightUser) => {
+    return await isUserToUser(idUser, decodedToken, formerPswd).then(async (isRightUser) => {
+      console.log(isRightUser);
+      console.log(decodedToken);
+      console.log(decodedToken.aud);
+      console.log(isRightRoleEnum.ADMINISTRATEUR);
+      console.log(await hasTheRights(authHeader, [isRightRoleEnum.ADMINISTRATEUR]));
       if (await hasTheRights(authHeader, [isRightRoleEnum.ADMINISTRATEUR])) {
         return true
       } else if (isRightUser){
@@ -79,14 +85,18 @@ const hasTheRightsToModiFyPswd = async (
   });
 };
 
-async function isUserToUser(decodedToken: any, formerPswd: string) : Promise<boolean> {
-  const query = `SELECT * FROM ${UtilisateurEnum.NOM_TABLE} WHERE ${UtilisateurEnum.PK} = ${decodedToken.id}`;
-  return await sql.connect(config).then(async (pool) => {
-    return await pool.request().query(query).then(async (result) => {
-      return bcrypt.compare(formerPswd, result.recordset[0][UtilisateurEnum.MDP]).then(async (isSame) => {
-        return isSame
-  });
-})})
+async function isUserToUser(idUser : number, decodedToken: any, formerPswd: string) : Promise<boolean> {
+  if (idUser === decodedToken.id) {
+    const query = `SELECT * FROM ${UtilisateurEnum.NOM_TABLE} WHERE ${UtilisateurEnum.PK} = ${decodedToken.id}`;
+    return await sql.connect(config).then(async (pool) => {
+      return await pool.request().query(query).then(async (result) => {
+        return bcrypt.compare(formerPswd, result.recordset[0][UtilisateurEnum.MDP]).then(async (isSame) => {
+          return isSame
+    });
+  })})
+  }else {
+    return false
+  }
 }
 
 const hasTheRights = async (
