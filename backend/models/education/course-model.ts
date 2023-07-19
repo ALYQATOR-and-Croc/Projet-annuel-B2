@@ -293,9 +293,10 @@ export const queryPatchCoursePATCH = (
   ${CoursEnum.FK_ATTACH_PROMO} = ${sqlQueryBodyData.idAttachePromotion},
   ${CoursEnum.FK_REPROGRAPHE} = ${sqlQueryBodyData.idReprographe},
   ${CoursEnum.FK_SALLE} = ${sqlQueryBodyData.idClassRoom},
-  ${CoursEnum.FK_MATIERE} = ${sqlQueryBodyData.idCourseSubject},
+  ${CoursEnum.FK_MATIERE} = ${sqlQueryBodyData.idCourseSubject}
   WHERE ${CoursEnum.PK} = ${idCourse}
   `;
+
   //  ${CoursEnum.FK_CLASSE} = ${sqlQueryBodyData.idClass}
   return query;
 };
