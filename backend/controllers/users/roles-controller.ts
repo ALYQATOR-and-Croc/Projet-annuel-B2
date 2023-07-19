@@ -225,6 +225,7 @@ const deleteUserDELETE = (
     const params: any = request.params;
     const idUser: number = Number(params.idUser);
     const fonctionUser: FonctionType = params.functionUser;
+    console.log(idUser, fonctionUser);
     if (!isId([idUser])) {
       throw new Error("Bad Request");
     }
@@ -253,7 +254,7 @@ const deleteUserDELETE = (
   }
 };
 
-const patchUserPATCH = async (
+const patchUserPATCH = (
   request: express.Request,
   response: express.Response
 ) => {
@@ -275,99 +276,51 @@ const patchUserPATCH = async (
       throw new Error("Bad Request");
     }
     sql.connect(config).then((pool) => {
-
-
-        replacingFunction(pool, idUser, bodyQuery, fonctionParameters, ancienneFonction).then((result) => {
-          if (result){
-            const queryPATCH = queryPatchUserPATCH(idUser, bodyQuery);
-            pool
-              .request()
-              .query(queryPATCH)
-              .catch((error) => {
-                console.log(error);
-                return response.status(405).send("Error while updating user");
-              }).then(() => {
-                response.status(201).send("User successfully updated !");
-              })
-          }else{
-            return response.status(405).send("Error while updating user");
-          }
+      const queryDELETE = queryDeleteFonctionUserDELETE(
+        idUser,
+        ancienneFonction
+      );
+      pool
+        .request()
+        .query(queryDELETE)
+        .catch((error) => {
+          console.log(error);
+          return response.status(405).send("Can't delete user");
         })
-            
-
-        // const queryDELETE = queryDeleteFonctionUserDELETE(
-        //   idUser,
-        //   ancienneFonction
-        // );
-        // pool
-        // .request()
-        // .query(queryDELETE)
-        // .catch((error) => {
-        //   console.log(error);
-        //   return response.status(405).send("Can't delete user");
-        // })            .then(() => {
-        //   const queryNewFunction = newFunctionQuery(
-        //     bodyQuery.fonction,
-        //     idUser,
-        //     fonctionParameters
-        //   );
-        //   if (queryNewFunction !== null) {
-        //     pool
-        //       .request()
-        //       .query(queryNewFunction)
-        //       .catch((error) => {
-        //         console.log(error);
-        //         return response
-        //           .status(405)
-        //           .send("Error while updating user");
-        //       })
-        //       .then(() => {
-        //         response.status(201).send("User successfully updated !");
-        //       });
-        //   }
-        // })
-
-;
+        .then(() => {
+          const queryPATCH = queryPatchUserPATCH(idUser, bodyQuery);
+          pool
+            .request()
+            .query(queryPATCH)
+            .catch((error) => {
+              console.log(error);
+              return response.status(405).send("Error while updating user");
+            })
+            .then(() => {
+              const queryNewFunction = newFunctionQuery(
+                bodyQuery.fonction,
+                idUser,
+                fonctionParameters
+              );
+              if (queryNewFunction !== null) {
+                pool
+                  .request()
+                  .query(queryNewFunction)
+                  .catch((error) => {
+                    console.log(error);
+                    return response
+                      .status(405)
+                      .send("Error while updating user");
+                  })
+                  .then(() => {
+                    response.status(201).send("User successfully updated !");
+                  });
+              }
+            });
+        });
     });
   } catch (error) {}
 };
-
-const replacingFunction = async(pool : sql.ConnectionPool , idUser : number, bodyQuery : UtilisateurType, fonctionParameters : any, ancienneFonction : FonctionType ) : Promise<any> => {
-  if (bodyQuery.fonction !== ancienneFonction){
-    const queryDELETE = queryDeleteFonctionUserDELETE(
-      idUser,
-      ancienneFonction
-    );
-    pool
-    .request()
-    .query(queryDELETE)
-    .catch((error) => {
-      console.log(error);
-      return false
-    }).then(() => {
-      const queryNewFunction = newFunctionQuery(
-        bodyQuery.fonction,
-        idUser,
-        fonctionParameters
-      );
-      if (queryNewFunction !== null) {
-        pool
-          .request()
-          .query(queryNewFunction)
-          .catch((error) => {
-            console.log(error);
-            return false;
-          })
-          .then(() => {
-            return true
-          });
-      }
-    })
-  }else{
-    return true
-  }
-  
-}
 
 export {
   newRolePOST,

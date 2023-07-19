@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.post('/roles/', isAuthenticated, isAdmin, newRolePOST);
+router.post('/roles/', isAuthenticated, isEducationManager, newRolePOST);
 
 router.get(
   '/roles/reprographes/page/:pageNumber/rows/:rowsNumber/order/:orderBy/',
@@ -52,9 +52,9 @@ router.get(
   responsablePedagogiqueGETList
 );
 
-router.patch('/user/:idUser/', isAuthenticated, isAdmin, patchUserPATCH);
+router.patch('/user/:idUser/', isAuthenticated, isEducationManager, patchUserPATCH);
 
-router.delete('/user/:idUser/function/:functionUser/', isAuthenticated, isAdmin, deleteUserDELETE);
+router.delete('/user/:idUser/function/:functionUser/', isAuthenticated, isEducationManager, deleteUserDELETE);
 
 router.get('/roles/', isAuthenticated, isEducationManager, paginatedRoleGET);
 export = router;

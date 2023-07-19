@@ -5,6 +5,7 @@ import {
   CoursePageGET,
   coursesUserFunctionIdGETQuery,
   coursesUserGETQuery,
+  queryCoursesGET,
   queryDeleteCourseAndPresencesDELETE,
   queryGetCourseAndStudentsGET,
   queryNewCoursesPOST,
@@ -102,12 +103,9 @@ const newCoursePOST = (
   }
 };
 
-
-
 const coursesPagesGET = (
   request: express.Request,
-  response: express.Response,
-  next: express.NextFunction
+  response: express.Response
 ) => {
   try {
     const params = request.params;
@@ -151,6 +149,32 @@ const coursesPagesGET = (
   }
 };
 
+const coursesAllPagesGET = (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const params = request.params;
+
+    const startDate = params.startDate;
+    const numberOfDays = Number(params.numberOfDays);
+
+    sql
+      .connect(config)
+      .then((pool) => {
+        const query = queryCoursesGET(startDate, numberOfDays);
+        console.log(query);
+        pool.request().query(query).then((result: any) => {
+        return response.status(200).send(result.recordsets[0]);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return response.status(400).send("Bad request");
+      });})
+  } catch (error) {
+    return response.status(400).send(error);
+  }
+};
 const courseByIdGET = (
   req: express.Request,
   res: express.Response,
@@ -352,4 +376,5 @@ export {
   deleteCourseDELETE,
   courseByIdGET,
   patchCoursePATCH,
+  coursesAllPagesGET,
 };

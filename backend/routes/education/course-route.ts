@@ -7,6 +7,7 @@ import {
 } from '../../middleware/roles-middleware';
 import {
   courseByIdGET,
+  coursesAllPagesGET,
   coursesPagesGET,
   coursesStudentGET,
   deleteCourseDELETE,
@@ -26,7 +27,7 @@ router.get(
   '/courses/page/start-date/:startDate/number-of-days/:numberOfDays/',
   isAuthenticated,
   isEducationManager,
-  coursesPagesGET
+  coursesAllPagesGET
 );
 
 
