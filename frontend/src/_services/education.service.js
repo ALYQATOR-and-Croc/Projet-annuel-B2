@@ -26,7 +26,7 @@ let reproList = () => {
 }
 
 let promotionsList = () => {
-    return Axios.get(`/promotions/`, 
+    return Axios.get(`/promotions/page/1/rows/1000/order/ANNEE/`, 
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }
@@ -49,11 +49,29 @@ let matieresList = () => {
     );
 }
 
-// let saveRoom = (roomData) => {
-//     return Axios.post(`/room/new/`, roomData,
-//     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
-//     );
-// }
+let savePromo = (promoData) => {
+    return Axios.post(`/promotion/new/`, promoData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let saveClasse = (classeData) => {
+    return Axios.post(`/class/new/`, classeData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let saveCourse = (courseData) => {
+    return Axios.post(`/courses/new/`, courseData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let saveMatiere = (matiereData) => {
+    return Axios.post(`/matiere/new/`, matiereData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
 
 // let changeCampus = (idCampus, campusData) => {
 //     return Axios.patch(`/campus/${idCampus}/`, campusData,
@@ -68,5 +86,5 @@ let matieresList = () => {
 // }
 
 export const educationService = {
-    teachersList, matieresList, promotionsList, reproList, apList, rpList, classesList, studentsFromClassList
+    teachersList, matieresList, promotionsList, reproList, apList, rpList, classesList, studentsFromClassList, savePromo, saveClasse, saveCourse, saveMatiere
 }
