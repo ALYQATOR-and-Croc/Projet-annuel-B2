@@ -693,9 +693,10 @@ const Cours = () => {
         {Classe()}
         {Promotion()}
         {Cours()}
+      {(selectedFormObject !== '')  ?           
       <Button type="submit" variant="contained" color="primary" style={{ marginBottom: '20px' }}>
         Ajouter
-      </Button>
+      </Button> : null}
     </form>
     </div>
   );

@@ -1,22 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { TextField, Button, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { userService } from '../../_services/user.service';
 import { educationService } from '../../_services/education.service';
+import { accountService } from '../../_services/account.service';
 import '../../styles/ApForm.css';
 
 const ApUserChange = () => {
+  const isAdmin = accountService.getUserRole() === "ADMINISTRATEUR"; 
+  const [selectedFormObject, setSelectedFormObject] = useState('');
+  const [idUser, setIdUser] = useState('');
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
     email: '',
-    mdp: '',
     idRole: '',
-    fonction: '',
-    idClasse: '',
+    ancienneFonction: '',
+    fonction:'',
+    fonctionParameters: {
+        idClasse: '',
+        libelleSpecialite: ''
+    }
   });
-  const [getClassesAndRoles, setGetClassesAndRoles] = useState(false);
+  const [getLists, setGetLists] = useState(false);
+  const [adminCheck, setAdminCheck] = useState(false);
   const [classes, setClasses] = useState([]);
   const [roles, setRoles] = useState([]);
+
+  const noAdmin = () => {
+    if (!isAdmin) {
+        console.log('ici');
+        setRoles(roles.filter(role=>role.id_role_utilisateur===1));
+    }
+  }
 
   const requestRoles = () => {
     userService.rolesList()
@@ -94,57 +109,188 @@ const ApUserChange = () => {
                 console.log(error);
             })
     };
-    
-  const saveUser = (userData) => {
-    userService.saveUser(userData)
+
+    const [adminsList, setAdminsList] = useState([]);
+    const requestAdmins = () => {
+        userService.adminsList()
+            .then(res => {
+                setAdminsList(res.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    };
+
+  if (!getLists) {
+    requestClasses();
+    requestRoles();
+    requestAp();
+    requestRp();
+    if (isAdmin) {
+        requestAdmins();
+    }
+    requestStudents();
+    requestRepro();
+    requestTeachers();
+    setGetLists(true);
+  }
+
+  if (getLists && !adminCheck) {
+    noAdmin();
+    setAdminCheck(true);
+  }
+
+  const handleChangeObject = (e) => {
+    setSelectedFormObject(e.target.value)
+    setIdUser('');
+    setFormData({
+        nom: '',
+        prenom: '',
+        email: '',
+        idRole: '',
+        ancienneFonction: '',
+        fonction:'',
+        fonctionParameters: {
+            idClasse: '',
+            libelleSpecialite: ''
+        }
+    });
+};
+
+const handleChangeUserId = (e) => {
+    setIdUser(e.target.value);
+    switch (selectedFormObject) {
+        case 'ETUDIANT':
+            let selectedStudent = studentsList.find(eleve=>eleve.id_utilisateur === e.target.value);
+            setFormData({
+                nom: selectedStudent.nom,
+                prenom: selectedStudent.prenom,
+                email: selectedStudent.adresse_email,
+                idRole: 2,
+                ancienneFonction: 'ETUDIANT',
+                fonction:'ETUDIANT',
+                fonctionParameters: {
+                    idClasse: selectedStudent.id_classe,
+                    libelleSpecialite: ''
+                }
+            });
+            break;
+        default:
+            let selectedUser = {};
+            let idRoleTemp = 0;
+            switch (selectedFormObject) {
+                case 'INTERVENANT':
+                    selectedUser = teachersList.find(user=>user.id_utilisateur === e.target.value);
+                    idRoleTemp = 6;
+                    break;
+                case 'ADMINISTRATEUR':
+                    selectedUser = adminsList.find(user=>user.id_utilisateur === e.target.value);
+                    idRoleTemp = 1;
+                    break;
+                case 'ATTACHE_PROMO':
+                    selectedUser = apList.find(user=>user.id_utilisateur === e.target.value);
+                    idRoleTemp = 3;
+                    break;
+                case 'RESPONSABLE_PEDA':
+                    selectedUser = rpList.find(user=>user.id_utilisateur === e.target.value);
+                    idRoleTemp = 4;
+                    break;
+                case 'REPROGRAPHE':
+                    selectedUser = reproList.find(user=>user.id_utilisateur === e.target.value);
+                    idRoleTemp = 5;
+                    break;
+                default:
+                    break;
+            }
+            setFormData({
+                nom: selectedUser.nom,
+                prenom: selectedUser.prenom,
+                email: selectedUser.adresse_email,
+                idRole: idRoleTemp,
+                ancienneFonction: {selectedFormObject},
+                fonction:{selectedFormObject},
+                fonctionParameters: {
+                    idClasse: '',
+                    libelleSpecialite: ''
+                }
+            });
+            break;
+    }
+  };
+
+  const handleChange = (e) => {
+    let newValue = '';
+    if (e.target.type === 'number') {
+        newValue = e.target.valueAsNumber;
+    }  else {
+        newValue = e.target.value;
+    }
+    setFormData((prevData) => ({
+              ...prevData,
+              [e.target.name]: newValue
+            }));
+  };
+
+  const handleSubmitChange = (e) => {
+    e.preventDefault();
+    console.log(idUser, formData);
+    userService.changeUser(idUser, formData)
         .then(res => {
-            console.log(res);  
+            console.log(res);
         })
         .catch(error => {
             console.log(error);
         })
-  };
-
-  if (!getClassesAndRoles) {
-    requestClasses();
-    requestRoles();
-    setGetClassesAndRoles(true);
-  }
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  useEffect(()=>{
-    if (formData.idRole !== '') {
-      const choseRole = roles.find((role) => role.id_role_utilisateur === formData.idRole);
-      setFormData({ ...formData, fonction: choseRole.libelle_role});
+        requestStudents();
+        requestRepro();
+        // requestAdmins();
+        requestAp();
+        requestRp();
+        requestTeachers();
     }
-  }, [formData.idRole])
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (formData.idRole !== 2) {
-      delete formData.idClasse;
-      console.log(formData);
-      saveUser(formData);
-      setFormData({ ...formData, idClasse: ""});
-    } else {
-      console.log(formData);
-      saveUser(formData);
-    }
-  };
+    const handleSubmitDelete = (e) => {
+        e.preventDefault();
+        console.log(idUser);
+        userService.removeUser(idUser)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            requestStudents();
+            requestRepro();
+            if (isAdmin) {
+                requestAdmins();
+            }
+            requestAp();
+            requestRp();
+            requestTeachers();
+            setIdUser('');
+            setFormData({
+                nom: '',
+                prenom: '',
+                email: '',
+                idRole: '',
+                ancienneFonction: '',
+                fonction:'',
+                fonctionParameters: {
+                    idClasse: '',
+                    libelleSpecialite: ''
+                }
+            });
+        }
 
   const renderClassSelect = () => {
-    if (formData.idRole === 2) {
+    if (selectedFormObject === 'ETUDIANT') {
       return (
         <FormControl fullWidth style={{ marginBottom: '20px' }}>
           <InputLabel>Classe</InputLabel>
           <Select
             label="Classe"
-            name="idClasse"
-            value={formData.idClasse}
+            name="fonctionParameters.idClasse"
+            value={formData.fonctionParameters.idClasse}
             onChange={handleChange}
             required
           >
@@ -160,26 +306,85 @@ const ApUserChange = () => {
     return null;
   };
 
+  const renderUserChoice = () => {
+    let list = [];
+    switch (selectedFormObject) {
+        case 'ETUDIANT':
+            list = studentsList;
+            break;
+        case 'INTERVENANT':
+            list = teachersList;
+            break;
+        case 'ADMINISTRATEUR':
+            list = adminsList;
+            break;
+        case 'ATTACHE_PROMO':
+            list = apList;
+            break;
+        case 'RESPONSABLE_PEDA':
+            list = rpList;
+            break;
+        case 'REPROGRAPHE':
+            list = reproList;
+            break;
+        default:
+            break;
+    }
+    return list.map((items) => (
+        <MenuItem key={items.id_utilisateur} value={items.id_utilisateur}>
+          {items.prenom} {items.nom}
+        </MenuItem>
+      ))
+  }
+
+
   return (
     <div className='formEntier'>
      <div className='formCase'>
-    <form onSubmit={handleSubmit} style={{ marginRight: '60px', marginLeft: '60px', marginTop:'40px'}}>
+    <form style={{ marginRight: '60px', marginLeft: '60px', marginTop:'40px'}}>
       <FormControl fullWidth style={{ marginBottom: '20px' }}>
         <InputLabel>Fonction</InputLabel>
         <Select
           label='Fonction'
-          name="idRole"
-          value={formData.idRole}
-          onChange={handleChange}
+          name="libelle_role"
+          value={selectedFormObject}
+          onChange={handleChangeObject}
           required
         >
           {roles.map((role) => (
-              <MenuItem key={role.id_role_utilisateur} value={role.id_role_utilisateur}>
+              <MenuItem key={role.libelle_role} value={role.libelle_role}>
                 {role.libelle_role.replace(/_/gm, ' ')}
               </MenuItem>
             ))}
         </Select>
       </FormControl>
+      <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Choisissez l'utilisateur</InputLabel>
+          <Select
+            label="Choisissez l'utilisateur"
+            name="idUser"
+            value={idUser}
+            onChange={handleChangeUserId}
+          >
+            {renderUserChoice()}
+          </Select>
+        </FormControl>  
+        <FormControl fullWidth style={{ marginBottom: '20px' }}>
+          <InputLabel>Nouveau rôle</InputLabel>
+          <Select
+            label="Nouveau rôle"
+            name="IdRole"
+            value={formData.idRole}
+            onChange={handleChange}
+            required
+          >
+            {roles.map((role) => (
+              <MenuItem key={role.id_role_utilisateur} value={role.id_role_utilisateur}>
+                {role.libelle_role.replace(/_/gm, ' ')}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>      
       {renderClassSelect()}
       <TextField
         label="Nom"
@@ -209,19 +414,9 @@ const ApUserChange = () => {
         required
         style={{ marginBottom: '20px', backgroundColor: 'white' }}
       />
-      <TextField
-        label="Mot de passe"
-        name="mdp"
-        type="password"
-        value={formData.mdp}
-        onChange={handleChange}
-        fullWidth
-        required
-        style={{ marginBottom: '20px', backgroundColor: 'white' }}
-      />
-      <Button type="submit" variant="contained" color="primary">
-        Ajouter {formData.prenom}
-      </Button>
+      {(selectedFormObject !== '') && (idUser !== '') ? 
+        <div><Button type="button" variant="contained" color="primary" style={{marginRight:50}} onClick={handleSubmitChange}>Enregistrer</Button>
+        <Button type="button" variant="contained" color="error" style={{marginLeft:50}} onClick={handleSubmitDelete}>Supprimer</Button></div> : null}
     </form>
     </div>
     </div>
