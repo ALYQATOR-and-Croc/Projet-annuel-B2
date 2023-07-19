@@ -5,6 +5,7 @@ import { IntervenantEnum } from "./intervenant";
 import { ReprographeEnum } from "./reprographe-model";
 import { ResponsablePedagogiqueEnum } from "./resp-pedago-model";
 import { RolesEnum, UtilisateurPagination } from "./roles-model";
+import { StudClassEnum } from "../education/student-class-model";
 
 export enum UtilisateurEnum {
   NOM_TABLE = "Utilisateur",
@@ -62,12 +63,14 @@ export const queryPaginatedEtudiantGET = (
         
         SELECT
         E.${EtudiantEnum.PK},
+        CL.${StudClassEnum.PK},
         U.${UtilisateurEnum.PK},
         U.${UtilisateurEnum.PRENOM},
         U.${UtilisateurEnum.NOM},
         U.${UtilisateurEnum.EMAIL}
         FROM ${EtudiantEnum.NOM_TABLE} E
         LEFT JOIN ${UtilisateurEnum.NOM_TABLE} AS U ON E.${EtudiantEnum.FK_UTILISATEUR} = U.${UtilisateurEnum.PK}
+        LEFT JOIN ${StudClassEnum.NOM_TABLE} AS CL ON E.${EtudiantEnum.FK_CLASSE} = CL.${StudClassEnum.PK}
         ORDER BY U.${utilisateurColumns[orderBy]} ASC
         OFFSET (@PageNumber - 1) * @PageSize ROWS
         FETCH NEXT @PageSize ROWS ONLY;
