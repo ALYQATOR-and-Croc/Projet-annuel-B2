@@ -61,8 +61,8 @@ let saveClasse = (classeData) => {
     );
 }
 
-let saveCourse = (courseData) => {
-    return Axios.post(`/courses/new/`, courseData,
+let saveCourse = (newCourseData) => {
+    return Axios.post(`/courses/new/`, newCourseData,
     { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
     );
 }
@@ -109,9 +109,21 @@ let changeClasse = (idClasse, classeData) => {
     );
 }
 
+let removeCourse = (idCourse) => {
+    return Axios.delete(`/courses/course/${idCourse}/`,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
+let changeCourse = (idCourse, courseData) => {
+    return Axios.patch(`/courses/course/${idCourse}/`, courseData,
+    { headers: {"Authorization" : `Bearer ${accountService.getToken()}`}}
+    );
+}
+
 export const educationService = {
     teachersList, matieresList, promotionsList, reproList, apList, rpList, 
     classesList, studentsFromClassList, savePromo, saveClasse, saveCourse, 
     saveMatiere, changePromo, removePromo, changeMatiere, removeMatiere,
-    changeClasse, removeClasse,
+    changeClasse, removeClasse, changeCourse, removeCourse, 
 }

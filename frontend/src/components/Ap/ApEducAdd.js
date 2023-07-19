@@ -179,9 +179,12 @@ const ApEduc = () => {
     let newValueTemp = '';
     if (e.target.type === 'number') {
         newValue = e.target.valueAsNumber;
-    } else if (e.target.type === 'date' || e.target.type === 'time') {
+    } else if (e.target.type === 'date') {
         newValueTemp = e.target.value;
         newValue = e.target.valueAsDate.toISOString();
+    } else if (e.target.type === 'time') {
+        newValueTemp = e.target.value;
+        newValue = formDataCourse.courseDate.substring(0, 10) + e.target.valueAsDate.toISOString().substring(10, e.target.valueAsDate.toISOString().length);
     } else {
         newValue = e.target.value;
     }

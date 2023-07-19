@@ -253,9 +253,12 @@ const ApEducChange = () => {
     let newValueTemp = '';
     if (e.target.type === 'number') {
         newValue = e.target.valueAsNumber;
-    } else if (e.target.type === 'date' || e.target.type === 'time') {
+    } else if (e.target.type === 'date') {
         newValueTemp = e.target.value;
         newValue = e.target.valueAsDate.toISOString();
+    } else if (e.target.type === 'time') {
+        newValueTemp = e.target.value;
+        newValue = formDataCourse.courseDate.substring(0, 10) + e.target.valueAsDate.toISOString().substring(10, e.target.valueAsDate.toISOString().length);
     } else {
         newValue = e.target.value;
     }
@@ -321,14 +324,14 @@ const ApEducChange = () => {
           break;
         case 'Cours':
           console.log(idCourse, formDataCourse);
-        //   educationService.changeCourse(idCourse, formDataCourse)
-        //   .then(res => {
-        //       console.log(res);  
-        //   })
-        //   .catch(error => {
-        //       console.log(error);
-        //   })
-        //   requestCourses();
+          educationService.changeCourse(idCourse, formDataCourse)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestCourses();
           break;
         case 'Matière':
           console.log(idMatiere, formDataMatiere);
@@ -379,30 +382,31 @@ const ApEducChange = () => {
           break;
         case 'Cours':
           console.log(idCourse);
-        //   educationService.removeCourse(idCourse)
-        //   .then(res => {
-        //       console.log(res);  
-        //   })
-        //   .catch(error => {
-        //       console.log(error);
-        //   })
-        //   requestCourses();
-        //   setFormDataCourse({
-        //     courseLabel: '',
-        //     courseDate: '',
-        //     courseDatetemp: '',
-        //     startCourse: '',
-        //     startCoursetemp: '',
-        //     endCourse: '',
-        //     endCoursetemp: '',
-        //     idTeacher: '',
-        //     idRespPedago: '',
-        //     idAttachePromotion: '',
-        //     idReprographe: '',
-        //     idClassRoom: '',
-        //     idCourseSubject: '',
-        //     idClass: ''
-        //   });
+          educationService.removeCourse(idCourse)
+          .then(res => {
+              console.log(res);  
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          requestCourses();
+          setFormDataCourse({
+            courseLabel: '',
+            courseDate: '',
+            courseDatetemp: '',
+            startCourse: '',
+            startCoursetemp: '',
+            endCourse: '',
+            endCoursetemp: '',
+            idTeacher: '',
+            idRespPedago: '',
+            idAttachePromotion: '',
+            idReprographe: '',
+            idClassRoom: '',
+            idCourseSubject: '',
+            idClass: ''
+          });
+          setIdCourse('');
           break;
         case 'Matière':
           console.log(idMatiere);
@@ -704,7 +708,7 @@ const Cours = () => {
           >
             {coursesList.map((items) => (
               <MenuItem key={items.id_cours} value={items.id_cours}>
-                {items.libelle_matiere} ({items.libelle_classe}) - {new Date(items.heure_debut_cours).toLocaleString("fr-Fr", { timeZone: 'UTC' })}
+                {items.id_cours} {items.libelle_matiere} ({items.libelle_classe}) - {new Date(items.heure_debut_cours).toLocaleString("fr-Fr", { timeZone: 'UTC' })}
               </MenuItem>
             ))}
           </Select>
